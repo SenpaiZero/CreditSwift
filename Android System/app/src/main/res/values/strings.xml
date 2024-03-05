@@ -1,0 +1,17 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">PRELIM PRESENTATION</string>
+    <string name="terms"><u>Terms and Condition</u></string>
+
+    <string-array name="yesno">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+
+    <string-array name="animation_speed">
+        <item>1x</item>
+        <item>1.5x</item>
+        <item>2x</item>
+        <item>2.5x</item>
+        <item>3x</item>
+    </string-array>
+</resources>

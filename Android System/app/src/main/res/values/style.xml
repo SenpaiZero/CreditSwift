@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MySpinnerItemStyle" parent="Widget.AppCompat.Spinner.DropDown">
+        <item name="android:layout">@layout/spinner_style</item>
+    </style>
+
+    <style name="customSpinnerDialog" >
+
+        <item name="android:background">@color/lightBackground</item>
+    </style>
+</resources>

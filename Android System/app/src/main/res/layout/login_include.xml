@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/protest_strike"
+            android:text="LOGIN"
+            android:textAlignment="center"
+            android:textColor="@color/lightRegister"
+            android:textSize="96sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/loginUserTB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/lightRegister"
+            android:drawableLeft="@drawable/user_img"
+            android:drawablePadding="5dp"
+            android:drawableTint="@color/lightRegister"
+            android:ems="13"
+            android:fontFamily="@font/abel"
+            android:hint="Username"
+            android:inputType="text"
+            android:textColor="@color/lightRegister"
+            android:textColorHint="@color/lightRegister" />
+
+        <EditText
+            android:id="@+id/loginPasswordTB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/lightRegister"
+            android:drawableLeft="@drawable/password_img"
+            android:drawableRight="@drawable/password_reveal"
+            android:drawablePadding="5dp"
+            android:drawableTint="@color/lightRegister"
+            android:ems="13"
+            android:fontFamily="@font/abel"
+            android:hint="Password"
+            android:inputType="text"
+            android:password="true"
+            android:textColor="@color/lightRegister"
+            android:textColorHint="@color/lightRegister" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/checkBox"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:buttonTint="@color/lightTxt"
+                    android:textColor="@color/lightRegister" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Auto Sign In"
+                    android:textColor="@color/lightRegister" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/forgotPass"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="right|center_horizontal|center_vertical"
+                android:layout_weight="1"
+                android:fontFamily="@font/abel"
+                android:gravity="center"
+                android:text="Forgot Password?"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/lightRegister"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="@color/lightBackground"
+                app:srcCompat="@null" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:fontFamily="@font/abel"
+                android:text="OR"
+                android:textAlignment="center"
+                android:textColor="@color/lightRegister" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="@color/lightBackground"
+                app:srcCompat="@null" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/socialMediaCon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:divider="@drawable/empty_tall_divider"
+            android:orientation="horizontal"
+            android:showDividers="middle">
+
+            <ImageView
+                android:id="@+id/fbLogin"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                app:srcCompat="@drawable/fb" />
+
+            <ImageView
+                android:id="@+id/googleLogin"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                app:srcCompat="@drawable/google" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:divider="@drawable/empty_tall_divider"
+            android:dividerPadding="5dp"
+            android:orientation="horizontal"
+            android:showDividers="middle">
+
+            <Button
+                android:id="@+id/cancelLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/lightTxt"
+                android:fontFamily="@font/protest_strike"
+                android:text="CANCEL"
+                android:textColor="@color/lightRegister"
+                app:cornerRadius="8dp" />
+
+            <Button
+                android:id="@+id/loginBtnLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/lightTxt"
+                android:fontFamily="@font/protest_strike"
+                android:text="LOGIN"
+                android:textColor="@color/lightRegister"
+                app:cornerRadius="8dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

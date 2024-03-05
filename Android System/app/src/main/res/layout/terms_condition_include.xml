@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#60000000">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        app:cardBackgroundColor="#FAEFEF"
+        app:cardCornerRadius="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ScrollView
+                android:id="@+id/scrollView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="35dp"
+                    android:paddingBottom="35dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:padding="16dp"
+                        android:text="TERMS AND CONDITION"
+                        android:textAlignment="center"
+                        android:textColor="#2E2E2E"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="AGREEMENT TO OUR LEGAL TERMS"
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="These terms and conditions  govern your use of the No name yet mobile application, provided by us. By downloading, accessing, or using the App, you agree to be bound by these Terms. If you do not agree to these Terms, you may not use the App."
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="1. License"
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="a. We grant you a limited, non-exclusive, non-transferable, revocable license to use the App for your personal, non-commercial use only.\n\n b. You agree not to modify, adapt, translate, reverse engineer, decompile, or disassemble the App, or attempt to create derivative works based on the App."
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/textView16"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="2. User Accounts"
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView17"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="a. You may be required to create an account to use certain features of the App. You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.\n\nb. You agree to provide accurate, current, and complete information during the registration process and to update such information to keep it accurate, current, and complete."
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/textView14"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="3. Privacy"
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView15"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="a. Your privacy is important to us. Please review our Privacy Policy [link to privacy policy] to understand how we collect, use, and disclose information about you."
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/textView10"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="4. Intellectual Property"
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView11"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="a. All intellectual property rights in the App, including but not limited to copyrights, trademarks, and trade secrets, are owned by us or our licensors.\n\nb. You may not use our trademarks or any confusingly similar marks without our prior written consent."
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/textView18"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="5. Prohibited Conduct"
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView19"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="a. You agree not to use the App for any unlawful purpose or in any way that violates these Terms.\n\nb. You agree not to engage in any conduct that could damage, disable, overburden, or impair the functioning of the App."
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/textView20"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="6. Termination"
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView21"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="a. We reserve the right to suspend or terminate your access to the App at any time, for any reason, without notice or liability."
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/textView22"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="7. Disclaimer of Warranties"
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView23"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="a. The App is provided &quot;as is&quot; and &quot;as available&quot; without any warranties of any kind. We do not warrant that the App will be error-free or uninterrupted."
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/textView24"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="8. Limitation of Liability"
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView25"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="a. To the fullest extent permitted by law, we will not be liable for any indirect, incidental, consequential, or punitive damages arising out of or relating to your use of the App."
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/textView26"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="9. Governing Law"
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView27"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="a. These Terms are governed by and construed in accordance with the laws of [Your Country/State], without regard to its conflict of law principles."
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/textView30"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="10. Changes to Terms"
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView31"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="a. We reserve the right to modify these Terms at any time. We will notify you of any changes by posting the revised Terms within the App."
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/textView28"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="11. Contact Us"
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView29"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/abel"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="a. If you have any questions or concerns about these Terms, please contact us at qwerty@gmail.com"
+                        android:textAlignment="textStart"
+                        android:textColor="#2E2E2E"
+                        android:textSize="14sp" />
+
+
+                </LinearLayout>
+            </ScrollView>
+
+            <TextView
+                android:id="@+id/cancelBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/bebas"
+                android:text="CLOSE"
+                android:textColor="#FB8787"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/scrollView2" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

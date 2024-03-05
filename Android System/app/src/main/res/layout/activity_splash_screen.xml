@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightLogin"
+    android:fitsSystemWindows="true"
+    tools:context=".SplashScreen">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/lightBackground"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:divider="@drawable/light_divider"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:orientation="vertical"
+        android:rotation="-45"
+        android:scaleX="4"
+        android:scaleY="4"
+        android:showDividers="middle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/top2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/lightLogin"
+            android:scaleY="0.1" />
+
+        <ImageView
+            android:id="@+id/bottom2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/lightRegister"
+            android:scaleType="centerCrop"
+            android:scaleY="0.1" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/bgView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="-5dp"
+        android:layout_marginStart="-5dp"
+        android:layout_marginTop="-5dp"
+        android:layout_marginEnd="-5dp"
+        android:layout_marginBottom="-5dp"
+        android:scaleType="centerCrop"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_marginBaseline="-5dp" />
+
+    <ImageView
+        android:id="@+id/bg"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleX="6"
+        android:scaleY="6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/bgView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/temp_logo" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

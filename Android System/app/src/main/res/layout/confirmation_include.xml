@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#80000000">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:cardBackgroundColor="#00ffffff"
+        app:cardCornerRadius="8dp"
+        app:cardPreventCornerOverlap="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:divider="@drawable/light_divider"
+            android:gravity="center|center_horizontal|center_vertical"
+            android:orientation="vertical"
+            android:rotation="-45"
+            android:scaleX="4"
+            android:scaleY="4"
+            android:showDividers="middle">
+
+            <ImageView
+                android:id="@+id/top2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/lightLogin" />
+
+            <ImageView
+                android:id="@+id/bottom2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/lightRegister"
+                android:scaleType="centerCrop" />
+
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            app:cardBackgroundColor="#00ffffff"
+            app:cardCornerRadius="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/titleTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/protest_strike"
+                    android:text="TITLE"
+                    android:textAlignment="center"
+                    android:textColor="@color/lightRegister"
+                    android:textSize="34sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/messageTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/protest_strike"
+                    android:text="MESSAGE MESSAGE MESSAGE MESSAGEMESSAGE MESSAGE MESSAGE MESSAGEMESSAGE MESSAGE MESSAGE MESSAGEMESSAGE MESSAGE MESSAGE MESSAGEMESSAGE MESSAGE MESSAGE MESSAGE"
+                    android:textAlignment="center"
+                    android:textColor="@color/darkRegister" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/negativeBtnConfirmation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="#CA0E00"
+                        android:fontFamily="@font/bebas"
+                        android:text="NEGATIVE"
+                        android:textColor="#FFFFFF"
+                        app:cornerRadius="7dp" />
+
+                    <Button
+                        android:id="@+id/positiveBtnConfirmation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="#5B9F0C"
+                        android:fontFamily="@font/bebas"
+                        android:text="POSITIVE"
+                        android:textColor="#FFFFFF"
+                        app:cornerRadius="7dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
