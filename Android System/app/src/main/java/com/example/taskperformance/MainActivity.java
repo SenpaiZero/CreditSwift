@@ -13,6 +13,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -189,6 +190,8 @@ public class MainActivity extends AppCompatActivity {
                 String user = loginUserTB.getText().toString();
                 String pass = loginPassTB.getText().toString();
 
+                if(user.equals("admin") && pass.equals("admin"))
+                    startActivity(new Intent(MainActivity.this, adminHome.class));
                 if(user.isEmpty())
                 {
                     UIHelper.showCustomToast("Username input is invalid");
@@ -199,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
                     UIHelper.showCustomToast("Password input is invalid");
                     return;
                 }
+
 
                 if(profileHelper.checkLogin(user, pass))
                 {
@@ -238,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if(rePass.equals(pass))
                 {
-                    if(profileHelper.newAccount(user, pass, email))
+                    if(profileHelper.newAccount(user, pass, email, "BORROWER"))
                     {
                         UIHelper.showCustomToast("You have successfully registered.");
                         resetTextBox();

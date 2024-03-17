@@ -3,19 +3,20 @@ package com.example.Helper;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class SqliteHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "LoanManagement.db";
     public static final String LOGIN_TABLE_CREATE = "CREATE TABLE Account (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "username TEXT NOT NULL," +
             "password TEXT NOT NULL," +
-            "email TEXT NOT NULL);";
+            "email TEXT NOT NULL," +
+            "type TEXT NOT NULL);";
 
 
-    private static final String CREATE_TABLES = LOGIN_TABLE_CREATE;
-    private static final String DELETE_TABLES = "DROP TABLE IF EXIST ";
+    private static final String DELETE_TABLES = "DROP TABLE IF EXISTS ";
     public SqliteHelper(Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -23,7 +24,8 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLES);
+        Log.d("SQL CREATE", "created");
+        db.execSQL(LOGIN_TABLE_CREATE);
     }
 
     @Override
@@ -37,5 +39,6 @@ public class SqliteHelper extends SQLiteOpenHelper {
         public static final String USERNAME_COLUMN = "username";
         public static final String PASSWORD_COLUMN = "password";
         public static final String EMAIL_COLUMN = "email";
+        public static final String TYPE_COLUMN = "type";
     }
 }

@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Debug;
 import android.os.Handler;
@@ -22,10 +23,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.taskperformance.MainActivity;
 import com.example.taskperformance.R;
 
 public class userInterfaceHelper extends AppCompatActivity {
     Activity activity;
+    Context context;
     ConstraintLayout confirmation, customCardView;
     TextView titleTxt, messageTxt;
     Button negativeBtn, positiveBtn;
@@ -36,6 +39,10 @@ public class userInterfaceHelper extends AppCompatActivity {
         confirmation = activity.findViewById(R.id.confirmationInclude);
         customCardView = activity.findViewById(R.id.card_view);
         if(customCardView != null) customCardView.setVisibility(View.GONE);
+    }
+    public void setContext(Context context)
+    {
+        this.context = context;
     }
     public void showCustomToast(String message) {
         showCustomToast_main(message, 0);
@@ -96,21 +103,26 @@ public class userInterfaceHelper extends AppCompatActivity {
     }
     public void setPositiveConfirmation(String type)
     {
-        if(type.equalsIgnoreCase("exit"))
-        {
             positiveBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    activity.finish();
-                    System.exit(0);
+                    if(type.equalsIgnoreCase("exit"))
+                    {
+                        activity.finish();
+                        System.exit(0);
+                    }
+                    else if(type.equalsIgnoreCase("logout"))
+                    {
+                        context.startActivity(new Intent(context, MainActivity.class));
+                    }
                 }
             });
-        }
+
     }
 
     public void setNegativeConfirmation(String type)
     {
-        if(type.equalsIgnoreCase("close"))
+        if(type.equalsIgnoreCase("close") || type.equalsIgnoreCase("cancel"))
         {
             negativeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
