@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">PRELIM PRESENTATION</string>
+    <string name="app_name">CreditSwift</string>
     <string name="terms"><u>Terms and Condition</u></string>
 
     <string-array name="yesno">
@@ -13,5 +13,36 @@
         <item>2x</item>
         <item>2.5x</item>
         <item>3x</item>
+    </string-array>
+
+    <string-array name="interestPercent">
+        <item>0.50%</item>
+        <item>1.00%</item>
+        <item>1.50%</item>
+        <item>2.00%</item>
+        <item>2.50%</item>
+        <item>3.00%</item>
+        <item>3.50%</item>
+        <item>4.00%</item>
+        <item>4.50%</item>
+        <item>5.00%</item>
+        <item>5.50%</item>
+        <item>6.00%</item>
+        <item>6.50%</item>
+        <item>7.00%</item>
+        <item>7.50%</item>
+        <item>8.00%</item>
+        <item>8.50%</item>
+        <item>9.00%</item>
+        <item>9.50%</item>
+        <item>10.00%</item>
+    </string-array>
+
+    <string-array name="frequency">
+        <item>Weekly</item>
+        <item>Monthly</item>
+        <item>Quarterly</item>
+        <item>Semi-Annual</item>
+        <item>Annual</item>
     </string-array>
 </resources>

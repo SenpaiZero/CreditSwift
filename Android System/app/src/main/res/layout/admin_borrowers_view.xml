@@ -9,7 +9,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        app:cardBackgroundColor="@color/ic_launcher_background"
+        app:cardBackgroundColor="#9F98E4"
         app:cardCornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +33,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:orientation="vertical"
                 android:paddingLeft="5dp">
 
@@ -42,6 +42,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/abel"
+                    android:gravity="fill_vertical"
                     android:text="User's Name"
                     android:textColor="@color/darkRegister"
                     android:textSize="20sp"
@@ -50,38 +51,56 @@
                 <TextView
                     android:id="@+id/userTypeTxt"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
                     android:fontFamily="@font/abel"
+                    android:gravity="fill_vertical"
                     android:text="User's Type"
                     android:textColor="@color/darkRegister"
-                    android:textSize="20sp" />
-            </LinearLayout>
+                    android:textSize="16sp" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/emailTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/abel"
+                    android:text="email"
+                    android:textColor="@color/darkRegister"
+                    android:textSize="16sp" />
 
-                <Button
-                    android:id="@+id/usersEditBtn"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/lightTxt"
-                    android:text="Edit"
-                    app:cornerRadius="10dp" />
+                    android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/usersRemoveBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/lightTxt"
-                    android:text="Remove"
-                    app:cornerRadius="10dp" />
+                    <Button
+                        android:id="@+id/usersEditBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="2dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/lightTxt"
+                        android:text="Edit"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="10dp" />
+
+                    <Button
+                        android:id="@+id/usersRemoveBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="2dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/lightTxt"
+                        android:text="Remove"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="10dp" />
+                </LinearLayout>
             </LinearLayout>
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

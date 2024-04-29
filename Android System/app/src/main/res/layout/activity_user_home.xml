@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/lightLogin"
     android:fitsSystemWindows="true"
-    tools:context=".adminHome">
+    tools:context=".userHome">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -44,7 +44,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/adminTitleTxt"
+        android:id="@+id/userTitleTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/protest_strike"
@@ -65,7 +65,7 @@
         app:layout_constraintBottom_toTopOf="@+id/tabCon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/adminTitleTxt" />
+        app:layout_constraintTop_toBottomOf="@+id/userTitleTxt" />
 
     <LinearLayout
         android:id="@+id/tabCon"
@@ -94,7 +94,7 @@
             app:iconPadding="0dp" />
 
         <Button
-            android:id="@+id/tabBorrowerBtn"
+            android:id="@+id/tabDashboardBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
@@ -103,13 +103,13 @@
             android:backgroundTint="#00FFFFFF"
             android:drawableTop="@drawable/tab_borrower"
             android:drawableTint="@color/lightLogin"
-            android:text="Borrower"
+            android:text="Dashboard"
             android:textColor="@color/lightLogin"
             app:cornerRadius="10dp"
             app:iconPadding="0dp" />
 
         <Button
-            android:id="@+id/tabAdminBtn"
+            android:id="@+id/tabUserBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
@@ -118,14 +118,14 @@
             android:backgroundTint="#00FFFFFF"
             android:drawableTop="@drawable/tab_settings"
             android:drawableTint="@color/lightLogin"
-            android:text="Admin"
+            android:text="User"
             android:textColor="@color/lightLogin"
             app:cornerRadius="10dp"
             app:iconPadding="0dp" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/adminCon"
+        android:id="@+id/userCon"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -133,10 +133,10 @@
         app:layout_constraintBottom_toBottomOf="@+id/recyclerCon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/adminTitleTxt">
+        app:layout_constraintTop_toBottomOf="@+id/userTitleTxt">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/adminSettings"
+            android:id="@+id/userSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -186,7 +186,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/adminChangePassword"
+            android:id="@+id/userChangePassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -236,7 +236,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/viewBorrowArchive"
+            android:id="@+id/profileBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -269,7 +269,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/protest_strike"
-                            android:text="View Borrower Archives"
+                            android:text="Profile"
                             android:textAlignment="center"
                             android:textColor="#515151"
                             android:textSize="34sp"
@@ -286,57 +286,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/viewLenderArchive"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:cardBackgroundColor="#27FFFFFF"
-            app:cardCornerRadius="10dp">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="5dp">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:cardBackgroundColor="#66FFFFFF"
-                    app:cardCornerRadius="10dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingTop="20dp"
-                        android:paddingBottom="20dp">
-
-                        <TextView
-                            android:id="@+id/textView333"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/protest_strike"
-                            android:text="View Lender Archives"
-                            android:textAlignment="center"
-                            android:textColor="#515151"
-                            android:textSize="34sp"
-                            android:textStyle="bold"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.cardview.widget.CardView>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/adminLogout"
+            android:id="@+id/userLogout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -399,7 +349,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <include
-        android:id="@+id/adminSettingCon"
+        android:id="@+id/userSettingCon"
         layout="@layout/settings_include"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -418,19 +368,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/newLenderBtn"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="@null"
-        android:scaleType="fitCenter"
+    <include
+        android:id="@+id/dashboardInclude"
+        layout="@layout/borrower_dashboard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/recyclerCon"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/plus" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/userCon" />
 </androidx.constraintlayout.widget.ConstraintLayout>

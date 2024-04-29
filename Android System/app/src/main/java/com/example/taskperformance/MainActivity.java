@@ -30,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.Helper.PasswordHelper;
 import com.example.Helper.ProfileHelper;
 import com.example.Helper.SettingHelper;
 import com.example.Helper.userInterfaceHelper;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     ConstraintLayout loginLayout, registerLayout, termLayout, confirmationLayout, settingsLayout;
     Button cancelLogin, loginBtn, cancelRegister, registerBtn, cancelExit, confirmExit, settingCancel, settingApply;
     EditText loginUserTB, loginPassTB, registerUserTB, registerEmailTB, registerPassTB, registerRePassTB;
-    boolean isOpened, isLoginEye, isRegisterEye;
+    boolean isOpened;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
     void openLoginRegister(View view, ConstraintLayout layout, ImageView bg, boolean isReverse)
     {
 
+       // startActivity(new Intent(MainActivity.this, borrower_info.class));
+
         float start, end;
 
         if(isReverse)
@@ -105,9 +108,9 @@ public class MainActivity extends AppCompatActivity {
                 if(isOpened && (view.getId() != R.id.cancelLogin && view.getId() != R.id.cancelRegister)) return;
                 if(UIHelper.isConfirmationVisible() || settingsLayout.getVisibility() == View.VISIBLE) return;
 
-                setViewPassword(loginPassTB);
-                setViewPassword(registerPassTB);
-                setViewPassword(registerRePassTB);
+                PasswordHelper.setViewPassword(loginPassTB, MainActivity.this);
+                PasswordHelper.setViewPassword(registerPassTB, MainActivity.this);
+                PasswordHelper.setViewPassword(registerRePassTB, MainActivity.this);
                 isOpened = true;
                 hideAllElements(isReverse);
                 if(isReverse)
@@ -145,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
         loginUserTB.setText(null);
         loginPassTB.setText(null);
+        PasswordHelper.hidePassword(new EditText[]{loginPassTB, registerPassTB, registerRePassTB}, this);
     }
     void setOnClickListener()
     {
@@ -191,7 +195,10 @@ public class MainActivity extends AppCompatActivity {
                 String pass = loginPassTB.getText().toString();
 
                 if(user.equals("admin") && pass.equals("admin"))
+                {
                     startActivity(new Intent(MainActivity.this, adminHome.class));
+                    return;
+                }
                 if(user.isEmpty())
                 {
                     UIHelper.showCustomToast("Username input is invalid");
@@ -204,14 +211,24 @@ public class MainActivity extends AppCompatActivity {
                 }
 
 
-                if(profileHelper.checkLogin(user, pass))
-                {
-                    UIHelper.showCustomToast("Login Success");
-                    return;
-                }
-                else
+                String va = profileHelper.checkLogin(user, pass);
+                if(va.equalsIgnoreCase("FALSE"))
                 {
                     UIHelper.showCustomToast("Incorrect Credentials. Please try again.");
+                    return;
+                }
+
+                if(va.equalsIgnoreCase("LENDER"))
+                {
+                    startActivity(new Intent(MainActivity.this, lenderHome.class)
+                            .putExtra("name", user)
+                            .putExtra("username", user));
+                }
+                else if(va.equalsIgnoreCase("BORROWER"))
+                {
+                    startActivity(new Intent(MainActivity.this, userHome.class)
+                            .putExtra("name", user)
+                            .putExtra("username", user));
                 }
             }
         });
@@ -285,37 +302,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    void setViewPassword(final EditText text) {
-        text.setOnTouchListener(new View.OnTouchListener() {
-            boolean open = true;
-
-            @SuppressLint("ClickableViewAccessibility")
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    int drawableRight = text.getRight() - text.getCompoundDrawables()[2].getBounds().width();
-                    if (event.getRawX() >= drawableRight) {
-                        int w = text.getWidth();
-                        if (open) {
-                            open = false;
-                            text.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                            text.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(MainActivity.this, R.drawable.password_img),
-                                    null, ContextCompat.getDrawable(MainActivity.this, R.drawable.password_reveal), null);
-                        } else {
-                            open = true;
-                            text.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            text.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(MainActivity.this, R.drawable.password_img),
-                                    null, ContextCompat.getDrawable(MainActivity.this, R.drawable.password_hide), null);
-                        }
-                        text.setWidth(w);
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
-    }
 
     @SuppressLint("ClickableViewAccessibility")
     void setOnTouchListener()

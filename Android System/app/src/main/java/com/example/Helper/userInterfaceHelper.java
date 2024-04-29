@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -26,7 +27,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.taskperformance.MainActivity;
 import com.example.taskperformance.R;
 
-public class userInterfaceHelper extends AppCompatActivity {
+import java.util.Arrays;
+
+public class userInterfaceHelper {
     Activity activity;
     Context context;
     ConstraintLayout confirmation, customCardView;
@@ -180,5 +183,108 @@ public class userInterfaceHelper extends AppCompatActivity {
 
         return 0;
     }
+    public void setupDateSpinner(Spinner day, Spinner month, Spinner year) {
+
+        String[] months = new String[] {
+                "January", "February", "March", "April", "May", "June", "July",
+                "August", "September", "October", "November", "December"
+        };
+        String[] years = new String[50];
+        for(int i = years.length; i > 0; i--) years[i-1] = String.valueOf(2024-i+1);
+
+        ArrayAdapter<String> adapter_day;
+        ArrayAdapter<String> adapter_month;
+        ArrayAdapter<String> adapter_year;
+
+        if (day.getAdapter() == null || month.getAdapter() == null || year.getAdapter() == null) {
+            adapter_year = new ArrayAdapter<>(context,
+                    android.R.layout.simple_spinner_item, years);
+            adapter_month = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, months);
+
+            // Set initial selection
+            adapter_day = new ArrayAdapter<>(context,
+                    android.R.layout.simple_spinner_dropdown_item, setDay((month.getSelectedItem() != null) ? month.getSelectedItem().toString() : "", (year.getSelectedItem() != null) ? Integer.valueOf(year.getSelectedItem().toString()) : 0));
+
+            adapter_day.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            adapter_month.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            adapter_year.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            day.setAdapter(adapter_day); // Set the day spinner adapter directly here
+            year.setAdapter(adapter_year);
+            month.setAdapter(adapter_month);
+
+            // Add OnItemSelectedListener to month spinner
+            month.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    // Update day spinner based on selected month
+                    String selectedMonth = parent.getSelectedItem().toString();
+                    int selectedYear = Integer.valueOf(year.getSelectedItem().toString());
+                    String[] dayArray = setDay(selectedMonth, selectedYear);
+                    ArrayAdapter<String> newAdapter = new ArrayAdapter<>(context,
+                            android.R.layout.simple_spinner_dropdown_item, dayArray);
+                    day.setAdapter(newAdapter);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    // Do nothing
+                }
+            });
+
+// Add OnItemSelectedListener to year spinner
+            year.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    // Update day spinner based on selected year
+                    String selectedMonth = month.getSelectedItem().toString();
+                    int selectedYear = Integer.valueOf(parent.getSelectedItem().toString());
+                    String[] dayArray = setDay(selectedMonth, selectedYear);
+                    ArrayAdapter<String> newAdapter = new ArrayAdapter<>(context,
+                            android.R.layout.simple_spinner_dropdown_item, dayArray);
+                    day.setAdapter(newAdapter);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    // Do nothing
+                }
+            });
+
+        }
+    }
+
+
+
+    String[] setDay(String month, int year) {
+        String[] days_31 = new String[] {
+                "1","2","3","4","5","6","7","8","9","10","11","12","13","14","15",
+                "16","17","18","19","20","21","22","23","24","25","26","27","28","29","30", "31"
+        };
+        String[] days_30 = new String[] {
+                "1","2","3","4","5","6","7","8","9","10","11","12","13","14","15",
+                "16","17","18","19","20","21","22","23","24","25","26","27","28","29","30"
+        };
+        String[] days_29 = new String[] {
+                "1","2","3","4","5","6","7","8","9","10","11","12","13","14","15",
+                "16","17","18","19","20","21","22","23","24","25","26","27","28","29"
+        };
+        String[] days_28 = new String[] {
+                "1","2","3","4","5","6","7","8","9","10","11","12","13","14","15",
+                "16","17","18","19","20","21","22","23","24","25","26","27","28"
+        };
+
+        String m = month.toLowerCase();
+        String[] dayCountArray;
+        if (Arrays.asList("january", "march", "may", "july", "august", "october", "december").contains(m))
+            dayCountArray = days_31;
+        else if (!m.equals("february"))
+            dayCountArray = days_30;
+        else
+            dayCountArray = (year % 4 == 0) ? days_29 : days_28; // Check if it's a leap year
+
+        return dayCountArray;
+    }
+
 }
 

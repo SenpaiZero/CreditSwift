@@ -27,35 +27,32 @@ import com.example.model.usersModel;
 
 import java.util.LinkedList;
 
-public class adminHome extends AppCompatActivity {
+public class userHome extends AppCompatActivity {
 
     Spinner animSpeedSpinner, animSpinner;
-    ImageButton createLender;
-    Button tabLender, tabBorrower, tabAdmin;
+    Button tabLender, tabDashboard, tabUser;
     TextView title, titleConfirm, msgConfirm;;
-    LinkedList<usersModel> usersList;
     LinkedList<userLenderModel> usersLenderList;
     SettingHelper settingHelper;
     RecyclerView userCon;
     LinearLayout adminCon;
-    CardView logoutBtn, lenderArchiveBtn, borrowerArchiveBtn, changePasswordBtn, settingsBtn;
-    ConstraintLayout settingCon, confirmationLayout;
+    CardView logoutBtn, lenderArchiveBtn, dashboardBtn, changePasswordBtn, settingsBtn;
+    ConstraintLayout settingCon, confirmationLayout, dashboard;
     userInterfaceHelper UIHelper;
+    ProfileHelper profileHelper;
     Button settingApply, settingCancel, confirmLogout, cancelLogout;
-    boolean isNormal;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_home);
+        setContentView(R.layout.activity_user_home);
 
-        isNormal = getIntent().getBooleanExtra("normal", true);
         UIHelper = new userInterfaceHelper(this);
         UIHelper.setContext(this);
         UIHelper.removeActionbar();
         UIHelper.transparentStatusBar();
 
         settingHelper = new SettingHelper(this);
-
+        profileHelper = new ProfileHelper(this);
         // Confirmation
         UIHelper.setConfirmation("LOGOUT", "DO YOU REALLY WANT TO LOGOUT?", "NO", "YES");
         UIHelper.setNegativeConfirmation("cancel");
@@ -63,32 +60,36 @@ public class adminHome extends AppCompatActivity {
 
         setUIVariables();
         setOnClick();
-        if(isNormal)
-            changeTintTab(tabAdmin);
-        else
-            changeTintTab(tabLender);
-    }
+        changeTintTab(tabUser);
 
+        if(profileHelper.checkUserFirstTime(getIntent().getStringExtra("name")))
+        {
+            startActivity(new Intent(userHome.this, borrower_info.class)
+                    .putExtra("firstTime", true)
+                    .putExtra("username", getIntent().getStringExtra("username")));
+        }
+
+    }
     void setUIVariables()
     {
         tabLender = findViewById(R.id.tabLenderBtn);
-        tabBorrower = findViewById(R.id.tabBorrowerBtn);
-        tabAdmin = findViewById(R.id.tabAdminBtn);
-        title = findViewById(R.id.adminTitleTxt);
+       // dashboardBtn = findViewById(R.id.tabDashboardBtn);
+        tabUser = findViewById(R.id.tabUserBtn);
+        title = findViewById(R.id.userTitleTxt);
+        dashboard = findViewById(R.id.dashboardInclude);
 
         userCon = findViewById(R.id.recyclerCon);
-        adminCon = findViewById(R.id.adminCon);
+        adminCon = findViewById(R.id.userCon);
 
-        //Buttons for admin
-        logoutBtn = findViewById(R.id.adminLogout);
-        borrowerArchiveBtn = findViewById(R.id.viewBorrowArchive);
+        //Buttons for user
+        logoutBtn = findViewById(R.id.userLogout);
+        tabDashboard = findViewById(R.id.tabDashboardBtn);
         lenderArchiveBtn = findViewById(R.id.viewLenderArchive);
-        changePasswordBtn = findViewById(R.id.adminChangePassword);
-        createLender = findViewById(R.id.newLenderBtn);
+        changePasswordBtn = findViewById(R.id.userChangePassword);
 
         // Settings
-        settingCon = findViewById(R.id.adminSettingCon);
-        settingsBtn = findViewById(R.id.adminSettings);
+        settingCon = findViewById(R.id.userSettingCon);
+        settingsBtn = findViewById(R.id.userSettings);
         settingApply = findViewById(R.id.confirmBtnSetting);
         settingCancel = findViewById(R.id.cancelBtnSetting);
 
@@ -114,17 +115,17 @@ public class adminHome extends AppCompatActivity {
             }
         });
 
-        tabBorrower.setOnClickListener(new View.OnClickListener() {
+        tabDashboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeTintTab(tabBorrower);
+                changeTintTab(tabDashboard);
             }
         });
 
-        tabAdmin.setOnClickListener(new View.OnClickListener() {
+        tabUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeTintTab(tabAdmin);
+                changeTintTab(tabUser);
             }
         });
 
@@ -172,14 +173,6 @@ public class adminHome extends AppCompatActivity {
                 settingCon.setVisibility(View.INVISIBLE);
             }
         });
-
-        createLender.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(adminHome.this, lender_info.class)
-                        .putExtra("create", true));
-            }
-        });
     }
 
     @SuppressLint("UseCompatTextViewDrawableApis")
@@ -187,12 +180,12 @@ public class adminHome extends AppCompatActivity {
     {
         // Setting the text color to default
         tabLender.setTextColor(getColor(R.color.lightLogin));
-        tabBorrower.setTextColor(getColor(R.color.lightLogin));
-        tabAdmin.setTextColor(getColor(R.color.lightLogin));
+        tabDashboard.setTextColor(getColor(R.color.lightLogin));
+        tabUser.setTextColor(getColor(R.color.lightLogin));
 
         // Setting the drawable color to default
-        tabAdmin.setCompoundDrawableTintList(getColorStateList(R.color.lightLogin));
-        tabBorrower.setCompoundDrawableTintList(getColorStateList(R.color.lightLogin));
+        tabUser.setCompoundDrawableTintList(getColorStateList(R.color.lightLogin));
+        tabDashboard.setCompoundDrawableTintList(getColorStateList(R.color.lightLogin));
         tabLender.setCompoundDrawableTintList(getColorStateList(R.color.lightLogin));
 
         // Setting the selected button to highlighted color
@@ -204,12 +197,8 @@ public class adminHome extends AppCompatActivity {
 
     void changeContent(Button button)
     {
-        usersAdapter usersAdapter_;
         userLenderAdapter usersLenderAdapter_;
-
-        if(usersList != null)
-            if(usersList.size() > 0)
-                usersList.clear();
+        dashboard.setVisibility(View.INVISIBLE);
         if(usersLenderList != null)
             if(usersLenderList.size() > 0)
                 usersLenderList.clear();
@@ -219,26 +208,28 @@ public class adminHome extends AppCompatActivity {
         {
             title.setText("LENDER");
             changeContainerVisibility(false);
-            createLender.setVisibility(View.VISIBLE);
             usersLenderList = profileHelper.getUsersLenderList("LENDER", false);
-            usersLenderAdapter_ = new userLenderAdapter(usersLenderList, this, false);
+            usersLenderAdapter_ = new userLenderAdapter(usersLenderList, this, true);
             userCon.setAdapter(usersLenderAdapter_);
             userCon.setLayoutManager(new LinearLayoutManager(this));
         }
-        else if(button.getId() == tabBorrower.getId())
+        else if(button.getId() == tabDashboard.getId())
         {
-            title.setText("BORROWER");
-            createLender.setVisibility(View.INVISIBLE);
+            title.setText("DASHBOARD");
             changeContainerVisibility(false);
-            usersList = profileHelper.getUsersList("BORROWER", false);
-            usersAdapter_ = new usersAdapter(usersList, this);
-            userCon.setAdapter(usersAdapter_);
+
+            if(usersLenderList != null)
+                if(usersLenderList.size() > 0)
+                    usersLenderList.clear();
+            usersLenderAdapter_ = new userLenderAdapter(usersLenderList, this, true);
+            userCon.setAdapter(usersLenderAdapter_);
             userCon.setLayoutManager(new LinearLayoutManager(this));
+
+            dashboard.setVisibility(View.VISIBLE);
         }
-        else if(button.getId() == tabAdmin.getId())
+        else if(button.getId() == tabUser.getId())
         {
-            title.setText("ADMIN");
-            createLender.setVisibility(View.INVISIBLE);
+            title.setText("USER");
             changeContainerVisibility(true);
         }
 
@@ -256,5 +247,4 @@ public class adminHome extends AppCompatActivity {
         userCon.setVisibility(View.VISIBLE);
         adminCon.setVisibility(View.INVISIBLE);
     }
-
 }

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            app:cardBackgroundColor="#9F98E4"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#009F6060"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/profileView"
+                    android:layout_width="0dp"
+                    android:layout_height="125dp"
+                    android:layout_weight="1"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/user" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:orientation="vertical"
+                    android:paddingLeft="5dp">
+
+                    <TextView
+                        android:id="@+id/companyTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.5"
+                        android:fontFamily="@font/abel"
+                        android:text="Company Name"
+                        android:textColor="@color/darkRegister"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/emailViewTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.5"
+                        android:fontFamily="@font/abel"
+                        android:text="Email"
+                        android:textColor="@color/darkRegister"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/rangeTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.5"
+                        android:drawablePadding="5dp"
+                        android:fontFamily="@font/abel"
+                        android:text="1,000 - 100,000"
+                        android:textColor="@color/darkRegister"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/interestTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.5"
+                        android:fontFamily="@font/abel"
+                        android:text="5% | Monthly"
+                        android:textColor="@color/darkRegister"
+                        android:textSize="16sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:showDividers="middle">
+
+                        <Button
+                            android:id="@+id/adminEditLenderBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/lightTxt"
+                            android:text="Edit"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="10dp" />
+
+                        <Button
+                            android:id="@+id/adminRemoveLenderBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="2dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/lightTxt"
+                            android:text="Remove"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="10dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,7 +29,7 @@ public class usersAdapter extends RecyclerView.Adapter<usersAdapter.usersHolder>
     @NonNull
     @Override
     public usersHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.users_view, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.admin_borrowers_view, parent, false);
 
         return new usersHolder(view);
     }
@@ -39,6 +39,7 @@ public class usersAdapter extends RecyclerView.Adapter<usersAdapter.usersHolder>
         holder.nameTxt.setText(userList.get(position).getName());
         holder.typeTxt.setText(userList.get(position).getType());
         holder.profile.setImageBitmap(userList.get(position).getPicture());
+        holder.email.setText(userList.get(position).getEmail());
     }
 
     @Override
@@ -48,13 +49,14 @@ public class usersAdapter extends RecyclerView.Adapter<usersAdapter.usersHolder>
 
     public static class usersHolder extends RecyclerView.ViewHolder {
 
-        TextView nameTxt, typeTxt;
+        TextView nameTxt, typeTxt, email;
         ImageView profile;
         public usersHolder(@NonNull View itemView) {
             super(itemView);
 
             nameTxt = itemView.findViewById(R.id.userNameTxt);
             typeTxt = itemView.findViewById(R.id.userTypeTxt);
+            email = itemView.findViewById(R.id.emailTxt);
             profile = itemView.findViewById(R.id.profileView);
         }
     }

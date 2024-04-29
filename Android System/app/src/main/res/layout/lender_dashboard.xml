@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#00FFFFFF">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/dashboardCon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                app:cardBackgroundColor="@color/lightBackground2"
+                app:cardCornerRadius="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView46"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/protest_strike"
+                        android:text="DASHBOARD"
+                        android:textAlignment="center"
+                        android:textColor="@color/darkRegister"
+                        android:textSize="34sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            app:cardBackgroundColor="@color/lightBackground"
+                            app:cardCornerRadius="5dp"
+                            app:cardElevation="8dp">
+
+                            <TextView
+                                android:id="@+id/appliedLenderTxt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:fontFamily="@font/protest_strike"
+                                android:gravity="center"
+                                android:text="APPLIED BORROWER\n10"
+                                android:textAlignment="center"
+                                android:textColor="@color/darkRegister"
+                                android:textSize="16sp" />
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            app:cardBackgroundColor="@color/lightBackground"
+                            app:cardCornerRadius="5dp"
+                            app:cardElevation="8dp">
+
+                            <TextView
+                                android:id="@+id/totalBorrowedTxt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:fontFamily="@font/protest_strike"
+                                android:gravity="center"
+                                android:text="CURRENT  APPLIED BORROWER\n10"
+                                android:textAlignment="center"
+                                android:textColor="@color/darkRegister"
+                                android:textSize="16sp" />
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            app:cardBackgroundColor="@color/lightBackground"
+                            app:cardCornerRadius="5dp"
+                            app:cardElevation="8dp">
+
+                            <TextView
+                                android:id="@+id/totalCurrentBorrowedTxt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:fontFamily="@font/protest_strike"
+                                android:gravity="center"
+                                android:text="TOTAL SPENT\n10"
+                                android:textAlignment="center"
+                                android:textColor="@color/darkRegister"
+                                android:textSize="16sp" />
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            app:cardBackgroundColor="@color/lightBackground"
+                            app:cardCornerRadius="5dp"
+                            app:cardElevation="8dp">
+
+                            <TextView
+                                android:id="@+id/totalUnpaidTxt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:fontFamily="@font/protest_strike"
+                                android:gravity="center"
+                                android:text="UNPAID\n10"
+                                android:textAlignment="center"
+                                android:textColor="@color/darkRegister"
+                                android:textSize="16sp" />
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            app:cardBackgroundColor="@color/lightBackground"
+                            app:cardCornerRadius="5dp"
+                            app:cardElevation="8dp">
+
+                            <TextView
+                                android:id="@+id/totalPaidTxt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:fontFamily="@font/protest_strike"
+                                android:gravity="center"
+                                android:text="PAID\n10"
+                                android:textAlignment="center"
+                                android:textColor="@color/darkRegister"
+                                android:textSize="16sp" />
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            app:cardBackgroundColor="@color/lightBackground"
+                            app:cardCornerRadius="5dp"
+                            app:cardElevation="8dp">
+
+                            <TextView
+                                android:id="@+id/totalInterestTxt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:fontFamily="@font/protest_strike"
+                                android:gravity="center"
+                                android:text="TOTAL INTEREST\n10"
+                                android:textAlignment="center"
+                                android:textColor="@color/darkRegister"
+                                android:textSize="16sp" />
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                app:cardBackgroundColor="@color/lightBackground2"
+                app:cardCornerRadius="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/textView4532432"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/protest_strike"
+                        android:text="LSIT OF CURRENT APPLIED BORROWER"
+                        android:textAlignment="center"
+                        android:textColor="@color/darkRegister"
+                        android:textSize="24sp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp" />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

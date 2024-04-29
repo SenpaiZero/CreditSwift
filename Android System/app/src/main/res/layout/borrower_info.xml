@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".borrower_info"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:divider="@drawable/light_divider"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:orientation="vertical"
+        android:rotation="-45"
+        android:scaleX="4"
+        android:scaleY="4"
+        android:showDividers="middle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/top2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/lightLogin" />
+
+        <ImageView
+            android:id="@+id/bottom2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/lightRegister"
+            android:scaleType="centerCrop" />
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/infoCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:cardBackgroundColor="#20FFFFFF"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="10dp"
+        app:contentPaddingBottom="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/textView35"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/protest_strike_regular"
+                android:text="INFORMATIONS"
+                android:textColor="@color/darkRegister"
+                android:textSize="34sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView32"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/protest_strike"
+                android:text="Full Name"
+                android:textAllCaps="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/darkRegister"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView35" />
+
+            <LinearLayout
+                android:id="@+id/nameCon"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView32">
+
+                <EditText
+                    android:id="@+id/lastNameTB"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/darkRegister"
+                    android:drawableLeft="@drawable/user_img"
+                    android:drawablePadding="2dp"
+                    android:drawableTint="@color/darkRegister"
+                    android:elegantTextHeight="false"
+                    android:ems="12"
+                    android:focusableInTouchMode="true"
+                    android:fontFamily="@font/abel"
+                    android:hint="Last Name"
+                    android:inputType="text"
+                    android:textColor="@color/darkRegister"
+                    android:textColorHint="@color/darkRegister" />
+
+                <EditText
+                    android:id="@+id/firstNameTB"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/darkRegister"
+                    android:drawableLeft="@drawable/user_img"
+                    android:drawablePadding="2dp"
+                    android:drawableTint="@color/darkRegister"
+                    android:elegantTextHeight="false"
+                    android:ems="12"
+                    android:focusableInTouchMode="true"
+                    android:fontFamily="@font/abel"
+                    android:hint="First Name"
+                    android:inputType="text"
+                    android:textColor="@color/darkRegister"
+                    android:textColorHint="@color/darkRegister" />
+
+                <EditText
+                    android:id="@+id/middleNameTB"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/darkRegister"
+                    android:drawableLeft="@drawable/user_img"
+                    android:drawablePadding="2dp"
+                    android:drawableTint="@color/darkRegister"
+                    android:elegantTextHeight="false"
+                    android:ems="12"
+                    android:focusableInTouchMode="true"
+                    android:fontFamily="@font/abel"
+                    android:hint="Middle Name"
+                    android:inputType="text"
+                    android:textColor="@color/darkRegister"
+                    android:textColorHint="@color/darkRegister" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView34"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/protest_strike"
+                android:text="Birthdate"
+                android:textAlignment="viewStart"
+                android:textAllCaps="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/darkRegister"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nameCon" />
+
+            <LinearLayout
+                android:id="@+id/rateTxtCon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView34">
+
+                <TextView
+                    android:id="@+id/textView36"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/abel"
+                    android:text="Month"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/darkRegister"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView37"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/abel"
+                    android:text="Day"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/darkRegister"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView38"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/abel"
+                    android:text="Year"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/darkRegister"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rateCon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rateTxtCon">
+
+                <Spinner
+                    android:id="@+id/monthSpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/darkRegister"
+                    android:dropDownWidth="match_parent"
+                    android:foregroundTint="@color/darkRegister" />
+
+                <Spinner
+                    android:id="@+id/daySpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/darkRegister"
+                    android:dropDownWidth="match_parent"
+                    android:foregroundTint="@color/darkRegister" />
+
+                <Spinner
+                    android:id="@+id/yearSpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/darkRegister"
+                    android:dropDownWidth="match_parent"
+                    android:foregroundTint="@color/darkRegister" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:cardBackgroundColor="#20FFFFFF"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/infoCard">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView39"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:fontFamily="@font/protest_strike"
+                android:text="PROFILE PICTURE"
+                android:textAlignment="center"
+                android:textColor="@color/darkRegister"
+                android:textSize="34sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/picture"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="16dp"
+                android:scaleType="fitCenter"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView39"
+                app:srcCompat="@drawable/add_picture" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/cancelLenderInfoBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/lightTxt"
+            android:fontFamily="@font/protest_strike"
+            android:text="CANCEL"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:visibility="gone"
+            app:cornerRadius="4dp" />
+
+        <Button
+            android:id="@+id/startBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/positiveButton"
+            android:fontFamily="@font/protest_strike"
+            android:text="START"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:cornerRadius="4dp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

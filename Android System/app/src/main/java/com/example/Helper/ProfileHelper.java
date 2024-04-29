@@ -5,11 +5,16 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.util.Log;
 
+import com.example.model.userLenderModel;
 import com.example.model.usersModel;
 
+import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 
 public class ProfileHelper {
@@ -26,10 +31,12 @@ public class ProfileHelper {
     public boolean newAccount(String username, String password, String email, String type)
     {
         ContentValues values = new ContentValues();
-        values.put(SqliteHelper.AccountEntry.USERNAME_COLUMN, username.trim());
+        values.put(SqliteHelper.AccountEntry.USERNAME_COLUMN, username.trim().replaceAll(" ", "_"));
         values.put(SqliteHelper.AccountEntry.EMAIL_COLUMN, email.trim());
         values.put(SqliteHelper.AccountEntry.PASSWORD_COLUMN, password.trim());
         values.put(SqliteHelper.AccountEntry.TYPE_COLUMN, type.trim());
+        values.put(SqliteHelper.AccountEntry.ARCHIVE_COLUMN, "NO");
+        values.put(SqliteHelper.AccountEntry.DATA_COLUMN, "NO");
         try
         {
             long newRowId = db.insert(SqliteHelper.AccountEntry.TABLE_NAME, null, values);
@@ -44,43 +51,252 @@ public class ProfileHelper {
              return false;
          }
     }
+    public boolean checkUserFirstTime(String name) {
+        String[] col = {
+                SqliteHelper.AccountEntry.USERNAME_COLUMN,
+                SqliteHelper.AccountEntry.DATA_COLUMN
+        };
+        Cursor cursor = db.query(
+                SqliteHelper.AccountEntry.TABLE_NAME,
+                col,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
 
-    public LinkedList<usersModel> getUsersList(String type, Bitmap img) // temp lng img
-    {
-        LinkedList<usersModel> list = new LinkedList<>();
-        String[] columns = {SqliteHelper.AccountEntry.USERNAME_COLUMN,
-                            SqliteHelper.AccountEntry.TYPE_COLUMN};
-        Cursor cursor = db.query(SqliteHelper.AccountEntry.TABLE_NAME, columns, null,null,null,null, null);
-
-        while(cursor.moveToNext())
-        {
+        while(cursor.moveToNext()) {
             String name_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.USERNAME_COLUMN));
-            String type_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.TYPE_COLUMN));
+            String data = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.DATA_COLUMN));
 
-            if(type.equals(type_))
-                list.add(new usersModel(name_, type_, img));
+            if(name_.equals(name)) {
+                if(data.equalsIgnoreCase("NO"))
+                    return true;
+            }
         }
 
-        return list;
+        return false;
     }
 
-    public boolean checkLogin(String username, String password)
+    public boolean newUserInformation(String username, String name, String birth, Bitmap imageBitmap) {
+        ContentValues values = new ContentValues();
+        values.put(SqliteHelper.BorrowerAccount.BIRTH_COLUMN, birth);
+        values.put(SqliteHelper.BorrowerAccount.USERNAME_COLUMN, username);
+        values.put(SqliteHelper.BorrowerAccount.NAME_COLUMN, name);
+        values.put(SqliteHelper.BorrowerAccount.LIST_COLUMN, "");
+        values.put(SqliteHelper.BorrowerAccount.LIST_DONE_COLUMN, "");
+        values.put(SqliteHelper.BorrowerAccount.TOTAL_CURRENT_LEND_COLUMN, 0.0);
+        values.put(SqliteHelper.BorrowerAccount.TOTAL_LEND_COLUMN, 0.0);
+        values.put(SqliteHelper.BorrowerAccount.TOTAL_INTEREST_COLUMN, 0.0);
+
+        ContentValues val = new ContentValues();
+        val.put(SqliteHelper.AccountEntry.DATA_COLUMN, "YES");
+
+        byte[] imageBytes = null;
+        if (imageBitmap != null) {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+            imageBytes = outputStream.toByteArray();
+        }
+
+        values.put(SqliteHelper.LenderAccount.PIC_COLUMN, imageBytes);
+
+        try {
+            long newRowId = db.insert(SqliteHelper.BorrowerAccount.TABLE_NAME, null, values);
+            db.update(
+                    SqliteHelper.AccountEntry.TABLE_NAME,
+                    val,
+                    SqliteHelper.AccountEntry.USERNAME_COLUMN + " = ?",
+                    new String[]{username}
+            );
+            return newRowId != -1;
+        } catch (Exception ex) {
+            Log.e("New Borrower Info", "Error inserting lender: " + ex.getMessage());
+            return false;
+        }
+    }
+    public boolean newLender(String name, String email, double minimum,
+                             double maximum, double rate, String frequency,
+                             Bitmap imageBitmap) {
+
+        ContentValues values = new ContentValues();
+        ContentValues actValues = new ContentValues();
+
+        String name_ = name.trim().replaceAll(" ", "_");
+        actValues.put(SqliteHelper.AccountEntry.USERNAME_COLUMN, name_);
+        actValues.put(SqliteHelper.AccountEntry.PASSWORD_COLUMN, name_);
+        actValues.put(SqliteHelper.AccountEntry.EMAIL_COLUMN, email);
+        actValues.put(SqliteHelper.AccountEntry.PASSWORD_COLUMN, name_);
+        actValues.put(SqliteHelper.AccountEntry.TYPE_COLUMN, "LENDER");
+        actValues.put(SqliteHelper.AccountEntry.ARCHIVE_COLUMN, "NO");
+        actValues.put(SqliteHelper.AccountEntry.DATA_COLUMN, "YES");
+
+        values.put(SqliteHelper.LenderAccount.NAME_COLUMN, name_);
+        values.put(SqliteHelper.LenderAccount.MIN_COLUMN, minimum);
+        values.put(SqliteHelper.LenderAccount.MAX_COLUMN, maximum);
+        values.put(SqliteHelper.LenderAccount.RATE_COLUMN, rate);
+        values.put(SqliteHelper.LenderAccount.FREQ_COLUMN, frequency);
+
+        // Convert the Bitmap image to a byte array
+        byte[] imageBytes = null;
+        if (imageBitmap != null) {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+            imageBytes = outputStream.toByteArray();
+        }
+        // Add the image byte array to the ContentValues
+        values.put(SqliteHelper.LenderAccount.PIC_COLUMN, imageBytes);
+
+        try {
+            // Insert the data into the database
+            long newRowId2 = db.insert(SqliteHelper.AccountEntry.TABLE_NAME, null, actValues);
+            if (newRowId2 == -1) {
+                return false;
+            }
+
+            long newRowId = db.insert(SqliteHelper.LenderAccount.TABLE_NAME, null, values);
+            return newRowId != -1;
+        } catch (Exception ex) {
+            Log.e("New Lender", "Error inserting lender: " + ex.getMessage());
+            return false;
+        }
+    }
+
+    public LinkedList<usersModel> getUsersList(String type, boolean isArchive) {
+        LinkedList<usersModel> list = new LinkedList<>();
+        LinkedList<usersModel> archlist = new LinkedList<>();
+
+        String[] columns = {
+                SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN,
+                SqliteHelper.AccountEntry.TYPE_COLUMN,
+                SqliteHelper.AccountEntry.EMAIL_COLUMN,
+                SqliteHelper.AccountEntry.ARCHIVE_COLUMN,
+                SqliteHelper.BorrowerAccount.TABLE_NAME + "." + SqliteHelper.BorrowerAccount.NAME_COLUMN,
+                SqliteHelper.BorrowerAccount.PIC_COLUMN
+        };
+
+        String selection = SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN +
+                " = " + SqliteHelper.BorrowerAccount.TABLE_NAME + "." + SqliteHelper.BorrowerAccount.USERNAME_COLUMN;
+
+        Cursor cursor = db.query(
+                SqliteHelper.AccountEntry.TABLE_NAME + " INNER JOIN " + SqliteHelper.BorrowerAccount.TABLE_NAME +
+                        " ON " + selection,
+                columns,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        while (cursor.moveToNext()) {
+            String name_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.USERNAME_COLUMN));
+            String type_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.TYPE_COLUMN));
+            String email_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.EMAIL_COLUMN));
+            String archive_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.ARCHIVE_COLUMN));
+
+            byte[] imageBytes = cursor.getBlob(cursor.getColumnIndexOrThrow(SqliteHelper.BorrowerAccount.PIC_COLUMN));
+            Bitmap img = null; // Default value for the image
+
+            if (imageBytes != null && imageBytes.length > 0) {
+                img = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+            }
+
+            if (type.equals(type_)) {
+                if (archive_.equalsIgnoreCase("YES"))
+                    archlist.add(new usersModel(name_, type_, email_, img));
+                else
+                    list.add(new usersModel(name_, type_, email_, img));
+            }
+        }
+
+        Log.d("", Arrays.toString(list.toArray()));
+        return isArchive ? archlist : list;
+    }
+
+    public LinkedList<userLenderModel> getUsersLenderList(String type, boolean isArchive)
+    {
+        LinkedList<userLenderModel> list = new LinkedList<>();
+        LinkedList<userLenderModel> archlist = new LinkedList<>();
+        String[] columns = {
+                SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN,
+                SqliteHelper.AccountEntry.ARCHIVE_COLUMN,
+                SqliteHelper.AccountEntry.EMAIL_COLUMN,
+                SqliteHelper.AccountEntry.TYPE_COLUMN,
+                SqliteHelper.LenderAccount.TABLE_NAME + "." + SqliteHelper.LenderAccount.NAME_COLUMN,
+                SqliteHelper.LenderAccount.NAME_COLUMN,
+                SqliteHelper.LenderAccount.PIC_COLUMN,
+                SqliteHelper.LenderAccount.MIN_COLUMN,
+                SqliteHelper.LenderAccount.MAX_COLUMN,
+                SqliteHelper.LenderAccount.FREQ_COLUMN,
+                SqliteHelper.LenderAccount.RATE_COLUMN,
+        };
+
+        String selection = SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN +
+                " = " + SqliteHelper.LenderAccount.TABLE_NAME + "." + SqliteHelper.LenderAccount.NAME_COLUMN;
+
+        Cursor cursor = db.query(
+                SqliteHelper.AccountEntry.TABLE_NAME + " INNER JOIN " + SqliteHelper.LenderAccount.TABLE_NAME +
+                        " ON " + selection,
+                columns,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        while (cursor.moveToNext())
+        {
+            String name_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.NAME_COLUMN));
+            double max_ = cursor.getDouble(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.MAX_COLUMN));
+            double min_ = cursor.getDouble(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.MIN_COLUMN));
+            String freq_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.FREQ_COLUMN));
+            double rate_ = cursor.getDouble(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.RATE_COLUMN));
+            String email_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.EMAIL_COLUMN));
+            String archive_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.ARCHIVE_COLUMN));
+            String type_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.TYPE_COLUMN));
+            byte[] imageBytes = cursor.getBlob(cursor.getColumnIndexOrThrow(SqliteHelper.BorrowerAccount.PIC_COLUMN));
+
+            Bitmap img = null; // Default value for the image
+
+            if (imageBytes != null && imageBytes.length > 0) {
+                img = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+            }
+
+            if (type.equals(type_)) {
+                if (archive_.equalsIgnoreCase("YES"))
+                    archlist.add(new userLenderModel(name_, min_, max_, rate_, freq_, email_, img));
+                else
+                    list.add(new userLenderModel(name_, min_, max_, rate_, freq_, email_, img));
+            }
+        }
+
+        return isArchive ? archlist : list;
+    }
+    public String checkLogin(String username, String password)
     {
         String[] columns = {SqliteHelper.AccountEntry.USERNAME_COLUMN,
                 SqliteHelper.AccountEntry.EMAIL_COLUMN,
-                SqliteHelper.AccountEntry.PASSWORD_COLUMN};
+                SqliteHelper.AccountEntry.PASSWORD_COLUMN,
+                SqliteHelper.AccountEntry.ARCHIVE_COLUMN,
+                SqliteHelper.AccountEntry.TYPE_COLUMN};
         Cursor cursor = db.query(SqliteHelper.AccountEntry.TABLE_NAME, columns, null, null, null, null, null);
 
         while(cursor.moveToNext())
         {
             String username_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.USERNAME_COLUMN));
             String password_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.PASSWORD_COLUMN));
+            String archive_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.ARCHIVE_COLUMN));
+            String type_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.TYPE_COLUMN));
 
+            if(archive_.equalsIgnoreCase("YES")) return "false";
             if(username_.trim().equals(username) && password_.trim().equals(password))
             {
-                return true;
+                return type_;
             }
         }
-        return false;
+        return "false";
     }
 }
