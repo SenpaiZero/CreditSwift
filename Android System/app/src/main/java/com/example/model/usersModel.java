@@ -9,13 +9,18 @@ public class usersModel {
     String type;
     String email;
     Bitmap picture;
-    public usersModel(String name, String type, String email, Bitmap picture) {
+    String fullname;
+    public usersModel(String name, String type, String email, Bitmap picture, String fullname) {
         this.name = name;
         this.type = type;
         this.email = email;
         this.picture = picture;
+        this.fullname = fullname;
     }
 
+    public String getFullname() {
+        return fullname;
+    }
     public String getEmail() {
         return email;
     }

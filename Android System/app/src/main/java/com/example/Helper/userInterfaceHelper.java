@@ -26,6 +26,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.taskperformance.MainActivity;
 import com.example.taskperformance.R;
+import com.example.taskperformance.adminHome;
 
 import java.util.Arrays;
 
@@ -89,8 +90,8 @@ public class userInterfaceHelper {
     {
         if(confirmation.getVisibility() == View.VISIBLE)
             return true;
-        else
-            return false;
+
+        return false;
     }
     public void setConfirmation(String title, String message, String negativeTxt, String positiveTxt)
     {
@@ -121,6 +122,32 @@ public class userInterfaceHelper {
                 }
             });
 
+    }
+
+    public void setPositiveConfirmation(String type, ProfileHelper profileHelper, String name, boolean isLender) {
+        positiveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (type.equalsIgnoreCase("unarchive")) {
+                    profileHelper.changeArchive(name, false);
+                    setConfirmVisibility(false);
+
+                    if(isLender)
+                        adminHome.admin.setLenderList(true);
+                    else
+                        adminHome.admin.setBorrowerList(true);
+                }
+                else if(type.equalsIgnoreCase("archive")) {
+                    profileHelper.changeArchive(name, true);
+                    setConfirmVisibility(false);
+
+                    if(isLender)
+                        adminHome.admin.setLenderList(false);
+                    else
+                        adminHome.admin.setBorrowerList(false);
+                }
+            }
+        });
     }
 
     public void setNegativeConfirmation(String type)
@@ -165,7 +192,6 @@ public class userInterfaceHelper {
 
     }
 
-
     public void setSpinner(String[] arr, Spinner spin)
     {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity, R.layout.spinner_style, arr);
@@ -183,6 +209,7 @@ public class userInterfaceHelper {
 
         return 0;
     }
+
     public void setupDateSpinner(Spinner day, Spinner month, Spinner year) {
 
         String[] months = new String[] {

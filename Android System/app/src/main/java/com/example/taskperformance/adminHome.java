@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.service.controls.Control;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -43,6 +44,8 @@ public class adminHome extends AppCompatActivity {
     userInterfaceHelper UIHelper;
     Button settingApply, settingCancel, confirmLogout, cancelLogout;
     boolean isNormal;
+    ProfileHelper profileHelper;
+    public static adminHome admin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,11 +58,7 @@ public class adminHome extends AppCompatActivity {
         UIHelper.transparentStatusBar();
 
         settingHelper = new SettingHelper(this);
-
-        // Confirmation
-        UIHelper.setConfirmation("LOGOUT", "DO YOU REALLY WANT TO LOGOUT?", "NO", "YES");
-        UIHelper.setNegativeConfirmation("cancel");
-        UIHelper.setPositiveConfirmation("logout");
+        profileHelper = new ProfileHelper(this);
 
         setUIVariables();
         setOnClick();
@@ -67,6 +66,15 @@ public class adminHome extends AppCompatActivity {
             changeTintTab(tabAdmin);
         else
             changeTintTab(tabLender);
+
+        admin = this;
+    }
+
+    void setLogoutPopup() {
+        // Confirmation
+        UIHelper.setConfirmation("LOGOUT", "DO YOU REALLY WANT TO LOGOUT?", "NO", "YES");
+        UIHelper.setNegativeConfirmation("cancel");
+        UIHelper.setPositiveConfirmation("logout");
     }
 
     void setUIVariables()
@@ -128,10 +136,26 @@ public class adminHome extends AppCompatActivity {
             }
         });
 
+        borrowerArchiveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeContent(borrowerArchiveBtn);
+                createLender.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        lenderArchiveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeContent(lenderArchiveBtn);
+                createLender.setVisibility(View.INVISIBLE);
+            }
+        });
         // Admin Buttons
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setLogoutPopup();
                 UIHelper.setConfirmVisibility(true);
             }
         });
@@ -202,11 +226,8 @@ public class adminHome extends AppCompatActivity {
         changeContent(button);
     }
 
-    void changeContent(Button button)
+    void changeContent(View button)
     {
-        usersAdapter usersAdapter_;
-        userLenderAdapter usersLenderAdapter_;
-
         if(usersList != null)
             if(usersList.size() > 0)
                 usersList.clear();
@@ -214,32 +235,31 @@ public class adminHome extends AppCompatActivity {
             if(usersLenderList.size() > 0)
                 usersLenderList.clear();
 
-        ProfileHelper profileHelper = new ProfileHelper(this);
         if(button.getId() == tabLender.getId())
         {
             title.setText("LENDER");
-            changeContainerVisibility(false);
-            createLender.setVisibility(View.VISIBLE);
-            usersLenderList = profileHelper.getUsersLenderList("LENDER", false);
-            usersLenderAdapter_ = new userLenderAdapter(usersLenderList, this, false);
-            userCon.setAdapter(usersLenderAdapter_);
-            userCon.setLayoutManager(new LinearLayoutManager(this));
+            setLenderList(false);
         }
         else if(button.getId() == tabBorrower.getId())
         {
             title.setText("BORROWER");
-            createLender.setVisibility(View.INVISIBLE);
-            changeContainerVisibility(false);
-            usersList = profileHelper.getUsersList("BORROWER", false);
-            usersAdapter_ = new usersAdapter(usersList, this);
-            userCon.setAdapter(usersAdapter_);
-            userCon.setLayoutManager(new LinearLayoutManager(this));
+            setBorrowerList(false);
         }
         else if(button.getId() == tabAdmin.getId())
         {
             title.setText("ADMIN");
             createLender.setVisibility(View.INVISIBLE);
             changeContainerVisibility(true);
+        }
+        else if(button.getId() == borrowerArchiveBtn.getId())
+        {
+            title.setText("BORROWER ARCHIVES");
+            setBorrowerList(true);
+        }
+        else if(button.getId() == lenderArchiveBtn.getId())
+        {
+            title.setText("LENDER ARCHIVES");
+            setLenderList(true);
         }
 
     }
@@ -257,4 +277,32 @@ public class adminHome extends AppCompatActivity {
         adminCon.setVisibility(View.INVISIBLE);
     }
 
+    public void editLender(String username) {
+        startActivity(new Intent(adminHome.this, lender_info.class)
+                .putExtra("create", false)
+                .putExtra("username", username));
+    }
+    public void setBorrowerList(boolean isArchive) {
+        usersAdapter usersAdapter_;
+        createLender.setVisibility(View.INVISIBLE);
+        changeContainerVisibility(false);
+        usersList = profileHelper.getUsersList("BORROWER", isArchive);
+        usersAdapter_ = new usersAdapter(usersList, this,
+                isArchive ? usersAdapter.archive : usersAdapter.admin,
+                profileHelper, UIHelper);
+        userCon.setAdapter(usersAdapter_);
+        userCon.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    public void setLenderList(boolean isArchive) {
+        userLenderAdapter usersLenderAdapter_;
+        changeContainerVisibility(false);
+        createLender.setVisibility(View.VISIBLE);
+        usersLenderList = profileHelper.getUsersLenderList("LENDER", isArchive);
+        usersLenderAdapter_ = new userLenderAdapter(usersLenderList, this,
+                isArchive ? userLenderAdapter.archive : userLenderAdapter.admin,
+                profileHelper, UIHelper);
+        userCon.setAdapter(usersLenderAdapter_);
+        userCon.setLayoutManager(new LinearLayoutManager(this));
+    }
 }

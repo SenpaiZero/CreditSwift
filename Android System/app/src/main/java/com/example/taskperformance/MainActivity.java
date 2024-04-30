@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
                 String user = loginUserTB.getText().toString();
                 String pass = loginPassTB.getText().toString();
 
-                if(user.equals("admin") && pass.equals("admin"))
+                if(user.equalsIgnoreCase("admin") && pass.equals("admin"))
                 {
                     startActivity(new Intent(MainActivity.this, adminHome.class));
                     return;
@@ -259,10 +259,14 @@ public class MainActivity extends AppCompatActivity {
 
                 if(rePass.equals(pass))
                 {
-                    if(profileHelper.newAccount(user, pass, email, "BORROWER"))
+                    String va = profileHelper.newAccount(user, pass, email, "BORROWER");
+                    if(va.equalsIgnoreCase("true"))
                     {
                         UIHelper.showCustomToast("You have successfully registered.");
                         resetTextBox();
+                    }
+                    else if(va.equalsIgnoreCase("duplicate")) {
+                        UIHelper.showCustomToast("The username already exist.");
                     }
                     else
                     {

@@ -209,7 +209,7 @@ public class userHome extends AppCompatActivity {
             title.setText("LENDER");
             changeContainerVisibility(false);
             usersLenderList = profileHelper.getUsersLenderList("LENDER", false);
-            usersLenderAdapter_ = new userLenderAdapter(usersLenderList, this, true);
+            usersLenderAdapter_ = new userLenderAdapter(usersLenderList, this, userLenderAdapter.admin, profileHelper);
             userCon.setAdapter(usersLenderAdapter_);
             userCon.setLayoutManager(new LinearLayoutManager(this));
         }
@@ -221,7 +221,7 @@ public class userHome extends AppCompatActivity {
             if(usersLenderList != null)
                 if(usersLenderList.size() > 0)
                     usersLenderList.clear();
-            usersLenderAdapter_ = new userLenderAdapter(usersLenderList, this, true);
+            usersLenderAdapter_ = new userLenderAdapter(usersLenderList, this, userLenderAdapter.admin, profileHelper);
             userCon.setAdapter(usersLenderAdapter_);
             userCon.setLayoutManager(new LinearLayoutManager(this));
 

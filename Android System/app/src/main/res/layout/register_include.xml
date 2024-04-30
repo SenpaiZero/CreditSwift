@@ -49,7 +49,8 @@
             android:focusableInTouchMode="true"
             android:fontFamily="@font/abel"
             android:hint="Username"
-            android:inputType="text"
+            android:inputType="text|textCapCharacters"
+            android:textAllCaps="true"
             android:textColor="@color/lightLogin"
             android:textColorHint="@color/lightLogin" />
 
@@ -66,7 +67,8 @@
             android:focusableInTouchMode="true"
             android:fontFamily="@font/abel"
             android:hint="Email"
-            android:inputType="text"
+            android:inputType="text|textEmailAddress|textCapCharacters"
+            android:textAllCaps="true"
             android:textColor="@color/lightLogin"
             android:textColorHint="@color/lightLogin" />
 

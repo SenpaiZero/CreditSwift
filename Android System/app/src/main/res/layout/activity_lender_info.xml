@@ -105,7 +105,8 @@
                 android:focusableInTouchMode="true"
                 android:fontFamily="@font/abel"
                 android:hint="Company Name"
-                android:inputType="text"
+                android:inputType="text|textCapCharacters"
+                android:textAllCaps="true"
                 android:textColor="@color/darkRegister"
                 android:textColorHint="@color/darkRegister"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -142,7 +143,8 @@
                 android:focusableInTouchMode="true"
                 android:fontFamily="@font/abel"
                 android:hint="Company Name"
-                android:inputType="textEmailAddress"
+                android:inputType="text|textEmailAddress|textCapCharacters"
+                android:textAllCaps="true"
                 android:textColor="@color/darkRegister"
                 android:textColorHint="@color/darkRegister"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -408,4 +410,14 @@
 
     </LinearLayout>
 
+    <include
+        android:id="@+id/card_view"
+        layout="@layout/custom_toast"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

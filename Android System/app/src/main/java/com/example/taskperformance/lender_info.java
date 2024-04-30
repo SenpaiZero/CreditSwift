@@ -9,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,7 +55,28 @@ public class lender_info extends AppCompatActivity {
         if(getIntent().getBooleanExtra("create", false))
             return;
 
-        // Load the data and display it
+        name.setEnabled(false);
+
+        String username = getIntent().getStringExtra("username").toString().replaceAll("_"," ");
+        String origUsername = username.replaceAll(" ","_");
+        profileHelper.getEditLender(origUsername);
+
+        String Username = profileHelper.Username;
+        String Email = profileHelper.Email;
+        String Name = profileHelper.Name;
+        String Freq = profileHelper.Freq;
+        double Min = profileHelper.Min;
+        double Max = profileHelper.Max;
+        double Rate = profileHelper.Rate;
+        Bitmap pic = profileHelper.pic;
+
+        name.setText(Name.replaceAll("_", " "));
+        email.setText(Email);
+        min.setText(Min + "");
+        max.setText(Max + "");
+        rate.setSelection(UIHelper.getSpinnerSelected(rate, String.valueOf(Rate) + "0%"));
+        freq.setSelection(UIHelper.getSpinnerSelected(freq, Freq));
+        profile.setImageBitmap(pic);
     }
     void setUIVariable()
     {
@@ -82,13 +104,31 @@ public class lender_info extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createNewLender(name.getText().toString(),
-                        email.getText().toString(),
-                        Double.valueOf(max.getText().toString()),
-                        Double.valueOf(min.getText().toString()),
-                        Double.valueOf(rate.getSelectedItem().toString().replaceAll("%", "")),
-                        freq.getSelectedItem().toString(),
-                        ((BitmapDrawable) profile.getDrawable()).getBitmap());
+                if(getIntent().getBooleanExtra("create", true))
+                {
+                    createNewLender(name.getText().toString(),
+                            email.getText().toString(),
+                            Double.valueOf(max.getText().toString()),
+                            Double.valueOf(min.getText().toString()),
+                            Double.valueOf(rate.getSelectedItem().toString().replaceAll("%", "")),
+                            freq.getSelectedItem().toString(),
+                            ((BitmapDrawable) profile.getDrawable()).getBitmap());
+                }
+                else
+                {
+                    if(profileHelper.updateLenderInfo(name.getText().toString(),
+                            email.getText().toString(),
+                            Double.valueOf(min.getText().toString()),
+                            Double.valueOf(max.getText().toString()),
+                            Double.valueOf(rate.getSelectedItem().toString().replaceAll("%", "")),
+                            freq.getSelectedItem().toString(),
+                            ((BitmapDrawable) profile.getDrawable()).getBitmap())) {
+                        UIHelper.showCustomToast("You have successfully updated the profile.");
+                    }
+                    else {
+                        UIHelper.showCustomToast("Something went wrong. Please try again.");
+                    }
+                }
             }
         });
 
@@ -102,10 +142,17 @@ public class lender_info extends AppCompatActivity {
     }
     void createNewLender(String companyName, String email, double max, double min,
                          double interest, String freq, Bitmap img) {
-        if(profileHelper.newLender(companyName, email, min, max, interest, freq, img))
+        String va = profileHelper.newLender(companyName, email, min, max, interest, freq, img);
+        if(va.equalsIgnoreCase("true"))
         {
-           // UIHelper.showCustomToast("You have successfully added a new lender.");
+            UIHelper.showCustomToast("You have successfully added a new lender.");
             goAdmin();
+        }
+        else if(va.equalsIgnoreCase("duplicate")) {
+            UIHelper.showCustomToast("The username already exist.");
+        }
+        else {
+            UIHelper.showCustomToast("Something went wrong. Please try again later.");
         }
     }
 

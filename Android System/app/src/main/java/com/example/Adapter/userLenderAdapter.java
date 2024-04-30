@@ -13,9 +13,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.Helper.ProfileHelper;
+import com.example.Helper.userInterfaceHelper;
 import com.example.model.userLenderModel;
 import com.example.model.usersModel;
 import com.example.taskperformance.R;
+import com.example.taskperformance.adminHome;
 
 import java.util.LinkedList;
 
@@ -23,13 +26,25 @@ public class userLenderAdapter extends RecyclerView.Adapter<userLenderAdapter.us
 
     LinkedList<userLenderModel> lenderList;
     Context context;
-    boolean isUser;
-    public userLenderAdapter(LinkedList<userLenderModel> lenderList, Context context, boolean isUser) {
+    String type;
+    ProfileHelper profileHelper;
+    userInterfaceHelper UIHelper;
+    public static final String admin = "admin",
+            user = "user",
+            archive = "archive";
+    public userLenderAdapter(LinkedList<userLenderModel> lenderList, Context context, String type, ProfileHelper profileHelper) {
         this.lenderList = lenderList;
         this.context = context;
-        this.isUser = isUser;
+        this.type = type;
+        this.profileHelper = profileHelper;
     }
-
+    public userLenderAdapter(LinkedList<userLenderModel> lenderList, Context context, String type, ProfileHelper profileHelper, userInterfaceHelper UIHelper) {
+        this.lenderList = lenderList;
+        this.context = context;
+        this.type = type;
+        this.profileHelper = profileHelper;
+        this.UIHelper = UIHelper;
+    }
 
     @NonNull
     @Override
@@ -41,47 +56,57 @@ public class userLenderAdapter extends RecyclerView.Adapter<userLenderAdapter.us
 
     @Override
     public void onBindViewHolder(@NonNull userLenderHolder holder, int position) {
-        holder.companyName.setText(lenderList.get(position).getCompanyName());
+        holder.companyName.setText(lenderList.get(position).getCompanyName().replaceAll("_", " "));
         holder.priceRange.setText("₱"+lenderList.get(position).getMinPrice() + "—" + "₱" +lenderList.get(position).getMaxPrice());
         holder.interest.setText(lenderList.get(position).getInterest() + "%  |  " + lenderList.get(position).getFrequency());
         holder.profile.setImageBitmap(lenderList.get(position).getPic());
         holder.email.setText(lenderList.get(position).getEmail());
         // This is for admin
-        if(!isUser)
+        if(type.equals(admin))
         {
             holder.remove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    UIHelper.setConfirmation("ARCHIVE", "DO YOU REALLY WANT TO ARCHIVE THIS PROFILE?", "CANCEL", "ARCHIVE");
+                    UIHelper.setNegativeConfirmation("cancel");
+                    UIHelper.setPositiveConfirmation("archive",profileHelper, holder.companyName.getText().toString(), true);
+                    UIHelper.setConfirmVisibility(true);
                 }
             });
 
             holder.edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    adminHome.admin.editLender(holder.companyName.getText().toString().replaceAll(" ", "_"));
                 }
             });
         }
 
         // This is for user
-        if(isUser)
+        if(type.equals(user))
         {
             holder.edit.setVisibility(View.INVISIBLE);
             holder.remove.setText("Apply");
             holder.remove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                }
-            });
-
-            holder.edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                    //apply btn
                 }
             });
         }
 
+        if(type.equals(archive)) {
+            holder.edit.setVisibility(View.INVISIBLE);
+            holder.remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UIHelper.setConfirmation("UNARCHIVE", "DO YOU REALLY WANT TO UNARCHIVE THIS PROFILE?", "CANCEL", "UNARCHIVE");
+                    UIHelper.setNegativeConfirmation("cancel");
+                    UIHelper.setPositiveConfirmation("unarchive",profileHelper, holder.companyName.getText().toString(), true);
+                    UIHelper.setConfirmVisibility(true);
+                }
+            });
+        }
     }
 
     @Override

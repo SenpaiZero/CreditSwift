@@ -43,7 +43,8 @@
             android:focusableInTouchMode="true"
             android:fontFamily="@font/abel"
             android:hint="Username"
-            android:inputType="text"
+            android:inputType="text|textCapCharacters"
+            android:textAllCaps="true"
             android:textColor="@color/lightRegister"
             android:textColorHint="@color/lightRegister" />
 
