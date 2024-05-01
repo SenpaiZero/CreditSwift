@@ -16,6 +16,7 @@ import com.example.Helper.userInterfaceHelper;
 import com.example.model.userLenderModel;
 import com.example.model.usersModel;
 import com.example.taskperformance.R;
+import com.example.taskperformance.adminHome;
 
 import java.util.LinkedList;
 
@@ -55,12 +56,14 @@ public class usersAdapter extends RecyclerView.Adapter<usersAdapter.usersHolder>
         holder.typeTxt.setText(userList.get(position).getType());
         holder.profile.setImageBitmap(userList.get(position).getPicture());
         holder.email.setText(userList.get(position).getEmail());
-        holder.fullname.setText(userList.get(position).getFullname());
+        holder.fullname.setText(userList.get(position).getFullname()
+                .replaceAll("\\|", " "));
 
         if(type.equals(admin)) {
             holder.edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    adminHome.admin.editBorrower(holder.nameTxt.getText().toString());
                 }
             });
 

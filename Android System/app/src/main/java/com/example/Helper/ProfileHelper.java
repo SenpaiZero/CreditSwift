@@ -44,7 +44,7 @@ public class ProfileHelper {
             if(newRowId != -1)
                 return "true";
             else
-                return "false";
+                return "duplicate";
         }
         catch (SQLiteConstraintException unique) {
             return "duplicate";
@@ -150,6 +150,33 @@ public class ProfileHelper {
         return rowsAffected > 0 && rowsAffected2 > 0;
     }
 
+    public boolean updateBorrowerInfo(String username, String fullname, String email, String birth, Bitmap pic) {
+        ContentValues content = new ContentValues();
+        content.put(SqliteHelper.BorrowerAccount.NAME_COLUMN, fullname);
+        content.put(SqliteHelper.BorrowerAccount.BIRTH_COLUMN, birth);
+        byte[] imageBytes = null;
+        if (pic != null) {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            pic.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+            imageBytes = outputStream.toByteArray();
+        }
+        content.put(SqliteHelper.BorrowerAccount.PIC_COLUMN, imageBytes);
+
+        ContentValues contentVal = new ContentValues();
+        contentVal.put(SqliteHelper.AccountEntry.EMAIL_COLUMN, email);
+
+        int rowsAffected = db.update(SqliteHelper.BorrowerAccount.TABLE_NAME,
+                content,
+                SqliteHelper.BorrowerAccount.USERNAME_COLUMN + " = ?",
+                new String[]{username});
+        int rowsAffected2 = db.update(SqliteHelper.AccountEntry.TABLE_NAME,
+                contentVal,
+                SqliteHelper.AccountEntry.USERNAME_COLUMN + " = ?",
+                new String[]{username});
+
+        return rowsAffected > 0 && rowsAffected2 > 0;
+    }
+
     public boolean changeArchive(String username, boolean isArchive) {
         ContentValues val = new ContentValues();
         val.put(SqliteHelper.AccountEntry.ARCHIVE_COLUMN, isArchive ? "YES" : "NO");
@@ -158,7 +185,7 @@ public class ProfileHelper {
                 SqliteHelper.AccountEntry.TABLE_NAME,
                 val,
                 SqliteHelper.AccountEntry.USERNAME_COLUMN + " = ?",
-                new String[]{username}
+                new String[]{username.replaceAll(" ", "_")}
         );
         return false;
     }
@@ -198,7 +225,7 @@ public class ProfileHelper {
             // Insert the data into the database
             long newRowId2 = db.insert(SqliteHelper.AccountEntry.TABLE_NAME, null, actValues);
             if (newRowId2 == -1) {
-                return "false";
+                return "duplicate";
             }
 
             long newRowId = db.insert(SqliteHelper.LenderAccount.TABLE_NAME, null, values);
@@ -263,7 +290,6 @@ public class ProfileHelper {
             }
         }
 
-        Log.d("", Arrays.toString(list.toArray()));
         return isArchive ? archlist : list;
     }
 
@@ -398,20 +424,75 @@ public class ProfileHelper {
                 if (imageBytes != null && imageBytes.length > 0) {
                     img = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
                 }
-                Username = username_;
-                Email = email_;
-                Name = name_;
-                Freq = freq_;
-                Min = min_;
-                Max = max_;
-                Rate = rate_;
-                pic = img;
+                lenderUsername = username_;
+                lenderEmail = email_;
+                lenderName = name_;
+                lenderFreq = freq_;
+                lenderMin = min_;
+                lenderMax = max_;
+                lenderRate = rate_;
+                lenderPic = img;
                 break;
             }
         }
     }
 
-    public String Username, Email, Name, Freq;
-    public double Min, Max, Rate;
-    public Bitmap pic;
+    public String lenderUsername, lenderEmail, lenderName, lenderFreq;
+    public double lenderMin, lenderMax, lenderRate;
+    public Bitmap lenderPic;
+
+    public void getEditBorrower(String username) {
+        String[] columns = {
+                SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN,
+                SqliteHelper.AccountEntry.TYPE_COLUMN,
+                SqliteHelper.AccountEntry.EMAIL_COLUMN,
+                SqliteHelper.AccountEntry.ARCHIVE_COLUMN,
+                SqliteHelper.BorrowerAccount.TABLE_NAME + "." + SqliteHelper.BorrowerAccount.NAME_COLUMN,
+                SqliteHelper.BorrowerAccount.NAME_COLUMN,
+                SqliteHelper.BorrowerAccount.PIC_COLUMN,
+                SqliteHelper.BorrowerAccount.BIRTH_COLUMN
+        };
+
+        String selection = SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN +
+                " = " + SqliteHelper.BorrowerAccount.TABLE_NAME + "." + SqliteHelper.BorrowerAccount.USERNAME_COLUMN;
+
+        Cursor cursor = db.query(
+                SqliteHelper.AccountEntry.TABLE_NAME + " INNER JOIN " + SqliteHelper.BorrowerAccount.TABLE_NAME +
+                        " ON " + selection,
+                columns,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        while (cursor.moveToNext()) {
+            String username_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.USERNAME_COLUMN));
+            String email_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.EMAIL_COLUMN));
+            String name_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.BorrowerAccount.NAME_COLUMN));
+            String birth_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.BorrowerAccount.BIRTH_COLUMN));
+
+            Log.d("user", username_);
+            if(username.equalsIgnoreCase(username_))
+            {
+                byte[] imageBytes = cursor.getBlob(cursor.getColumnIndexOrThrow(SqliteHelper.BorrowerAccount.PIC_COLUMN));
+                Bitmap img = null;
+
+                if (imageBytes != null && imageBytes.length > 0) {
+                    img = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                }
+                borrowUsername = username_;
+                borrowEmail = email_;
+                borrowName = name_;
+                borrowPic = img;
+                borrowBirth = birth_;
+                break;
+            }
+        }
+    }
+
+    public String borrowUsername, borrowEmail, borrowName, borrowBirth;
+    public Bitmap borrowPic;
+
 }

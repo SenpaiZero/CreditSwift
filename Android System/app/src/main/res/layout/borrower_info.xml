@@ -264,6 +264,46 @@
                     android:dropDownWidth="match_parent"
                     android:foregroundTint="@color/darkRegister" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView44"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/protest_strike"
+                android:text="EMAIL ADDRESS"
+                android:textAllCaps="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/darkRegister"
+                android:textSize="24sp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rateCon" />
+
+            <EditText
+                android:id="@+id/emailBorrowerTB"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="@color/darkRegister"
+                android:drawableLeft="@drawable/email_img"
+                android:drawablePadding="2dp"
+                android:drawableTint="@color/darkRegister"
+                android:elegantTextHeight="false"
+                android:ems="12"
+                android:focusableInTouchMode="true"
+                android:fontFamily="@font/abel"
+                android:hint="Email Address"
+                android:inputType="text|textEmailAddress|textCapCharacters"
+                android:textAllCaps="true"
+                android:textColor="@color/darkRegister"
+                android:textColorHint="@color/darkRegister"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView44" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

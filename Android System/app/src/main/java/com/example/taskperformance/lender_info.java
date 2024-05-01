@@ -61,14 +61,14 @@ public class lender_info extends AppCompatActivity {
         String origUsername = username.replaceAll(" ","_");
         profileHelper.getEditLender(origUsername);
 
-        String Username = profileHelper.Username;
-        String Email = profileHelper.Email;
-        String Name = profileHelper.Name;
-        String Freq = profileHelper.Freq;
-        double Min = profileHelper.Min;
-        double Max = profileHelper.Max;
-        double Rate = profileHelper.Rate;
-        Bitmap pic = profileHelper.pic;
+        String Username = profileHelper.lenderUsername;
+        String Email = profileHelper.lenderEmail;
+        String Name = profileHelper.lenderName;
+        String Freq = profileHelper.lenderFreq;
+        double Min = profileHelper.lenderMin;
+        double Max = profileHelper.lenderMax;
+        double Rate = profileHelper.lenderRate;
+        Bitmap pic = profileHelper.lenderPic;
 
         name.setText(Name.replaceAll("_", " "));
         email.setText(Email);
@@ -149,7 +149,7 @@ public class lender_info extends AppCompatActivity {
             goAdmin();
         }
         else if(va.equalsIgnoreCase("duplicate")) {
-            UIHelper.showCustomToast("The username already exist.");
+            UIHelper.showCustomToast("The username/company name already exist.");
         }
         else {
             UIHelper.showCustomToast("Something went wrong. Please try again later.");

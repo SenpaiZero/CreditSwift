@@ -202,7 +202,7 @@ public class userInterfaceHelper {
     public int getSpinnerSelected(Spinner spinner, String compareValue)
     {
         for (int i=0;i<spinner.getCount();i++){
-            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(compareValue)){
+            if (spinner.getItemAtPosition(i).toString().trim().equalsIgnoreCase(compareValue.trim())){
                 return i;
             }
         }
@@ -250,7 +250,11 @@ public class userInterfaceHelper {
                     String[] dayArray = setDay(selectedMonth, selectedYear);
                     ArrayAdapter<String> newAdapter = new ArrayAdapter<>(context,
                             android.R.layout.simple_spinner_dropdown_item, dayArray);
+
+                    int pos = day.getSelectedItemPosition();
                     day.setAdapter(newAdapter);
+                    if(setDay(selectedMonth, selectedYear).length > pos)
+                        day.setSelection(pos);
                 }
 
                 @Override
@@ -269,7 +273,10 @@ public class userInterfaceHelper {
                     String[] dayArray = setDay(selectedMonth, selectedYear);
                     ArrayAdapter<String> newAdapter = new ArrayAdapter<>(context,
                             android.R.layout.simple_spinner_dropdown_item, dayArray);
+                    int pos = day.getSelectedItemPosition();
                     day.setAdapter(newAdapter);
+                    if(setDay(selectedMonth, selectedYear).length > pos)
+                        day.setSelection(pos);
                 }
 
                 @Override

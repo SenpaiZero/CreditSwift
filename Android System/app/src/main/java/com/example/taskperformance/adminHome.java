@@ -282,6 +282,11 @@ public class adminHome extends AppCompatActivity {
                 .putExtra("create", false)
                 .putExtra("username", username));
     }
+    public void editBorrower(String username) {
+        startActivity(new Intent(adminHome.this, borrower_info.class)
+                .putExtra("firstTime", false)
+                .putExtra("username", username));
+    }
     public void setBorrowerList(boolean isArchive) {
         usersAdapter usersAdapter_;
         createLender.setVisibility(View.INVISIBLE);
@@ -297,7 +302,8 @@ public class adminHome extends AppCompatActivity {
     public void setLenderList(boolean isArchive) {
         userLenderAdapter usersLenderAdapter_;
         changeContainerVisibility(false);
-        createLender.setVisibility(View.VISIBLE);
+        if(!isArchive)
+            createLender.setVisibility(View.VISIBLE);
         usersLenderList = profileHelper.getUsersLenderList("LENDER", isArchive);
         usersLenderAdapter_ = new userLenderAdapter(usersLenderList, this,
                 isArchive ? userLenderAdapter.archive : userLenderAdapter.admin,

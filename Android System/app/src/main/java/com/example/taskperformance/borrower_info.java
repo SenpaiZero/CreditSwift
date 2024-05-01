@@ -6,11 +6,14 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,7 +23,8 @@ import com.example.Helper.userInterfaceHelper;
 public class borrower_info extends AppCompatActivity {
 
     Spinner daySpinner, monthSpinner, yearSpinner;
-    EditText lastName, firstName, middleName;
+    EditText lastName, firstName, middleName, email;
+    TextView emailTxt;
     Button cancel, save;
     ImageView profile;
     userInterfaceHelper UIHelper;
@@ -32,10 +36,10 @@ public class borrower_info extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.borrower_info);
 
-        UIHelper = new userInterfaceHelper(this);
-        UIHelper.setContext(this);
+        UIHelper = new userInterfaceHelper(borrower_info.this);
         UIHelper.removeActionbar();
         UIHelper.transparentStatusBar();
+        UIHelper.setContext(this);
 
         setupUIVariable();
         setOnclick();
@@ -49,23 +53,43 @@ public class borrower_info extends AppCompatActivity {
         //if it's edit
         if(!getIntent().getBooleanExtra("firstTime", false))
         {
+            emailTxt.setVisibility(View.VISIBLE);
+            email.setVisibility(View.VISIBLE);
             cancel.setVisibility(View.VISIBLE);
             // Load the data and display it
+            profileHelper.getEditBorrower(getIntent().getStringExtra("username"));
+            String username_ = profileHelper.borrowUsername;
+            String name_ = profileHelper.borrowName;
+            String birth_ = profileHelper.borrowBirth;
+            String email_ = profileHelper.borrowEmail;
+            Bitmap pic_ = profileHelper.borrowPic;
 
+            lastName.setText(name_.split("\\|")[0]);
+            firstName.setText(name_.split("\\|")[1]);
+            middleName.setText(name_.split("\\|")[2]);
+
+            monthSpinner.setSelection(UIHelper.getSpinnerSelected(monthSpinner, birth_.split(" ")[0]));
+            yearSpinner.setSelection(UIHelper.getSpinnerSelected(yearSpinner, birth_.split(" ")[2]));
+            daySpinner.setSelection(UIHelper.getSpinnerSelected(daySpinner, birth_.split(" ")[1]));
+
+            email.setText(email_);
+            profile.setImageBitmap(pic_);
             return;
         }
-
         cancel.setVisibility(View.INVISIBLE);
+        emailTxt.setVisibility(View.INVISIBLE);
+        email.setVisibility(View.INVISIBLE);
+
     }
 
     void addNewInfo(String name, String birthday, Bitmap img) {
         if(profileHelper.newUserInformation(getIntent().getStringExtra("username").toString(),
                 name, birthday, img))
-            goBack();
+            goBack(true);
     }
     void setupUIVariable() {
-        daySpinner = findViewById(R.id.monthSpinner);
-        monthSpinner = findViewById(R.id.daySpinner);
+        daySpinner = findViewById(R.id.daySpinner);
+        monthSpinner = findViewById(R.id.monthSpinner);
         yearSpinner = findViewById(R.id.yearSpinner);
 
         cancel = findViewById(R.id.cancelLenderInfoBtn);
@@ -76,10 +100,13 @@ public class borrower_info extends AppCompatActivity {
         firstName = findViewById(R.id.firstNameTB);
         lastName = findViewById(R.id.lastNameTB);
         middleName = findViewById(R.id.middleNameTB);
-
+        email = findViewById(R.id.emailBorrowerTB);
+        emailTxt = findViewById(R.id.textView44);
     }
 
     void setOnclick() {
+        boolean isFirstTime = getIntent().getBooleanExtra("firstTime", false);
+
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,21 +119,31 @@ public class borrower_info extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name_ = lastName.getText().toString().toUpperCase() + " " +
-                        firstName.getText().toString().toUpperCase() + " " +
+                String name_ = lastName.getText().toString().toUpperCase() + "|" +
+                        firstName.getText().toString().toUpperCase() + "|" +
                         middleName.getText().toString().toUpperCase();
 
                 String birth_ = monthSpinner.getSelectedItem().toString().toUpperCase() + " " +
                         daySpinner.getSelectedItem().toString() + " " +
                         yearSpinner.getSelectedItem().toString();
-                addNewInfo(name_, birth_, ((BitmapDrawable) profile.getDrawable()).getBitmap());
+
+                if(isFirstTime)
+                    addNewInfo(name_, birth_, ((BitmapDrawable) profile.getDrawable()).getBitmap());
+                else
+                    profileHelper.updateBorrowerInfo(getIntent().getStringExtra("username").toString(),
+                            name_,
+                            email.getText().toString().toUpperCase(),
+                            birth_, ((BitmapDrawable) profile.getDrawable()).getBitmap()
+                            );
+
+                goBack(false);
             }
         });
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goBack();
+                goBack(false);
             }
         });
     }
@@ -122,8 +159,13 @@ public class borrower_info extends AppCompatActivity {
         }
     }
 
-    public void goBack() {
-        startActivity(new Intent(borrower_info.this, userHome.class));
+    public void goBack(boolean isCreate) {
+        if(isCreate)
+        {
+            startActivity(new Intent(borrower_info.this, userHome.class));
+            return;
+        }
+        startActivity(new Intent(borrower_info.this, adminHome.class));
     }
     private Bitmap resizeImage(Uri imageUri) {
         try {
