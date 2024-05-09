@@ -304,6 +304,7 @@ public class adminHome extends AppCompatActivity {
         changeContainerVisibility(false);
         if(!isArchive)
             createLender.setVisibility(View.VISIBLE);
+
         usersLenderList = profileHelper.getUsersLenderList("LENDER", isArchive);
         usersLenderAdapter_ = new userLenderAdapter(usersLenderList, this,
                 isArchive ? userLenderAdapter.archive : userLenderAdapter.admin,

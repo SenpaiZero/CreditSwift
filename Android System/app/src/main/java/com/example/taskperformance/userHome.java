@@ -10,8 +10,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -37,10 +39,11 @@ public class userHome extends AppCompatActivity {
     RecyclerView userCon;
     LinearLayout adminCon;
     CardView logoutBtn, lenderArchiveBtn, dashboardBtn, changePasswordBtn, settingsBtn;
-    ConstraintLayout settingCon, confirmationLayout, dashboard;
+    ConstraintLayout settingCon, confirmationLayout, dashboard, applyInfo;
     userInterfaceHelper UIHelper;
     ProfileHelper profileHelper;
-    Button settingApply, settingCancel, confirmLogout, cancelLogout;
+    Button settingApply, settingCancel, confirmLogout, cancelLogout, applyApply, applyCancel;
+    EditText applyAmount, applyYear;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +106,12 @@ public class userHome extends AppCompatActivity {
         confirmLogout = findViewById(R.id.positiveBtnConfirmation);
         titleConfirm = findViewById(R.id.titleTxt);
         msgConfirm = findViewById(R.id.messageTxt);
+
+        applyInfo = findViewById(R.id.applyInclude);
+        applyAmount = findViewById(R.id.amountTB);
+        applyYear = findViewById(R.id.yearTB);
+        applyApply = findViewById(R.id.applyApplyBtn);
+        applyCancel = findViewById(R.id.cancelApplyBtn);
     }
 
     void setOnClick()
@@ -209,7 +218,8 @@ public class userHome extends AppCompatActivity {
             title.setText("LENDER");
             changeContainerVisibility(false);
             usersLenderList = profileHelper.getUsersLenderList("LENDER", false);
-            usersLenderAdapter_ = new userLenderAdapter(usersLenderList, this, userLenderAdapter.admin, profileHelper);
+            usersLenderAdapter_ = new userLenderAdapter(usersLenderList, this, userLenderAdapter.user, profileHelper);
+            usersLenderAdapter_.setUser_home(userHome.this);
             userCon.setAdapter(usersLenderAdapter_);
             userCon.setLayoutManager(new LinearLayoutManager(this));
         }
@@ -221,7 +231,7 @@ public class userHome extends AppCompatActivity {
             if(usersLenderList != null)
                 if(usersLenderList.size() > 0)
                     usersLenderList.clear();
-            usersLenderAdapter_ = new userLenderAdapter(usersLenderList, this, userLenderAdapter.admin, profileHelper);
+            usersLenderAdapter_ = new userLenderAdapter(usersLenderList, this, userLenderAdapter.user, profileHelper);
             userCon.setAdapter(usersLenderAdapter_);
             userCon.setLayoutManager(new LinearLayoutManager(this));
 
@@ -246,5 +256,38 @@ public class userHome extends AppCompatActivity {
 
         userCon.setVisibility(View.VISIBLE);
         adminCon.setVisibility(View.INVISIBLE);
+    }
+
+    public void openApplyInfo(String companyName) {
+        applyInfo.setVisibility(View.VISIBLE);
+        applyAmount.setText(null);
+        applyYear.setText(null);
+        applyCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                applyInfo.setVisibility(View.INVISIBLE);
+            }
+        });
+        applyApply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int amount = Integer.valueOf(applyAmount.getText().toString());
+                int year = Integer.valueOf(applyYear.getText().toString());
+                boolean a = profileHelper.addUpdateCurrentLend(getIntent().getStringExtra("username"),
+                        companyName, amount, amount, year, true);
+                Log.d("apply", "username: " + getIntent().getStringExtra("username"));
+
+                if(a) {
+                    // update
+                    Log.d("apply", "UPDATE");
+                }
+                else {
+                    // add
+                    Log.d("apply", "ADD");
+                }
+
+                applyInfo.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 }

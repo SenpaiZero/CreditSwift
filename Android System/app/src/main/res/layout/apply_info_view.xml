@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#C8595858"
+    android:padding="10dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/lightBackground"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="25dp">
+
+            <TextView
+                android:id="@+id/textView43"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:fontFamily="@font/bebas"
+                android:text="INFORMATIONS"
+                android:textAlignment="center"
+                android:textColor="@color/darkRegister"
+                android:textSize="48sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView47"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/abel"
+                android:text="AMOUNT"
+                android:textColor="@color/darkRegister"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/amountTB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/darkRegister"
+                android:drawableLeft="@drawable/arrow_up_img"
+                android:drawablePadding="2dp"
+                android:drawableTint="@color/darkRegister"
+                android:elegantTextHeight="false"
+                android:ems="12"
+                android:fontFamily="@font/abel"
+                android:hint="Amount"
+                android:inputType="number"
+                android:textColor="@color/darkRegister"
+                android:textColorHint="@color/darkRegister" />
+
+            <TextView
+                android:id="@+id/textView48"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/abel"
+                android:text="YEAR TO PAY"
+                android:textColor="@color/darkRegister"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/yearTB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/darkRegister"
+                android:drawableLeft="@drawable/calendar_img"
+                android:drawablePadding="2dp"
+                android:drawableTint="@color/darkRegister"
+                android:elegantTextHeight="false"
+                android:ems="12"
+                android:fontFamily="@font/abel"
+                android:hint="Year"
+                android:inputType="number"
+                android:textColor="@color/darkRegister"
+                android:textColorHint="@color/darkRegister" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/cancelApplyBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/lightTxt"
+                    android:text="CANCEL"
+                    android:textColor="@color/white"
+                    app:cornerRadius="5dp" />
+
+                <Button
+                    android:id="@+id/applyApplyBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/lightTxt"
+                    android:text="APPLY"
+                    android:textColor="@color/white"
+                    app:cornerRadius="5dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

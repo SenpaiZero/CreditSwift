@@ -128,15 +128,19 @@ public class borrower_info extends AppCompatActivity {
                         yearSpinner.getSelectedItem().toString();
 
                 if(isFirstTime)
+                {
                     addNewInfo(name_, birth_, ((BitmapDrawable) profile.getDrawable()).getBitmap());
-                else
+                    goBack(false);
+                }
+                else {
+
                     profileHelper.updateBorrowerInfo(getIntent().getStringExtra("username").toString(),
                             name_,
                             email.getText().toString().toUpperCase(),
                             birth_, ((BitmapDrawable) profile.getDrawable()).getBitmap()
-                            );
-
-                goBack(false);
+                    );
+                    goBack(false);
+                }
             }
         });
 

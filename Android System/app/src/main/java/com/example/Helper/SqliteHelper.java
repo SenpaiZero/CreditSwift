@@ -8,7 +8,7 @@ import android.util.Log;
 import java.util.Date;
 
 public class SqliteHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 6;
+    public static final int DATABASE_VERSION = 9;
     public static final String DATABASE_NAME = "LoanManagement.db";
     public static final String LOGIN_TABLE_CREATE = "CREATE TABLE IF NOT EXISTS Account (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -90,10 +90,10 @@ public class SqliteHelper extends SQLiteOpenHelper {
 
 
         // List ng mga borrower na kinuha nya (delimiter is '|')
-        // (use for unpaid (minus this to done))
+        // (use for paid (minus this to done))
         public static final String APPLIED_BORROWER_COLUMN = "appliedBorrower";
 
-        // Same sa applied borrower pero current lng (use for unpaid)
+        // Same sa applied borrower pero current lng (use for unpaid) |NAME:RUE/FALSE:REMAINING|
         public static final String CURRENT_APPLIED_BORROWER_COLUMN = "currentAppliedBorrower";
         public static final String TOTAL_SPENT = "spent";
         public static final String TOTAL_INTEREST = "interest";

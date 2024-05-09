@@ -19,6 +19,7 @@ import com.example.model.userLenderModel;
 import com.example.model.usersModel;
 import com.example.taskperformance.R;
 import com.example.taskperformance.adminHome;
+import com.example.taskperformance.userHome;
 
 import java.util.LinkedList;
 
@@ -29,6 +30,7 @@ public class userLenderAdapter extends RecyclerView.Adapter<userLenderAdapter.us
     String type;
     ProfileHelper profileHelper;
     userInterfaceHelper UIHelper;
+    userHome user_home;
     public static final String admin = "admin",
             user = "user",
             archive = "archive";
@@ -44,6 +46,10 @@ public class userLenderAdapter extends RecyclerView.Adapter<userLenderAdapter.us
         this.type = type;
         this.profileHelper = profileHelper;
         this.UIHelper = UIHelper;
+    }
+
+    public void setUser_home(userHome user_home) {
+        this.user_home = user_home;
     }
 
     @NonNull
@@ -91,6 +97,8 @@ public class userLenderAdapter extends RecyclerView.Adapter<userLenderAdapter.us
                 @Override
                 public void onClick(View v) {
                     //apply btn
+                    if(user_home != null)
+                        user_home.openApplyInfo(holder.companyName.getText().toString().replaceAll(" ", "_"));
                 }
             });
         }
