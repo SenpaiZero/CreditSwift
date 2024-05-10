@@ -21,17 +21,20 @@ import java.util.LinkedList;
 public class applyAdapter extends RecyclerView.Adapter<applyAdapter.applyAdapterHolder> {
 
 
-
     LinkedList<applyModel> applyList;
     ProfileHelper profileHelper;
     userInterfaceHelper UIHelper;
     Context context;
-    public applyAdapter(LinkedList<applyModel> applyList, ProfileHelper profileHelper, userInterfaceHelper UIHelper, Context context) {
+
+    public applyAdapter(LinkedList<applyModel> applyList, ProfileHelper profileHelper, userInterfaceHelper UIHelper, Context context, String lenderName) {
         this.applyList = applyList;
         this.profileHelper = profileHelper;
         this.UIHelper = UIHelper;
         this.context = context;
+        this.lenderName = lenderName;
     }
+
+    String lenderName;
     @NonNull
     @Override
     public applyAdapterHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -50,14 +53,16 @@ public class applyAdapter extends RecyclerView.Adapter<applyAdapter.applyAdapter
         holder.accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                profileHelper.acceptDeclineCurrentLend(lenderName,
+                        applyList.get(position).getName(), true);
             }
         });
 
         holder.decline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                profileHelper.acceptDeclineCurrentLend(lenderName,
+                        applyList.get(position).getName(), true);
             }
         });
     }

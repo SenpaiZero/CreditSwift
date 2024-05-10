@@ -68,63 +68,6 @@
         app:layout_constraintTop_toBottomOf="@+id/userTitleTxt" />
 
     <LinearLayout
-        android:id="@+id/tabCon"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/lightBackground"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:id="@+id/tabLenderBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:backgroundTint="#00FFFFFF"
-            android:drawableTop="@drawable/tab_lender"
-            android:drawableTint="@color/lightLogin"
-            android:text="Lender"
-            android:textColor="@color/lightLogin"
-            app:cornerRadius="10dp"
-            app:iconPadding="0dp" />
-
-        <Button
-            android:id="@+id/tabDashboardBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:backgroundTint="#00FFFFFF"
-            android:drawableTop="@drawable/tab_borrower"
-            android:drawableTint="@color/lightLogin"
-            android:text="Dashboard"
-            android:textColor="@color/lightLogin"
-            app:cornerRadius="10dp"
-            app:iconPadding="0dp" />
-
-        <Button
-            android:id="@+id/tabUserBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:backgroundTint="#00FFFFFF"
-            android:drawableTop="@drawable/tab_settings"
-            android:drawableTint="@color/lightLogin"
-            android:text="User"
-            android:textColor="@color/lightLogin"
-            app:cornerRadius="10dp"
-            app:iconPadding="0dp" />
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/userCon"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -394,4 +337,61 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/tabCon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/lightBackground"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/tabLenderBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:backgroundTint="#00FFFFFF"
+            android:drawableTop="@drawable/tab_lender"
+            android:drawableTint="@color/lightLogin"
+            android:text="Lender"
+            android:textColor="@color/lightLogin"
+            app:cornerRadius="10dp"
+            app:iconPadding="0dp" />
+
+        <Button
+            android:id="@+id/tabDashboardBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:backgroundTint="#00FFFFFF"
+            android:drawableTop="@drawable/tab_borrower"
+            android:drawableTint="@color/lightLogin"
+            android:text="Dashboard"
+            android:textColor="@color/lightLogin"
+            app:cornerRadius="10dp"
+            app:iconPadding="0dp" />
+
+        <Button
+            android:id="@+id/tabUserBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:backgroundTint="#00FFFFFF"
+            android:drawableTop="@drawable/tab_settings"
+            android:drawableTint="@color/lightLogin"
+            android:text="User"
+            android:textColor="@color/lightLogin"
+            app:cornerRadius="10dp"
+            app:iconPadding="0dp" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

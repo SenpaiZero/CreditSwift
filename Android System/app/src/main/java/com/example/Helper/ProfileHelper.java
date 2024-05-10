@@ -12,6 +12,7 @@ import android.media.Image;
 import android.util.Log;
 
 import com.example.model.applyModel;
+import com.example.model.listBorrowModel;
 import com.example.model.userLenderModel;
 import com.example.model.usersModel;
 
@@ -20,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 public class ProfileHelper {
     Activity activity;
@@ -180,7 +182,142 @@ public class ProfileHelper {
         return rowsAffected > 0 && rowsAffected2 > 0;
     }
 
-    public boolean addUpdateCurrentLend(String borrowerName, String lenderName, int remaining, int total, int year, boolean isApply) {
+    public String userFullnameToUsername(String fullname) {
+        String[] columns = {
+                SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN,
+                SqliteHelper.BorrowerAccount.TABLE_NAME + "." + SqliteHelper.BorrowerAccount.NAME_COLUMN,
+        };
+
+        String selection = SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN +
+                " = " + SqliteHelper.BorrowerAccount.TABLE_NAME + "." + SqliteHelper.BorrowerAccount.USERNAME_COLUMN;
+
+        Cursor cursor = db.query(
+                SqliteHelper.AccountEntry.TABLE_NAME + " INNER JOIN " + SqliteHelper.BorrowerAccount.TABLE_NAME +
+                        " ON " + selection,
+                columns,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        while(cursor.moveToNext()) {
+            String name_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.BorrowerAccount.NAME_COLUMN));
+
+            if(name_.equalsIgnoreCase(fullname)) {
+                return cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.USERNAME_COLUMN));
+            }
+        }
+        return null;
+    }
+
+    public boolean acceptDeclineCurrentLend(String lenderName, String borrowName, boolean isAccept) {
+        String[] columns = {
+                SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN,
+                SqliteHelper.LenderAccount.TABLE_NAME + "." + SqliteHelper.LenderAccount.NAME_COLUMN,
+                SqliteHelper.LenderAccount.NAME_COLUMN,
+                SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN
+        };
+
+        String selection = SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN +
+                " = " + SqliteHelper.LenderAccount.TABLE_NAME + "." + SqliteHelper.LenderAccount.NAME_COLUMN;
+
+        Cursor cursor = db.query(
+                SqliteHelper.AccountEntry.TABLE_NAME + " INNER JOIN " + SqliteHelper.LenderAccount.TABLE_NAME +
+                        " ON " + selection,
+                columns,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        while(cursor.moveToNext()) {
+            String name_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.NAME_COLUMN));
+            String val_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN));
+
+            // Found the lender
+            if(name_.equalsIgnoreCase(lenderName)) {
+                String[] data = val_.split("\\|");
+                Log.e("apply", "bef: " + Arrays.toString(data));
+                String[] data_;
+
+                for(int i = 0; i < data.length; i++) {
+                    data_ = data[i].split(":");
+                    Log.d("Apply", data_[0] + " : " + userFullnameToUsername(borrowName));
+                    if(data_[0].equals(userFullnameToUsername(borrowName))) {
+                        if(isAccept)
+                            data[i] = data_[0]+":"+"TRUE"+":"+data_[2]+":"+data_[3]+":"+data_[4];
+                        else
+                            data[i] = "";
+                        Log.e("apply", "update data");
+                    }
+                }
+
+                String newVal = Arrays.stream(data)
+                        .filter(s -> !s.isEmpty())
+                        .collect(Collectors.joining("|"));
+
+                Log.d("Apply", newVal);
+                ContentValues values = new ContentValues();
+                values.put(SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN, newVal);
+                db.update(SqliteHelper.LenderAccount.TABLE_NAME,  values,
+                        SqliteHelper.LenderAccount.NAME_COLUMN+ " = ?",
+                        new String[]{lenderName});
+
+                if(isAccept) {
+                    addRemoveListBorrower(lenderName, borrowName, true);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addRemoveListBorrower(String lenderName, String borrowName, boolean isAdd) {
+        String[] col = {
+                SqliteHelper.BorrowerAccount.NAME_COLUMN,
+                SqliteHelper.BorrowerAccount.LIST_COLUMN
+        };
+        Cursor cursor = db.query(
+                SqliteHelper.BorrowerAccount.TABLE_NAME,
+                col,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        while(cursor.moveToNext()) {
+            String name_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.BorrowerAccount.NAME_COLUMN));
+            String val_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.BorrowerAccount.LIST_COLUMN));
+            ContentValues values = new ContentValues();
+            if(name_.equalsIgnoreCase(borrowName)) {
+                String newVal = "";
+                if(isAdd) {
+                    newVal = val_ + lenderName + "|";
+                }
+                else {
+                    String data[] = val_.split("\\|");
+                    for(int i = 0; i < data.length; i++) {
+                        if(data[i].equals(lenderName)) {
+                            data[i] = "";
+                        }
+                    }
+                    newVal = Arrays.stream(data)
+                            .filter(s -> !s.isEmpty())
+                            .collect(Collectors.joining("|"));
+                }
+
+                values.put(SqliteHelper.BorrowerAccount.LIST_COLUMN, newVal);
+                db.update(SqliteHelper.BorrowerAccount.TABLE_NAME,  values,
+                        SqliteHelper.BorrowerAccount.NAME_COLUMN+ " = ?",
+                        new String[]{borrowName});
+            }
+        }
+    }
+    public String addUpdateCurrentLend(String borrowerName, String lenderName, int remaining, int total, int year, boolean isApply) {
         ContentValues lender = new ContentValues();
         String val = borrowerName + ":"+String.valueOf(!isApply).toUpperCase()+":"+remaining+":"+total+":"+year+"|";
         lender.put(SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN, val);
@@ -205,13 +342,14 @@ public class ProfileHelper {
 
             if(name_.equals(lenderName)) {
                 if(isApply) {
-                    if(val_.contains(borrowerName)) return false;
+                    if(val_.contains(borrowerName)) return "EXIST";
                 }
 
                 boolean isUpdated = false;
                 String[] data = val_.split("\\|");
                 Log.e("apply", "bef: " + Arrays.toString(data));
                 String[] data_;
+                String returnType = "ADD";
 
                 for(int i = 0; i < data.length; i++) {
                      data_ = data[i].split(":");
@@ -219,8 +357,10 @@ public class ProfileHelper {
                          data[i] = val;
                          Log.e("apply", "update data");
                          isUpdated = true;
+                         returnType = "UPDATE";
                      }
                 }
+
 
                 String newVal = String.join("|", data);
                 if(!isUpdated) newVal = val_ + val;
@@ -232,12 +372,10 @@ public class ProfileHelper {
                 db.update(SqliteHelper.LenderAccount.TABLE_NAME,  lender,
                         SqliteHelper.LenderAccount.NAME_COLUMN+ " = ?",
                         new String[]{lenderName});
-                return true;
+                return returnType;
             }
         }
-
-        // Add
-        return false;
+        return "";
     }
 
     public LinkedList<applyModel> getApplyList(String companyName) {
@@ -299,7 +437,8 @@ public class ProfileHelper {
                             img = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
                         }
 
-                        list.add(new applyModel(fullname_, email_, Integer.valueOf(data_[3]), img));
+                        if(data_[1].equalsIgnoreCase("FALSE"))
+                            list.add(new applyModel(fullname_, email_, Integer.valueOf(data_[3]), img));
                     }
                     cursor2.close();
                 }
@@ -629,4 +768,91 @@ public class ProfileHelper {
     public String borrowUsername, borrowEmail, borrowName, borrowBirth;
     public Bitmap borrowPic;
 
+    public LinkedList<listBorrowModel> getCurrentListBorrow(String borrowName) {
+        LinkedList<listBorrowModel> list = new LinkedList<>();
+
+        Cursor cursor = db.query(
+                SqliteHelper.BorrowerAccount.TABLE_NAME,
+                new String[] {SqliteHelper.BorrowerAccount.NAME_COLUMN,
+                        SqliteHelper.BorrowerAccount.LIST_COLUMN},
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        while (cursor.moveToNext()) {
+            String name_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.BorrowerAccount.NAME_COLUMN));
+            String val_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.BorrowerAccount.LIST_COLUMN));
+
+            Log.e("APPLY", "NAME: " + name_ + " compa: " + borrowName);
+            if(userFullnameToUsername(name_).equalsIgnoreCase(borrowName)) {
+                // now kukunin na val = lender
+                String[] lenders = val_.split("\\|");
+
+                for(int i = 0; i < lenders.length; i++) {
+                    String[] columns = {
+                            SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN,
+                            SqliteHelper.AccountEntry.EMAIL_COLUMN,
+                            SqliteHelper.LenderAccount.TABLE_NAME + "." + SqliteHelper.LenderAccount.NAME_COLUMN,
+                            SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN,
+                            SqliteHelper.LenderAccount.FREQ_COLUMN,
+                            SqliteHelper.LenderAccount.PIC_COLUMN
+                    };
+
+                    String selection = SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN +
+                            " = " + SqliteHelper.LenderAccount.TABLE_NAME + "." + SqliteHelper.LenderAccount.NAME_COLUMN;
+
+                    Cursor cursor2 = db.query(
+                            SqliteHelper.AccountEntry.TABLE_NAME + " INNER JOIN " + SqliteHelper.LenderAccount.TABLE_NAME +
+                                    " ON " + selection,
+                            columns,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null
+                    );
+
+                    Log.d("apply", "List is running");
+                    while (cursor2.moveToNext()) {
+                        String companyName_ = cursor2.getString(cursor2.getColumnIndexOrThrow(SqliteHelper.AccountEntry.USERNAME_COLUMN));
+
+                        Log.e("APPLY", "comapny: " + companyName_ + " :: compare: " + lenders[i]);
+                        if(companyName_.equalsIgnoreCase(lenders[i])) {
+                            String value_ = cursor2.getString(cursor2.getColumnIndexOrThrow(SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN));
+                            String email_ = cursor2.getString(cursor2.getColumnIndexOrThrow(SqliteHelper.AccountEntry.EMAIL_COLUMN));
+                            String freq_ = cursor2.getString(cursor2.getColumnIndexOrThrow(SqliteHelper.LenderAccount.FREQ_COLUMN));
+
+                            String[] data = value_.split("\\|");
+                            String[] data_;
+                            byte[] imageBytes = cursor2.getBlob(cursor2.getColumnIndexOrThrow(SqliteHelper.BorrowerAccount.PIC_COLUMN));
+                            Bitmap img = null;
+
+                            if (imageBytes != null && imageBytes.length > 0) {
+                                img = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                            }
+
+                            for(int j = 0; j < data.length; j++) {
+                                data_ = data[j].split(":");
+
+                                String name = data_[0];
+                                String isAccept = data_[1];
+                                int remaining = Integer.valueOf(data_[2]);
+                                int total = Integer.valueOf(data_[3]);
+                                int year = Integer.valueOf(data_[4]);
+                                if(isAccept.equalsIgnoreCase("TRUE")) {
+                                    list.add(new listBorrowModel(name, freq_, email_, total, remaining, year, img));
+                                    Log.e("APPLY", "ADDED TO THE LIST");
+                                }
+                            }
+                        }
+                    }
+                }
+                return list;
+            }
+        }
+        return list;
+    }
 }

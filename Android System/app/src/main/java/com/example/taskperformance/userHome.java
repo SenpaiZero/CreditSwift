@@ -20,10 +20,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.Adapter.userLenderAdapter;
+import com.example.Adapter.userListAdapter;
 import com.example.Adapter.usersAdapter;
 import com.example.Helper.ProfileHelper;
 import com.example.Helper.SettingHelper;
 import com.example.Helper.userInterfaceHelper;
+import com.example.model.listBorrowModel;
 import com.example.model.userLenderModel;
 import com.example.model.usersModel;
 
@@ -35,8 +37,9 @@ public class userHome extends AppCompatActivity {
     Button tabLender, tabDashboard, tabUser;
     TextView title, titleConfirm, msgConfirm;;
     LinkedList<userLenderModel> usersLenderList;
+    LinkedList<listBorrowModel> listBorrowModel;
     SettingHelper settingHelper;
-    RecyclerView userCon;
+    RecyclerView userCon, dashboardRec;
     LinearLayout adminCon;
     CardView logoutBtn, lenderArchiveBtn, dashboardBtn, changePasswordBtn, settingsBtn;
     ConstraintLayout settingCon, confirmationLayout, dashboard, applyInfo;
@@ -112,6 +115,8 @@ public class userHome extends AppCompatActivity {
         applyYear = findViewById(R.id.yearTB);
         applyApply = findViewById(R.id.applyApplyBtn);
         applyCancel = findViewById(R.id.cancelApplyBtn);
+
+        dashboardRec = findViewById(R.id.listCer);
     }
 
     void setOnClick()
@@ -207,6 +212,8 @@ public class userHome extends AppCompatActivity {
     void changeContent(Button button)
     {
         userLenderAdapter usersLenderAdapter_;
+        userListAdapter userListAdapter_;
+
         dashboard.setVisibility(View.INVISIBLE);
         if(usersLenderList != null)
             if(usersLenderList.size() > 0)
@@ -215,6 +222,9 @@ public class userHome extends AppCompatActivity {
         ProfileHelper profileHelper = new ProfileHelper(this);
         if(button.getId() == tabLender.getId())
         {
+            if(listBorrowModel != null)
+                if(listBorrowModel.size() > 0)
+                    listBorrowModel.clear();
             title.setText("LENDER");
             changeContainerVisibility(false);
             usersLenderList = profileHelper.getUsersLenderList("LENDER", false);
@@ -231,11 +241,13 @@ public class userHome extends AppCompatActivity {
             if(usersLenderList != null)
                 if(usersLenderList.size() > 0)
                     usersLenderList.clear();
-            usersLenderAdapter_ = new userLenderAdapter(usersLenderList, this, userLenderAdapter.user, profileHelper);
-            userCon.setAdapter(usersLenderAdapter_);
-            userCon.setLayoutManager(new LinearLayoutManager(this));
 
+            userCon.setVisibility(View.INVISIBLE);
             dashboard.setVisibility(View.VISIBLE);
+            listBorrowModel = profileHelper.getCurrentListBorrow(getIntent().getStringExtra("username"));
+            userListAdapter_ = new userListAdapter(listBorrowModel, profileHelper, UIHelper, this);
+            dashboardRec.setAdapter(userListAdapter_);
+            dashboardRec.setLayoutManager(new LinearLayoutManager(this));
         }
         else if(button.getId() == tabUser.getId())
         {
@@ -273,17 +285,25 @@ public class userHome extends AppCompatActivity {
             public void onClick(View v) {
                 int amount = Integer.valueOf(applyAmount.getText().toString());
                 int year = Integer.valueOf(applyYear.getText().toString());
-                boolean a = profileHelper.addUpdateCurrentLend(getIntent().getStringExtra("username"),
+                String a = profileHelper.addUpdateCurrentLend(getIntent().getStringExtra("username"),
                         companyName, amount, amount, year, true);
                 Log.d("apply", "username: " + getIntent().getStringExtra("username"));
 
-                if(a) {
-                    // update
-                    Log.d("apply", "UPDATE");
+                if(a.equalsIgnoreCase("EXIST")) {
+                    Log.d("apply", "ADD ALREADY EXIST. STOPPED");
+                    UIHelper.showCustomToast("You already applied for this lender.");
+                }
+                else  if(a.equalsIgnoreCase("ADD")){
+                    Log.d("apply", "NEW APPLY ADDED");
+                    UIHelper.showCustomToast("You successfully applied to the lender.");
+                }
+                else if(a.equalsIgnoreCase("UPDATE")){
+                    Log.d("apply", "APPLY HAS BEEN UPDATED");
+                    UIHelper.showCustomToast("You successfully updated the data");
                 }
                 else {
-                    // add
-                    Log.d("apply", "ADD");
+                    Log.d("apply", "APPLY ERROR");
+                    UIHelper.showCustomToast("An error has occured.");
                 }
 
                 applyInfo.setVisibility(View.INVISIBLE);

@@ -199,16 +199,18 @@ public class lenderHome extends AppCompatActivity {
         ProfileHelper profileHelper = new ProfileHelper(this);
         if(button.getId() == tabLender.getId())
         {
+            userCon.setVisibility(View.VISIBLE);
             title.setText("APPLY LIST");
             changeContainerVisibility(false);
             applyList = profileHelper.getApplyList(getIntent().getStringExtra("name"));
-            applyAdapter_ = new applyAdapter(applyList, profileHelper, UIHelper, this);
-           // usersLenderAdapter_.setUser_home(userHome.this);
+            applyAdapter_ = new applyAdapter(applyList, profileHelper, UIHelper, this, getIntent().getStringExtra("username"));
+
             userCon.setAdapter(applyAdapter_);
             userCon.setLayoutManager(new LinearLayoutManager(this));
         }
         else if(button.getId() == tabDashboard.getId())
         {
+            userCon.setVisibility(View.INVISIBLE);
             title.setText("DASHBOARD");
             changeContainerVisibility(false);
 
