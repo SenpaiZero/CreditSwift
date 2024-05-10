@@ -32,9 +32,8 @@
 
                 <ImageView
                     android:id="@+id/profileView"
-                    android:layout_width="0dp"
-                    android:layout_height="125dp"
-                    android:layout_weight="1"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
                     android:scaleType="centerCrop"
                     app:srcCompat="@drawable/user" />
 

@@ -245,7 +245,7 @@ public class userHome extends AppCompatActivity {
             userCon.setVisibility(View.INVISIBLE);
             dashboard.setVisibility(View.VISIBLE);
             listBorrowModel = profileHelper.getCurrentListBorrow(getIntent().getStringExtra("username"));
-            userListAdapter_ = new userListAdapter(listBorrowModel, profileHelper, UIHelper, this);
+            userListAdapter_ = new userListAdapter(listBorrowModel, profileHelper, UIHelper, this, userListAdapter.borrower);
             dashboardRec.setAdapter(userListAdapter_);
             dashboardRec.setLayoutManager(new LinearLayoutManager(this));
         }

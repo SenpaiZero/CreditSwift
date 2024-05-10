@@ -130,7 +130,7 @@ public class borrower_info extends AppCompatActivity {
                 if(isFirstTime)
                 {
                     addNewInfo(name_, birth_, ((BitmapDrawable) profile.getDrawable()).getBitmap());
-                    goBack(false);
+                    goBack(true);
                 }
                 else {
 

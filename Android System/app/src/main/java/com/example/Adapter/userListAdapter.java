@@ -1,5 +1,6 @@
 package com.example.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,13 +26,20 @@ public class userListAdapter extends RecyclerView.Adapter<userListAdapter.userLi
     ProfileHelper profileHelper;
     userInterfaceHelper UIHelper;
     Context context;
+    String type;
 
-    public userListAdapter(LinkedList<listBorrowModel> borrowList, ProfileHelper profileHelper, userInterfaceHelper UIHelper, Context context) {
+    public static final String borrower = "borrow",
+            lender = "lender";
+
+    public userListAdapter(LinkedList<listBorrowModel> borrowList, ProfileHelper profileHelper, userInterfaceHelper UIHelper, Context context, String type) {
         this.borrowList = borrowList;
         this.profileHelper = profileHelper;
         this.UIHelper = UIHelper;
         this.context = context;
+        this.type = type;
     }
+
+
     @NonNull
     @Override
     public userListAdapterHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -40,21 +48,36 @@ public class userListAdapter extends RecyclerView.Adapter<userListAdapter.userLi
         return new userListAdapter.userListAdapterHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull userListAdapterHolder holder, int position) {
-        holder.name.setText(borrowList.get(position).getName());
-        holder.email.setText(borrowList.get(position).getEmail());
-        holder.total.setText("Total: " + String.valueOf(borrowList.get(position).getTotal()));
-        holder.remaining.setText(String.valueOf(borrowList.get(position).getRemaining())
-                + "| " + borrowList.get(position).getFrequency().toUpperCase());
-        holder.pic.setImageBitmap(borrowList.get(position).getPic());
+        if(type.equals(borrower)) {
+            holder.name.setText(borrowList.get(position).getName());
+            holder.email.setText(borrowList.get(position).getEmail());
+            holder.total.setText("Total: " + borrowList.get(position).getTotal()+
+                    " | Year: "+borrowList.get(position).getYear());
+            holder.remaining.setText(borrowList.get(position).getRemaining()
+                    + "| " + borrowList.get(position).getFrequency().toUpperCase());
+            holder.pic.setImageBitmap(borrowList.get(position).getPic());
 
-        holder.payBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            holder.payBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-            }
-        });
+                }
+            });
+        }
+
+        if(type.equals(lender)) {
+            holder.payBtn.setVisibility(View.INVISIBLE);
+
+            holder.name.setText(borrowList.get(position).getName());
+            holder.email.setText(borrowList.get(position).getEmail());
+            holder.total.setText("Total: " +borrowList.get(position).getTotal());
+            holder.remaining.setText("Remaining: "+borrowList.get(position).getRemaining()
+                    + "\nYear: " + borrowList.get(position).getYear());
+            holder.pic.setImageBitmap(borrowList.get(position).getPic());
+        }
     }
 
     @Override

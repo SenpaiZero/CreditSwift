@@ -16,10 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.Adapter.applyAdapter;
 import com.example.Adapter.userLenderAdapter;
+import com.example.Adapter.userListAdapter;
 import com.example.Helper.ProfileHelper;
 import com.example.Helper.SettingHelper;
 import com.example.Helper.userInterfaceHelper;
 import com.example.model.applyModel;
+import com.example.model.listBorrowModel;
 import com.example.model.userLenderModel;
 
 import java.util.LinkedList;
@@ -30,8 +32,9 @@ public class lenderHome extends AppCompatActivity {
     Button tabLender, tabDashboard, tabUser;
     TextView title, titleConfirm, msgConfirm;;
     LinkedList<applyModel> applyList;
+    LinkedList<listBorrowModel> borrowerList;
     SettingHelper settingHelper;
-    RecyclerView userCon;
+    RecyclerView userCon, borrowerListCer;
     LinearLayout adminCon;
     CardView logoutBtn, lenderArchiveBtn, dashboardBtn, changePasswordBtn, settingsBtn;
     ConstraintLayout settingCon, confirmationLayout, dashboard, applyInfo;
@@ -101,6 +104,8 @@ public class lenderHome extends AppCompatActivity {
         applyYear = findViewById(R.id.yearTB);
         applyApply = findViewById(R.id.applyApplyBtn);
         applyCancel = findViewById(R.id.cancelApplyBtn);
+
+        borrowerListCer = findViewById(R.id.listCer);
     }
     void setOnClick() {
         // Tab onclick
@@ -191,6 +196,8 @@ public class lenderHome extends AppCompatActivity {
     void changeContent(Button button)
     {
         applyAdapter applyAdapter_;
+        userListAdapter userListAdapter_;
+
         dashboard.setVisibility(View.INVISIBLE);
         if(applyList != null)
             if(applyList.size() > 0)
@@ -215,6 +222,11 @@ public class lenderHome extends AppCompatActivity {
             changeContainerVisibility(false);
 
             dashboard.setVisibility(View.VISIBLE);
+
+            borrowerList = profileHelper.getBorrowList_Lender(getIntent().getStringExtra("name"));
+            userListAdapter_ = new userListAdapter(borrowerList, profileHelper, UIHelper, this, userListAdapter.lender);
+            borrowerListCer.setAdapter(userListAdapter_);
+            borrowerListCer.setLayoutManager(new LinearLayoutManager(this));
         }
         else if(button.getId() == tabUser.getId())
         {

@@ -307,25 +307,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <include
-        android:id="@+id/confirmationInclude"
-        layout="@layout/confirmation_include"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <include
         android:id="@+id/dashboardInclude"
         layout="@layout/borrower_dashboard"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerCon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/userCon" />
+        app:layout_constraintTop_toTopOf="@id/userTitleTxt"
+        app:layout_constraintVertical_bias="0.0" />
 
     <include
         android:id="@+id/applyInclude"
@@ -394,4 +385,16 @@
             app:cornerRadius="10dp"
             app:iconPadding="0dp" />
     </LinearLayout>
+
+    <include
+        android:id="@+id/confirmationInclude"
+        layout="@layout/confirmation_include"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

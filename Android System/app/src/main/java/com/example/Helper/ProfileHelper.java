@@ -340,6 +340,7 @@ public class ProfileHelper {
             String name_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.NAME_COLUMN));
             String val_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN));
 
+            if(val_ == null || val_.isEmpty()) val_ = "";
             if(name_.equals(lenderName)) {
                 if(isApply) {
                     if(val_.contains(borrowerName)) return "EXIST";
@@ -824,6 +825,7 @@ public class ProfileHelper {
                             String value_ = cursor2.getString(cursor2.getColumnIndexOrThrow(SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN));
                             String email_ = cursor2.getString(cursor2.getColumnIndexOrThrow(SqliteHelper.AccountEntry.EMAIL_COLUMN));
                             String freq_ = cursor2.getString(cursor2.getColumnIndexOrThrow(SqliteHelper.LenderAccount.FREQ_COLUMN));
+                            String lenderName = cursor2.getString(cursor2.getColumnIndexOrThrow(SqliteHelper.LenderAccount.NAME_COLUMN));
 
                             String[] data = value_.split("\\|");
                             String[] data_;
@@ -843,12 +845,71 @@ public class ProfileHelper {
                                 int total = Integer.valueOf(data_[3]);
                                 int year = Integer.valueOf(data_[4]);
                                 if(isAccept.equalsIgnoreCase("TRUE")) {
-                                    list.add(new listBorrowModel(name, freq_, email_, total, remaining, year, img));
+                                    list.add(new listBorrowModel(lenderName.replaceAll("_", " "), freq_, email_, total, remaining, year, img));
                                     Log.e("APPLY", "ADDED TO THE LIST");
                                 }
                             }
                         }
                     }
+                }
+                return list;
+            }
+        }
+        return list;
+    }
+
+    public LinkedList<listBorrowModel> getBorrowList_Lender(String lenderName) {
+        LinkedList<listBorrowModel> list = new LinkedList<>();
+
+        String[] columns = {
+                SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN,
+                SqliteHelper.AccountEntry.EMAIL_COLUMN,
+                SqliteHelper.LenderAccount.TABLE_NAME + "." + SqliteHelper.LenderAccount.NAME_COLUMN,
+                SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN,
+                SqliteHelper.LenderAccount.FREQ_COLUMN,
+                SqliteHelper.LenderAccount.PIC_COLUMN
+        };
+
+        String selection = SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN +
+                " = " + SqliteHelper.LenderAccount.TABLE_NAME + "." + SqliteHelper.LenderAccount.NAME_COLUMN;
+
+        Cursor cursor = db.query(
+                SqliteHelper.AccountEntry.TABLE_NAME + " INNER JOIN " + SqliteHelper.LenderAccount.TABLE_NAME +
+                        " ON " + selection,
+                columns,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        while(cursor.moveToNext()) {
+            String name_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.NAME_COLUMN));
+            if(name_.equalsIgnoreCase(lenderName)) {
+                String val_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN));
+                String email_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.EMAIL_COLUMN));
+                String freq_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.FREQ_COLUMN));
+                byte[] imageBytes = cursor.getBlob(cursor.getColumnIndexOrThrow(SqliteHelper.BorrowerAccount.PIC_COLUMN));
+                Bitmap img = null;
+
+                if (imageBytes != null && imageBytes.length > 0) {
+                    img = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                }
+
+                if(val_ == null) val_ = "";
+                String[] data = val_.split("\\|");
+                String[] data_;
+
+                for(int i = 0; i < data.length; i++) {
+                    data_ = data[i].split(":");
+                    String borrowName = data_[0];
+                    String isAccept = data_[1];
+                    int remaining = Integer.valueOf(data_[2]);
+                    int total = Integer.valueOf(data_[3]);
+                    int year = Integer.valueOf(data_[4]);
+
+                    list.add(new listBorrowModel(borrowName, freq_, email_, total, remaining, year, img));
                 }
                 return list;
             }
