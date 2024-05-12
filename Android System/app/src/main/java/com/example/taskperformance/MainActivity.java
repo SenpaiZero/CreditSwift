@@ -32,6 +32,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.Helper.AdminAccountHelper;
+import com.example.Helper.JavaMailAPI;
 import com.example.Helper.PasswordHelper;
 import com.example.Helper.ProfileHelper;
 import com.example.Helper.SettingHelper;
@@ -40,12 +41,17 @@ import com.example.Helper.userInterfaceHelper;
 import com.example.Helper.validationHelper;
 
 import java.text.DecimalFormat;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
     Spinner animSpeedSpinner, animSpinner;
     ImageButton login, register;
-    TextView loginTxt, registerTxt, termsBtn, closeTerm, titleConfirm, msgConfirm;
+    TextView loginTxt, registerTxt, termsBtn, closeTerm, titleConfirm, msgConfirm, forgotBtn;
+    EditText forgotEmail, forgotCode, forgotPassword;
+    Button forgotCancel, forgotUpdate, forgotSend;
+    ConstraintLayout forgotLayout;
+    String code;
     ImageView bg, top, bottom, setting, exit;
     ConstraintLayout layout;
     userInterfaceHelper UIHelper;
@@ -284,6 +290,10 @@ public class MainActivity extends AppCompatActivity {
                     UIHelper.showCustomToast("The email you entered is not valid.");
                     return;
                 }
+                else if(profileHelper.checkEmailExist(email)) {
+                    UIHelper.showCustomToast("The email you entered already exist.");
+                    return;
+                }
                 else if(pass.isEmpty())
                 {
                     UIHelper.showCustomToast("Password input is invalid");
@@ -342,6 +352,70 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        forgotBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                forgotLayout.setVisibility(View.VISIBLE);
+            }
+        });
+
+        forgotCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                forgotLayout.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        forgotSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(validationHelper.checkEmail(forgotEmail.getText().toString())) {
+                    UIHelper.showCustomToast("Invalid email address.");
+                    return;
+                }
+                if(!profileHelper.checkEmailExist(forgotEmail.getText().toString())) {
+                    UIHelper.showCustomToast("Email Address does not exist.");
+                    return;
+                }
+
+                Random rand = new Random();
+                int min = 10000;
+                int max = 99999;
+                int random = rand.nextInt((max - min) + 1) + min;
+                code = String.valueOf(random);
+
+                JavaMailAPI javaMailAPI = new JavaMailAPI(MainActivity.this,
+                        forgotEmail.getText().toString(),
+                        "FORGOT PASSWORD",
+                        "Username: "+profileHelper.getUsernameFromEmail(forgotEmail.getText().toString())
+                                +"\nYour code is: " + code
+                                +"\n\nMake sure that you do not share this code to anyone!");
+
+                javaMailAPI.execute();
+            }
+        });
+
+        forgotUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!code.equals(forgotCode.getText().toString())) {
+                    UIHelper.showCustomToast("Incorrect Code.");
+                    return;
+                }
+                if(forgotPassword.getText().toString().isEmpty()) {
+                    UIHelper.showCustomToast("The password is empty.");
+                    return;
+                }
+
+                profileHelper.changePassword(
+                        profileHelper.getUsernameFromEmail(
+                            forgotEmail.getText().toString()),
+                        forgotPassword.getText().toString()
+                );
+                UIHelper.showCustomToast("Password has been updated");
+                forgotLayout.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
 
@@ -442,6 +516,16 @@ public class MainActivity extends AppCompatActivity {
         loginPassTB = findViewById(R.id.loginPasswordTB);
         loginBtn = findViewById(R.id.loginBtnLogin);
         stayLogin = findViewById(R.id.stayLoginCB);
+
+        // Forgot
+        forgotBtn = findViewById(R.id.forgotPass);
+        forgotCancel = findViewById(R.id.forgotCancel);
+        forgotUpdate = findViewById(R.id.forgotChange);
+        forgotSend = findViewById(R.id.sendForgotBtn);
+        forgotEmail = findViewById(R.id.forgotEmailTB);
+        forgotCode = findViewById(R.id.codeTB);
+        forgotPassword = findViewById(R.id.newPassForgotTB);
+        forgotLayout = findViewById(R.id.forgotLayout);
 
         // Register
         registerUserTB = findViewById(R.id.registerUserTB);

@@ -1029,6 +1029,40 @@ public class ProfileHelper {
         return list;
     }
 
+    public boolean checkEmailExist(String email) {
+        String[] col = {
+            SqliteHelper.AccountEntry.EMAIL_COLUMN
+        };
+
+        Cursor cursor = db.query(SqliteHelper.AccountEntry.TABLE_NAME,
+                col, null, null, null, null, null);
+
+        while(cursor.moveToNext())
+        {
+            String email_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.EMAIL_COLUMN));
+            if(email_.equalsIgnoreCase(email_))
+                return true;
+        }
+        return false;
+    }
+    public String getUsernameFromEmail(String email) {
+        String[] col = {
+                SqliteHelper.AccountEntry.EMAIL_COLUMN,
+                SqliteHelper.AccountEntry.USERNAME_COLUMN
+        };
+
+        Cursor cursor = db.query(SqliteHelper.AccountEntry.TABLE_NAME,
+                col, null, null, null, null, null);
+
+        while(cursor.moveToNext())
+        {
+            String email_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.EMAIL_COLUMN));
+            String user_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.USERNAME_COLUMN));
+            if(email_.equalsIgnoreCase(email_))
+                return user_;
+        }
+        return "";
+    }
     public boolean changePassword(String username, String password) {
         String selection = SqliteHelper.AccountEntry.USERNAME_COLUMN + " = ?";
         String[] selectionArgs = { username };

@@ -142,6 +142,10 @@ public class borrower_info extends AppCompatActivity {
                     UIHelper.showCustomToast("Please add an image for your profile");
                     return;
                 }
+                else if(profileHelper.checkEmailExist(email.getText().toString())) {
+                    UIHelper.showCustomToast("The email you entered already exist.");
+                    return;
+                }
                 String name_ = lastName.getText().toString().toUpperCase() + "|" +
                         firstName.getText().toString().toUpperCase() + "|" +
                         middleName.getText().toString().toUpperCase();

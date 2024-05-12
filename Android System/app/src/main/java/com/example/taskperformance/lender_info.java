@@ -126,7 +126,10 @@ public class lender_info extends AppCompatActivity {
                     UIHelper.showCustomToast("Please add an image for your profile.");
                     return;
                 }
-
+                else if(profileHelper.checkEmailExist(email.getText().toString())) {
+                    UIHelper.showCustomToast("The email you entered already exist.");
+                    return;
+                }
                 if(getIntent().getBooleanExtra("create", true))
                 {
                     createNewLender(name.getText().toString(),
