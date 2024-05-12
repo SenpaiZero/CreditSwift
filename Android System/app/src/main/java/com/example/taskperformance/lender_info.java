@@ -25,6 +25,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.Helper.ProfileHelper;
 import com.example.Helper.SqliteHelper;
 import com.example.Helper.userInterfaceHelper;
+import com.example.Helper.validationHelper;
 
 public class lender_info extends AppCompatActivity {
 
@@ -35,6 +36,7 @@ public class lender_info extends AppCompatActivity {
     Spinner rate, freq;
     ImageView profile;
     Button cancel, save;
+    Bitmap def, current;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,8 @@ public class lender_info extends AppCompatActivity {
         setUIVariable();
         setOnClick();
         checkEdit();
+
+        def = BitmapFactory.decodeResource(getResources(), R.drawable.add_picture);;
     }
 
     void checkEdit() {
@@ -77,6 +81,7 @@ public class lender_info extends AppCompatActivity {
         rate.setSelection(UIHelper.getSpinnerSelected(rate, String.valueOf(Rate) + "0%"));
         freq.setSelection(UIHelper.getSpinnerSelected(freq, Freq));
         profile.setImageBitmap(pic);
+        current = ((BitmapDrawable) profile.getDrawable()).getBitmap();
     }
     void setUIVariable()
     {
@@ -97,13 +102,31 @@ public class lender_info extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goAdmin();
+                if(getIntent().getBooleanExtra("create", true))
+                    goAdmin();
+                else if(getIntent().getBooleanExtra("admin", false))
+                    goAdmin();
+                else
+                    startActivity(new Intent(lender_info.this, lenderHome.class));
             }
         });
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(validationHelper.checkAlphaWithSpace(name.getText().toString())) {
+                    UIHelper.showCustomToast("The company name you entered is not valid.");
+                    return;
+                }
+                else if(validationHelper.checkEmail(email.getText().toString())) {
+                    UIHelper.showCustomToast("The email you entered is not valid.");
+                    return;
+                }
+                else if(validationHelper.checkImageChange(def, current)) {
+                    UIHelper.showCustomToast("Please add an image for your profile.");
+                    return;
+                }
+
                 if(getIntent().getBooleanExtra("create", true))
                 {
                     createNewLender(name.getText().toString(),
@@ -164,11 +187,13 @@ public class lender_info extends AppCompatActivity {
             Uri imageUri = data.getData();
             Bitmap resized = resizeImage(imageUri);
             profile.setImageBitmap(resized);
+            current = resized;
         }
     }
     void goAdmin() {
         startActivity(new Intent(lender_info.this, adminHome.class)
-                .putExtra("normal", false));
+                .putExtra("normal", false)
+                .putExtra("username", getIntent().getStringExtra("username").toString()));
     }
     private Bitmap resizeImage(Uri imageUri) {
         try {

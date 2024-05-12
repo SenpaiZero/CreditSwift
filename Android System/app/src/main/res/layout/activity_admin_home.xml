@@ -433,6 +433,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         android:background="@null"
+        android:elevation="10dp"
         android:scaleType="fitCenter"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/recyclerCon"

@@ -117,13 +117,49 @@ public class userInterfaceHelper {
                     }
                     else if(type.equalsIgnoreCase("logout"))
                     {
+                        StayLoginHelper stayLoginHelper = new StayLoginHelper(activity);
+                        stayLoginHelper.setStayLogin(false);
+
+                        Log.d("Logout", stayLoginHelper.getStayLogin() + "");
                         context.startActivity(new Intent(context, MainActivity.class));
                     }
                 }
             });
-
+    }
+    public String setPositiveConfirmation_changePassword(ProfileHelper profileHelper, String username, String currentPass, String newPass) {
+        String va = profileHelper.checkLogin(username, currentPass);
+        if(va.equalsIgnoreCase("LENDER")) {
+            profileHelper.changePassword(username, newPass);
+            return "Password has been updated";
+        }
+        else if(va.equalsIgnoreCase("BORROWER")) {
+            profileHelper.changePassword(username, newPass);
+            return "Password has been updated";
+        }
+        else {
+            return "Incorrect current password.";
+        }
     }
 
+    public String setPositiveConfirmation_changePasswordAdmin(AdminAccountHelper adminAccountHelper, String currentPass, String newPass) {
+            if(!adminAccountHelper.getPassword().equals(currentPass))
+                return "Incorrect current password.";
+            else
+            {
+                adminAccountHelper.setPassword(newPass);
+                return "Password has been updated";
+            }
+
+    }
+    public void setPositiveConfirmation_pay(ProfileHelper profileHelper, String borrowerName, String lenderName, double remaining) {
+        positiveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                profileHelper.addUpdateCurrentLend(borrowerName, lenderName, remaining,1122334455, 1122334455, false);
+                setConfirmVisibility(false);
+            }
+        });
+    }
     public void setPositiveConfirmation(String type, ProfileHelper profileHelper, String name, boolean isLender) {
         positiveBtn.setOnClickListener(new View.OnClickListener() {
             @Override

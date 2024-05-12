@@ -33,21 +33,23 @@
 
                 <ImageView
                     android:id="@+id/profileView"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:scaleType="centerCrop"
                     app:srcCompat="@drawable/user" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:orientation="vertical"
                     android:paddingLeft="5dp">
 
                     <TextView
                         android:id="@+id/companyTxt"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/abel"
                         android:text="Company Name"
@@ -58,7 +60,7 @@
                     <TextView
                         android:id="@+id/emailViewTxt"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/abel"
                         android:text="Email"
@@ -68,7 +70,7 @@
                     <TextView
                         android:id="@+id/totalViewTxt"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/abel"
                         android:text="Total: "
@@ -78,7 +80,7 @@
                     <TextView
                         android:id="@+id/remainingFreqViewTxt"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/abel"
                         android:text=" 1422312234 | Quarterly"
@@ -88,15 +90,15 @@
                     <Button
                         android:id="@+id/payNowBtn"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginRight="2dp"
-                        android:layout_weight="2"
                         android:backgroundTint="@color/lightTxt"
-                        android:text="PAY NOW"
+                        android:includeFontPadding="false"
+                        android:text="PAY NOW: 1231.1231221321312"
                         android:textColor="#FFFFFF"
                         android:textSize="16sp"
                         android:textStyle="bold"
-                        app:cornerRadius="10dp" />
+                        app:cornerRadius="5dp" />
 
                 </LinearLayout>
 

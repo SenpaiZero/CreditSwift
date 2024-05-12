@@ -64,7 +64,7 @@ public class applyAdapter extends RecyclerView.Adapter<applyAdapter.applyAdapter
             @Override
             public void onClick(View v) {
                 profileHelper.acceptDeclineCurrentLend(lenderName,
-                        applyList.get(position).getName(), true);
+                        applyList.get(position).getName(), false);
             }
         });
     }

@@ -27,16 +27,18 @@ public class userListAdapter extends RecyclerView.Adapter<userListAdapter.userLi
     userInterfaceHelper UIHelper;
     Context context;
     String type;
+    String borrowerName;
 
     public static final String borrower = "borrow",
             lender = "lender";
 
-    public userListAdapter(LinkedList<listBorrowModel> borrowList, ProfileHelper profileHelper, userInterfaceHelper UIHelper, Context context, String type) {
+    public userListAdapter(LinkedList<listBorrowModel> borrowList, ProfileHelper profileHelper, userInterfaceHelper UIHelper, Context context, String type, String borrowerName) {
         this.borrowList = borrowList;
         this.profileHelper = profileHelper;
         this.UIHelper = UIHelper;
         this.context = context;
         this.type = type;
+        this.borrowerName = borrowerName;
     }
 
 
@@ -50,26 +52,31 @@ public class userListAdapter extends RecyclerView.Adapter<userListAdapter.userLi
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull userListAdapterHolder holder, int position) {
+    public void onBindViewHolder(@NonNull userListAdapterHolder holder, @SuppressLint("RecyclerView") int position) {
         if(type.equals(borrower)) {
             holder.name.setText(borrowList.get(position).getName());
             holder.email.setText(borrowList.get(position).getEmail());
             holder.total.setText("Total: " + borrowList.get(position).getTotal()+
                     " | Year: "+borrowList.get(position).getYear());
-            holder.remaining.setText(borrowList.get(position).getRemaining()
-                    + "| " + borrowList.get(position).getFrequency().toUpperCase());
+            holder.remaining.setText(String.format("%.2f", borrowList.get(position).getRemaining())
+                    + " | " + borrowList.get(position).getFrequency().toUpperCase());
             holder.pic.setImageBitmap(borrowList.get(position).getPic());
 
+            holder.payBtn.setText("PAY NOW: " + String.format("%.2f", borrowList.get(position).getPayment()));
             holder.payBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    UIHelper.setConfirmation("PAYMENT", "DO YOU REALLY WANT PAY?", "CANCEL", "PAY");
+                    UIHelper.setNegativeConfirmation("cancel");
+                    UIHelper.setPositiveConfirmation_pay(profileHelper, borrowerName, borrowList.get(position).getName(),
+                            borrowList.get(position).getRemaining() - borrowList.get(position).getPayment());
+                    UIHelper.setConfirmVisibility(true);
                 }
             });
         }
 
         if(type.equals(lender)) {
-            holder.payBtn.setVisibility(View.INVISIBLE);
+            holder.payBtn.setVisibility(View.GONE);
 
             holder.name.setText(borrowList.get(position).getName());
             holder.email.setText(borrowList.get(position).getEmail());

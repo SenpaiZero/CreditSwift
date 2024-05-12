@@ -23,6 +23,7 @@ import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -30,10 +31,13 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.Helper.AdminAccountHelper;
 import com.example.Helper.PasswordHelper;
 import com.example.Helper.ProfileHelper;
 import com.example.Helper.SettingHelper;
+import com.example.Helper.StayLoginHelper;
 import com.example.Helper.userInterfaceHelper;
+import com.example.Helper.validationHelper;
 
 import java.text.DecimalFormat;
 
@@ -47,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     userInterfaceHelper UIHelper;
     SettingHelper settingHelper;
     ProfileHelper profileHelper;
+    CheckBox termCB, stayLogin;
+    StayLoginHelper stayLoginHelper;
     ConstraintLayout loginLayout, registerLayout, termLayout, confirmationLayout, settingsLayout;
     Button cancelLogin, loginBtn, cancelRegister, registerBtn, cancelExit, confirmExit, settingCancel, settingApply;
     EditText loginUserTB, loginPassTB, registerUserTB, registerEmailTB, registerPassTB, registerRePassTB;
@@ -76,6 +82,25 @@ public class MainActivity extends AppCompatActivity {
 
         UIHelper.setSpinner(getResources().getStringArray(R.array.yesno), animSpinner);
         UIHelper.setSpinner(getResources().getStringArray(R.array.animation_speed), animSpeedSpinner);
+
+        stayLoginHelper = new StayLoginHelper(this);
+
+        if(stayLoginHelper.getStayLogin()) {
+           String va = profileHelper.checkLogin(stayLoginHelper.getUserPass()[0], stayLoginHelper.getUserPass()[1]);
+            if(va.equalsIgnoreCase("LENDER"))
+            {
+                startActivity(new Intent(MainActivity.this, lenderHome.class)
+                        .putExtra("name", stayLoginHelper.getUserPass()[0])
+                        .putExtra("username", stayLoginHelper.getUserPass()[0]));
+            }
+            else if(va.equalsIgnoreCase("BORROWER"))
+            {
+                startActivity(new Intent(MainActivity.this, userHome.class)
+                        .putExtra("name", stayLoginHelper.getUserPass()[0])
+                        .putExtra("username", stayLoginHelper.getUserPass()[0]));
+            }
+
+        }
     }
 
     void openLoginRegister(View view, ConstraintLayout layout, ImageView bg, boolean isReverse)
@@ -194,9 +219,11 @@ public class MainActivity extends AppCompatActivity {
                 String user = loginUserTB.getText().toString();
                 String pass = loginPassTB.getText().toString();
 
-                if(user.equalsIgnoreCase("admin") && pass.equals("admin"))
+                AdminAccountHelper adminAccountHelper = new AdminAccountHelper(MainActivity.this);
+                if(user.equalsIgnoreCase("admin") && adminAccountHelper.getPassword().equals(pass))
                 {
-                    startActivity(new Intent(MainActivity.this, adminHome.class));
+                    startActivity(new Intent(MainActivity.this, adminHome.class)
+                            .putExtra("username", "ADMIN"));
                     return;
                 }
                 if(user.isEmpty())
@@ -218,6 +245,8 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
+                stayLoginHelper.setStayLogin(stayLogin.isChecked());
+                stayLoginHelper.setUserPass(user, pass);
                 if(va.equalsIgnoreCase("LENDER"))
                 {
                     startActivity(new Intent(MainActivity.this, lenderHome.class)
@@ -241,19 +270,27 @@ public class MainActivity extends AppCompatActivity {
                 String rePass = registerRePassTB.getText().toString();
                 String email = registerEmailTB.getText().toString();
 
-                if(user.isEmpty())
+                if(validationHelper.checkAlphaNumeric(user) || validationHelper.checkMinMaxLen(user, 3, 100))
                 {
-                    UIHelper.showCustomToast("Username input is invalid");
+                    UIHelper.showCustomToast("The username you entered is not valid.");
                     return;
                 }
-                else if(email.isEmpty())
+                else if(user.equalsIgnoreCase("ADMIN")) {
+                    UIHelper.showCustomToast("The username you entered is not valid.");
+                    return;
+                }
+                else if(validationHelper.checkEmail(email))
                 {
-                    UIHelper.showCustomToast("Email input is invalid");
+                    UIHelper.showCustomToast("The email you entered is not valid.");
                     return;
                 }
                 else if(pass.isEmpty())
                 {
                     UIHelper.showCustomToast("Password input is invalid");
+                    return;
+                }
+                else if(!termCB.isChecked()) {
+                    UIHelper.showCustomToast("Please read the terms and conditions.");
                     return;
                 }
 
@@ -304,6 +341,7 @@ public class MainActivity extends AppCompatActivity {
                 UIHelper.showCustomToast("Settings Applied. Please restart the application for the settings to take effects", 10000);
             }
         });
+
     }
 
 
@@ -330,6 +368,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        ((TextView)findViewById(R.id.cbTxt)).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                termCB.setChecked(!termCB.isChecked());
+                return true;
+            }
+        });
     }
     @SuppressLint("WrongConstant")
     void hideAllElements(boolean isVisible)
@@ -372,6 +418,7 @@ public class MainActivity extends AppCompatActivity {
         termsBtn = findViewById(R.id.termTxt);
         closeTerm = findViewById(R.id.cancelBtn);
         termLayout = findViewById(R.id.termInclude);
+        termCB = findViewById(R.id.termCB);
 
         // Confirmation
         confirmationLayout = findViewById(R.id.confirmationInclude);
@@ -394,6 +441,7 @@ public class MainActivity extends AppCompatActivity {
         loginUserTB = findViewById(R.id.loginUserTB);
         loginPassTB = findViewById(R.id.loginPasswordTB);
         loginBtn = findViewById(R.id.loginBtnLogin);
+        stayLogin = findViewById(R.id.stayLoginCB);
 
         // Register
         registerUserTB = findViewById(R.id.registerUserTB);

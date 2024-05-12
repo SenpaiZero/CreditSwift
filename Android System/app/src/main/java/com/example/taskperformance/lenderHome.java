@@ -1,5 +1,6 @@
 package com.example.taskperformance;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -36,7 +37,7 @@ public class lenderHome extends AppCompatActivity {
     SettingHelper settingHelper;
     RecyclerView userCon, borrowerListCer;
     LinearLayout adminCon;
-    CardView logoutBtn, lenderArchiveBtn, dashboardBtn, changePasswordBtn, settingsBtn;
+    CardView logoutBtn, lenderArchiveBtn, dashboardBtn, changePasswordBtn, settingsBtn, profileBtn;
     ConstraintLayout settingCon, confirmationLayout, dashboard, applyInfo;
     userInterfaceHelper UIHelper;
     ProfileHelper profileHelper;
@@ -81,6 +82,7 @@ public class lenderHome extends AppCompatActivity {
         tabDashboard = findViewById(R.id.tabDashboardBtn);
         lenderArchiveBtn = findViewById(R.id.viewLenderArchive);
         changePasswordBtn = findViewById(R.id.userChangePassword);
+        profileBtn = findViewById(R.id.profileBtn);
 
         // Settings
         settingCon = findViewById(R.id.userSettingCon);
@@ -174,6 +176,24 @@ public class lenderHome extends AppCompatActivity {
                 settingCon.setVisibility(View.INVISIBLE);
             }
         });
+
+        changePasswordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(lenderHome.this, changePassword.class)
+                        .putExtra("username", getIntent().getStringExtra("username").toString())
+                        .putExtra("type", "LENDER"));
+            }
+        });
+
+        profileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(lenderHome.this, lender_info.class)
+                        .putExtra("create", false)
+                        .putExtra("username", getIntent().getStringExtra("username".toString())));
+            }
+        });
     }
     void changeTintTab(Button button){
         // Setting the text color to default
@@ -224,7 +244,7 @@ public class lenderHome extends AppCompatActivity {
             dashboard.setVisibility(View.VISIBLE);
 
             borrowerList = profileHelper.getBorrowList_Lender(getIntent().getStringExtra("name"));
-            userListAdapter_ = new userListAdapter(borrowerList, profileHelper, UIHelper, this, userListAdapter.lender);
+            userListAdapter_ = new userListAdapter(borrowerList, profileHelper, UIHelper, this, userListAdapter.lender, "");
             borrowerListCer.setAdapter(userListAdapter_);
             borrowerListCer.setLayoutManager(new LinearLayoutManager(this));
         }

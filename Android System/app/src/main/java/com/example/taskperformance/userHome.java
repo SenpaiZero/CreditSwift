@@ -41,7 +41,7 @@ public class userHome extends AppCompatActivity {
     SettingHelper settingHelper;
     RecyclerView userCon, dashboardRec;
     LinearLayout adminCon;
-    CardView logoutBtn, lenderArchiveBtn, dashboardBtn, changePasswordBtn, settingsBtn;
+    CardView logoutBtn, lenderArchiveBtn, dashboardBtn, changePasswordBtn, settingsBtn, profileBtn;
     ConstraintLayout settingCon, confirmationLayout, dashboard, applyInfo;
     userInterfaceHelper UIHelper;
     ProfileHelper profileHelper;
@@ -92,6 +92,7 @@ public class userHome extends AppCompatActivity {
         tabDashboard = findViewById(R.id.tabDashboardBtn);
         lenderArchiveBtn = findViewById(R.id.viewLenderArchive);
         changePasswordBtn = findViewById(R.id.userChangePassword);
+        profileBtn = findViewById(R.id.profileBtn);
 
         // Settings
         settingCon = findViewById(R.id.userSettingCon);
@@ -147,6 +148,9 @@ public class userHome extends AppCompatActivity {
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                UIHelper.setConfirmation("LOGOUT", "DO YOU REALLY WANT TO LOGOUT?", "NO", "YES");
+                UIHelper.setNegativeConfirmation("cancel");
+                UIHelper.setPositiveConfirmation("logout");
                 UIHelper.setConfirmVisibility(true);
             }
         });
@@ -185,6 +189,25 @@ public class userHome extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 settingCon.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        changePasswordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(userHome.this, changePassword.class)
+                        .putExtra("username", getIntent().getStringExtra("username").toString())
+                        .putExtra("type", "BORROWER"));
+            }
+        });
+
+        profileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(userHome.this, borrower_info.class)
+                        .putExtra("username", getIntent().getStringExtra("username"))
+                        .putExtra("firstTime", false)
+                        .putExtra("borrower", true));
             }
         });
     }
@@ -245,7 +268,7 @@ public class userHome extends AppCompatActivity {
             userCon.setVisibility(View.INVISIBLE);
             dashboard.setVisibility(View.VISIBLE);
             listBorrowModel = profileHelper.getCurrentListBorrow(getIntent().getStringExtra("username"));
-            userListAdapter_ = new userListAdapter(listBorrowModel, profileHelper, UIHelper, this, userListAdapter.borrower);
+            userListAdapter_ = new userListAdapter(listBorrowModel, profileHelper, UIHelper, this, userListAdapter.borrower, getIntent().getStringExtra("username"));
             dashboardRec.setAdapter(userListAdapter_);
             dashboardRec.setLayoutManager(new LinearLayoutManager(this));
         }

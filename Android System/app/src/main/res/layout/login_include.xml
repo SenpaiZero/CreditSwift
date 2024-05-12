@@ -57,6 +57,7 @@
             android:backgroundTint="@color/lightRegister"
             android:drawableLeft="@drawable/password_img"
             android:drawableRight="@drawable/password_reveal"
+            android:password="true"
             android:drawablePadding="5dp"
             android:drawableTint="@color/lightRegister"
             android:elegantTextHeight="false"
@@ -65,7 +66,6 @@
             android:fontFamily="@font/abel"
             android:hint="Password"
             android:inputType="text"
-            android:password="true"
             android:textColor="@color/lightRegister"
             android:textColorHint="@color/lightRegister" />
 
@@ -82,14 +82,14 @@
                 android:orientation="horizontal">
 
                 <CheckBox
-                    android:id="@+id/checkBox"
+                    android:id="@+id/stayLoginCB"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:buttonTint="@color/lightTxt"
                     android:textColor="@color/lightRegister" />
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/cbTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Auto Sign In"

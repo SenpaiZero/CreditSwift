@@ -201,7 +201,18 @@ public class adminHome extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(adminHome.this, lender_info.class)
-                        .putExtra("create", true));
+                        .putExtra("create", true)
+                        .putExtra("username", "ADMIN")
+                        .putExtra("admin", true));
+            }
+        });
+
+        changePasswordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(adminHome.this, changePassword.class)
+                        .putExtra("username", "ADMIN")
+                        .putExtra("type", "ADMIN"));
             }
         });
     }
@@ -280,12 +291,14 @@ public class adminHome extends AppCompatActivity {
     public void editLender(String username) {
         startActivity(new Intent(adminHome.this, lender_info.class)
                 .putExtra("create", false)
-                .putExtra("username", username));
+                .putExtra("username", username)
+                .putExtra("admin", true));
     }
     public void editBorrower(String username) {
         startActivity(new Intent(adminHome.this, borrower_info.class)
                 .putExtra("firstTime", false)
-                .putExtra("username", username));
+                .putExtra("username", username)
+                .putExtra("admin", true));
     }
     public void setBorrowerList(boolean isArchive) {
         usersAdapter usersAdapter_;

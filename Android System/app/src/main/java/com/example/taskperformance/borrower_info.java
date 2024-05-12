@@ -2,6 +2,7 @@ package com.example.taskperformance;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.Helper.ProfileHelper;
 import com.example.Helper.userInterfaceHelper;
+import com.example.Helper.validationHelper;
 
 public class borrower_info extends AppCompatActivity {
 
@@ -30,6 +32,7 @@ public class borrower_info extends AppCompatActivity {
     userInterfaceHelper UIHelper;
     ProfileHelper profileHelper;
     private static final int PICK_IMAGE = 100;
+    Bitmap def, current;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,8 @@ public class borrower_info extends AppCompatActivity {
 
         UIHelper.setupDateSpinner(daySpinner, monthSpinner, yearSpinner);
         checkEdit();
+
+        def = BitmapFactory.decodeResource(getResources(), R.drawable.add_picture);
     }
 
     void checkEdit() {
@@ -74,6 +79,7 @@ public class borrower_info extends AppCompatActivity {
 
             email.setText(email_);
             profile.setImageBitmap(pic_);
+            current = ((BitmapDrawable) profile.getDrawable()).getBitmap();
             return;
         }
         cancel.setVisibility(View.INVISIBLE);
@@ -119,6 +125,23 @@ public class borrower_info extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(validationHelper.checkAlphaWithSpace(lastName.getText().toString())) {
+                    UIHelper.showCustomToast("The last name you entered is not valid");
+                    return;
+                }
+                else if(validationHelper.checkAlphaWithSpace(firstName.getText().toString())) {
+                    UIHelper.showCustomToast("The first name you entered is not valid");
+                    return;
+                }
+                else if(validationHelper.checkAlphaWithSpace(middleName.getText().toString())) {
+                    UIHelper.showCustomToast("The middle name you entered is not valid");
+                    return;
+                }
+                else if(validationHelper.checkImageChange(def, current)) {
+                    UIHelper.showCustomToast("Please add an image for your profile");
+                    return;
+                }
                 String name_ = lastName.getText().toString().toUpperCase() + "|" +
                         firstName.getText().toString().toUpperCase() + "|" +
                         middleName.getText().toString().toUpperCase();
@@ -164,12 +187,14 @@ public class borrower_info extends AppCompatActivity {
     }
 
     public void goBack(boolean isCreate) {
-        if(isCreate)
+        if(isCreate || getIntent().getBooleanExtra("borrower", false))
         {
-            startActivity(new Intent(borrower_info.this, userHome.class));
+            startActivity(new Intent(borrower_info.this, userHome.class)
+                    .putExtra("username", getIntent().getStringExtra("username").toString()));
             return;
         }
-        startActivity(new Intent(borrower_info.this, adminHome.class));
+        startActivity(new Intent(borrower_info.this, adminHome.class)
+                .putExtra("username", getIntent().getStringExtra("username").toString()));
     }
     private Bitmap resizeImage(Uri imageUri) {
         try {
@@ -198,6 +223,7 @@ public class borrower_info extends AppCompatActivity {
             // Resize the original bitmap to the new dimensions
             Bitmap resizedBitmap = Bitmap.createScaledBitmap(originalBitmap, newWidth, newHeight, true);
 
+            current = resizedBitmap;
             // Return the resized bitmap
             return resizedBitmap;
         } catch (Exception e) {
