@@ -8,26 +8,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.Adapter.userLenderAdapter;
 import com.example.Adapter.userListAdapter;
-import com.example.Adapter.usersAdapter;
 import com.example.Helper.ProfileHelper;
 import com.example.Helper.SettingHelper;
 import com.example.Helper.userInterfaceHelper;
 import com.example.model.listBorrowModel;
 import com.example.model.userLenderModel;
-import com.example.model.usersModel;
 
 import java.util.LinkedList;
 
@@ -47,6 +43,9 @@ public class userHome extends AppCompatActivity {
     ProfileHelper profileHelper;
     Button settingApply, settingCancel, confirmLogout, cancelLogout, applyApply, applyCancel;
     EditText applyAmount, applyYear;
+    public static userHome user_home;
+
+    TextView unpaid, paid, contract, totalLoans, currentLoans, paidLoans;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +74,8 @@ public class userHome extends AppCompatActivity {
                     .putExtra("username", getIntent().getStringExtra("username")));
         }
 
+        user_home = this;
+        setDashboard();
     }
     void setUIVariables()
     {
@@ -118,8 +119,26 @@ public class userHome extends AppCompatActivity {
         applyCancel = findViewById(R.id.cancelApplyBtn);
 
         dashboardRec = findViewById(R.id.listCer);
+
+        unpaid = findViewById(R.id.unpaidTxt);
+        paid = findViewById(R.id.fullPaidTxt);
+        contract = findViewById(R.id.allContractTxt);
+
+        totalLoans = findViewById(R.id.totalLoansTxt);
+        currentLoans = findViewById(R.id.paidLenderTxt);
+        paidLoans = findViewById(R.id.profitTxt);
     }
 
+    public void setDashboard() {
+        double[] data = profileHelper.getBorrowerDashboard(getIntent().getStringExtra("username"));
+        contract.setText("ALL CONTRACTS\n"+String.format("%.0f", data[0]));
+        paid.setText("PAID\n"+String.format("%.0f", data[1]));
+        unpaid.setText("UNPAID\n"+String.format("%.0f", data[2]));
+
+        totalLoans.setText("TOTAL LOANS\n"+data[3]);
+        currentLoans.setText("CURRENT LOANS\n"+data[4]);
+        paidLoans.setText("PAID LOANS\n"+data[5]);
+    }
     void setOnClick()
     {
         // Tab onclick
@@ -252,7 +271,7 @@ public class userHome extends AppCompatActivity {
             changeContainerVisibility(false);
             usersLenderList = profileHelper.getUsersLenderList("LENDER", false);
             usersLenderAdapter_ = new userLenderAdapter(usersLenderList, this, userLenderAdapter.user, profileHelper);
-            usersLenderAdapter_.setUser_home(userHome.this);
+
             userCon.setAdapter(usersLenderAdapter_);
             userCon.setLayoutManager(new LinearLayoutManager(this));
         }
@@ -293,7 +312,7 @@ public class userHome extends AppCompatActivity {
         adminCon.setVisibility(View.INVISIBLE);
     }
 
-    public void openApplyInfo(String companyName) {
+    public void openApplyInfo(String companyName, double min, double max) {
         applyInfo.setVisibility(View.VISIBLE);
         applyAmount.setText(null);
         applyYear.setText(null);
@@ -308,6 +327,12 @@ public class userHome extends AppCompatActivity {
             public void onClick(View v) {
                 int amount = Integer.valueOf(applyAmount.getText().toString());
                 int year = Integer.valueOf(applyYear.getText().toString());
+
+                if(amount < min || amount > max) {
+                    UIHelper.showCustomToast("Please make sure that the amount is within the company's budget.");
+                    return;
+                }
+
                 String a = profileHelper.addUpdateCurrentLend(getIntent().getStringExtra("username"),
                         companyName, amount, amount, year, true);
                 Log.d("apply", "username: " + getIntent().getStringExtra("username"));

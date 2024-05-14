@@ -8,7 +8,7 @@ import android.util.Log;
 import java.util.Date;
 
 public class SqliteHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 9;
+    public static final int DATABASE_VERSION = 11;
     public static final String DATABASE_NAME = "LoanManagement.db";
     public static final String LOGIN_TABLE_CREATE = "CREATE TABLE IF NOT EXISTS Account (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -75,7 +75,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
         public static final String EMAIL_COLUMN = "email";
         public static final String TYPE_COLUMN = "type";
         public static final String ARCHIVE_COLUMN = "archive"; // Yes or No
-        public static final String DATA_COLUMN = "data";
+        public static final String DATA_COLUMN = "data"; // To check if borrower has added personal information
     }
 
     public static class LenderAccount

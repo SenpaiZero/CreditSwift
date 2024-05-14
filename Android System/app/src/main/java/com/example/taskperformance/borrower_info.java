@@ -33,6 +33,7 @@ public class borrower_info extends AppCompatActivity {
     ProfileHelper profileHelper;
     private static final int PICK_IMAGE = 100;
     Bitmap def, current;
+    String defEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,11 +81,13 @@ public class borrower_info extends AppCompatActivity {
             email.setText(email_);
             profile.setImageBitmap(pic_);
             current = ((BitmapDrawable) profile.getDrawable()).getBitmap();
+            defEmail = email_;
+            save.setText("UPDATE");
             return;
         }
         cancel.setVisibility(View.INVISIBLE);
-        emailTxt.setVisibility(View.INVISIBLE);
-        email.setVisibility(View.INVISIBLE);
+        emailTxt.setVisibility(View.GONE);
+        email.setVisibility(View.GONE);
 
     }
 
@@ -142,10 +145,6 @@ public class borrower_info extends AppCompatActivity {
                     UIHelper.showCustomToast("Please add an image for your profile");
                     return;
                 }
-                else if(profileHelper.checkEmailExist(email.getText().toString())) {
-                    UIHelper.showCustomToast("The email you entered already exist.");
-                    return;
-                }
                 String name_ = lastName.getText().toString().toUpperCase() + "|" +
                         firstName.getText().toString().toUpperCase() + "|" +
                         middleName.getText().toString().toUpperCase();
@@ -156,11 +155,19 @@ public class borrower_info extends AppCompatActivity {
 
                 if(isFirstTime)
                 {
+                    if(profileHelper.checkEmailExist(email.getText().toString())) {
+                        UIHelper.showCustomToast("The email you entered already exist.");
+                        return;
+                    }
                     addNewInfo(name_, birth_, ((BitmapDrawable) profile.getDrawable()).getBitmap());
                     goBack(true);
                 }
                 else {
 
+                    if(profileHelper.checkEmailExist_update(email.getText().toString(), defEmail)) {
+                        UIHelper.showCustomToast("The email you entered already exist.");
+                        return;
+                    }
                     profileHelper.updateBorrowerInfo(getIntent().getStringExtra("username").toString(),
                             name_,
                             email.getText().toString().toUpperCase(),
@@ -198,7 +205,8 @@ public class borrower_info extends AppCompatActivity {
             return;
         }
         startActivity(new Intent(borrower_info.this, adminHome.class)
-                .putExtra("username", getIntent().getStringExtra("username").toString()));
+                .putExtra("username", getIntent().getStringExtra("username").toString())
+                .putExtra("normal", "BORROWER"));
     }
     private Bitmap resizeImage(Uri imageUri) {
         try {

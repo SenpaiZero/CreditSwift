@@ -7,9 +7,9 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.taskperformance"
+        applicationId = "com.example.creditswitft"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 

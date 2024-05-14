@@ -30,7 +30,6 @@ public class userLenderAdapter extends RecyclerView.Adapter<userLenderAdapter.us
     String type;
     ProfileHelper profileHelper;
     userInterfaceHelper UIHelper;
-    userHome user_home;
     public static final String admin = "admin",
             user = "user",
             archive = "archive";
@@ -48,9 +47,6 @@ public class userLenderAdapter extends RecyclerView.Adapter<userLenderAdapter.us
         this.UIHelper = UIHelper;
     }
 
-    public void setUser_home(userHome user_home) {
-        this.user_home = user_home;
-    }
 
     @NonNull
     @Override
@@ -97,8 +93,9 @@ public class userLenderAdapter extends RecyclerView.Adapter<userLenderAdapter.us
                 @Override
                 public void onClick(View v) {
                     //apply btn
-                    if(user_home != null)
-                        user_home.openApplyInfo(holder.companyName.getText().toString().replaceAll(" ", "_"));
+                       userHome.user_home.openApplyInfo(holder.companyName.getText().toString().replaceAll(" ", "_"),
+                               lenderList.get(position).getMinPrice(), lenderList.get(position).getMaxPrice());
+                       userHome.user_home.setDashboard();
                 }
             });
         }

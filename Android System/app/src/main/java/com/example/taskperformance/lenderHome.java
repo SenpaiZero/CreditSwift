@@ -43,6 +43,7 @@ public class lenderHome extends AppCompatActivity {
     ProfileHelper profileHelper;
     Button settingApply, settingCancel, confirmLogout, cancelLogout, applyApply, applyCancel;
     EditText applyAmount, applyYear;
+    public static lenderHome lender_home;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +66,8 @@ public class lenderHome extends AppCompatActivity {
         setUIVariables();
         setOnClick();
         changeTintTab(tabUser);
+
+        lender_home = this;
     }
     void setUIVariables()
     {
@@ -215,7 +218,6 @@ public class lenderHome extends AppCompatActivity {
 
     void changeContent(Button button)
     {
-        applyAdapter applyAdapter_;
         userListAdapter userListAdapter_;
 
         dashboard.setVisibility(View.INVISIBLE);
@@ -226,14 +228,7 @@ public class lenderHome extends AppCompatActivity {
         ProfileHelper profileHelper = new ProfileHelper(this);
         if(button.getId() == tabLender.getId())
         {
-            userCon.setVisibility(View.VISIBLE);
-            title.setText("APPLY LIST");
-            changeContainerVisibility(false);
-            applyList = profileHelper.getApplyList(getIntent().getStringExtra("name"));
-            applyAdapter_ = new applyAdapter(applyList, profileHelper, UIHelper, this, getIntent().getStringExtra("username"));
-
-            userCon.setAdapter(applyAdapter_);
-            userCon.setLayoutManager(new LinearLayoutManager(this));
+            updateBorrowerList();
         }
         else if(button.getId() == tabDashboard.getId())
         {
@@ -256,6 +251,18 @@ public class lenderHome extends AppCompatActivity {
 
     }
 
+    public void updateBorrowerList() {
+
+        applyAdapter applyAdapter_;
+        userCon.setVisibility(View.VISIBLE);
+        title.setText("APPLY LIST");
+        changeContainerVisibility(false);
+        applyList = profileHelper.getApplyList(getIntent().getStringExtra("name"));
+        applyAdapter_ = new applyAdapter(applyList, profileHelper, UIHelper, this, getIntent().getStringExtra("username"));
+
+        userCon.setAdapter(applyAdapter_);
+        userCon.setLayoutManager(new LinearLayoutManager(this));
+    }
     void changeContainerVisibility(boolean isAdmin)
     {
         if(isAdmin)

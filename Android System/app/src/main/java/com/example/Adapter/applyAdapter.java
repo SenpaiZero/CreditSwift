@@ -16,6 +16,7 @@ import com.example.Helper.ProfileHelper;
 import com.example.Helper.userInterfaceHelper;
 import com.example.model.applyModel;
 import com.example.taskperformance.R;
+import com.example.taskperformance.lenderHome;
 
 import java.util.LinkedList;
 
@@ -57,6 +58,7 @@ public class applyAdapter extends RecyclerView.Adapter<applyAdapter.applyAdapter
             public void onClick(View v) {
                 profileHelper.acceptDeclineCurrentLend(lenderName,
                         applyList.get(position).getName(), true);
+                lenderHome.lender_home.updateBorrowerList();
             }
         });
 
@@ -65,6 +67,7 @@ public class applyAdapter extends RecyclerView.Adapter<applyAdapter.applyAdapter
             public void onClick(View v) {
                 profileHelper.acceptDeclineCurrentLend(lenderName,
                         applyList.get(position).getName(), false);
+                lenderHome.lender_home.updateBorrowerList();
             }
         });
     }

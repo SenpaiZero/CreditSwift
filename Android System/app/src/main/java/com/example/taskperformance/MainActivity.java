@@ -6,6 +6,7 @@ import static android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.animation.Animator;
@@ -14,6 +15,9 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -42,6 +46,7 @@ import com.example.Helper.validationHelper;
 
 import java.text.DecimalFormat;
 import java.util.Random;
+import android.Manifest;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -105,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
                         .putExtra("name", stayLoginHelper.getUserPass()[0])
                         .putExtra("username", stayLoginHelper.getUserPass()[0]));
             }
-
         }
     }
 
@@ -369,6 +373,17 @@ public class MainActivity extends AppCompatActivity {
         forgotSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+                if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE) != null) {
+                    boolean connected = (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                            connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+
+                    if(!connected) {
+                        UIHelper.showCustomToast("No Internet Connection");
+                        return;
+                    }
+                }
+
                 if(validationHelper.checkEmail(forgotEmail.getText().toString())) {
                     UIHelper.showCustomToast("Invalid email address.");
                     return;

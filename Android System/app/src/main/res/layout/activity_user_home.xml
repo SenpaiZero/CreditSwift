@@ -285,17 +285,6 @@
     </LinearLayout>
 
     <include
-        android:id="@+id/card_view"
-        layout="@layout/custom_toast"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <include
         android:id="@+id/userSettingCon"
         layout="@layout/settings_include"
         android:layout_width="0dp"
@@ -389,6 +378,17 @@
     <include
         android:id="@+id/confirmationInclude"
         layout="@layout/confirmation_include"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/card_view"
+        layout="@layout/custom_toast"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="invisible"

@@ -36,7 +36,7 @@
                     <TextView
                         android:id="@+id/textView46"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/protest_strike"
                         android:text="DASHBOARD"
@@ -46,9 +46,9 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
                         android:layout_margin="5dp"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:orientation="horizontal">
 
                         <androidx.cardview.widget.CardView
@@ -61,13 +61,13 @@
                             app:cardElevation="8dp">
 
                             <TextView
-                                android:id="@+id/borrowerCountTxt"
+                                android:id="@+id/fullPaidTxt"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_margin="5dp"
                                 android:fontFamily="@font/protest_strike"
                                 android:gravity="center"
-                                android:text="BORROWER\n10"
+                                android:text="FULLY PAID\n10"
                                 android:textAlignment="center"
                                 android:textColor="@color/darkRegister"
                                 android:textSize="16sp" />
@@ -83,13 +83,13 @@
                             app:cardElevation="8dp">
 
                             <TextView
-                                android:id="@+id/totalLendTxt"
+                                android:id="@+id/unpaidTxt"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_margin="5dp"
                                 android:fontFamily="@font/protest_strike"
                                 android:gravity="center"
-                                android:text="TOTAL LEND\n10"
+                                android:text="UPAID\n10"
                                 android:textAlignment="center"
                                 android:textColor="@color/darkRegister"
                                 android:textSize="16sp" />
@@ -97,7 +97,7 @@
 
                         <androidx.cardview.widget.CardView
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_margin="5dp"
                             android:layout_weight="1"
                             app:cardBackgroundColor="@color/lightBackground"
@@ -105,13 +105,13 @@
                             app:cardElevation="8dp">
 
                             <TextView
-                                android:id="@+id/totalCurrentLendTxt"
+                                android:id="@+id/allContractTxt"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_margin="5dp"
                                 android:fontFamily="@font/protest_strike"
                                 android:gravity="center"
-                                android:text="TOTAL CURRENT LEND\n10"
+                                android:text="ALL CONTRACTS\n10"
                                 android:textAlignment="center"
                                 android:textColor="@color/darkRegister"
                                 android:textSize="16sp" />
@@ -120,35 +120,13 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
                         android:layout_margin="5dp"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:orientation="horizontal">
 
                         <androidx.cardview.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:layout_weight="1"
-                            app:cardBackgroundColor="@color/lightBackground"
-                            app:cardCornerRadius="5dp"
-                            app:cardElevation="8dp">
-
-                            <TextView
-                                android:id="@+id/currentBorrowerTxt"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="5dp"
-                                android:fontFamily="@font/protest_strike"
-                                android:gravity="center"
-                                android:text="CURRENT BORROWER\n10"
-                                android:textAlignment="center"
-                                android:textColor="@color/darkRegister"
-                                android:textSize="16sp" />
-                        </androidx.cardview.widget.CardView>
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_margin="5dp"
                             android:layout_weight="1"
@@ -157,20 +135,20 @@
                             app:cardElevation="8dp">
 
                             <TextView
-                                android:id="@+id/totalPaidTxt"
+                                android:id="@+id/totalLoansTxt"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_margin="5dp"
                                 android:fontFamily="@font/protest_strike"
                                 android:gravity="center"
-                                android:text="TOTAL PAID\n10"
+                                android:text="TOTAL LOANS\n10"
                                 android:textAlignment="center"
                                 android:textColor="@color/darkRegister"
                                 android:textSize="16sp" />
                         </androidx.cardview.widget.CardView>
 
                         <androidx.cardview.widget.CardView
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_margin="5dp"
                             android:layout_weight="1"
@@ -179,13 +157,35 @@
                             app:cardElevation="8dp">
 
                             <TextView
-                                android:id="@+id/totalInterestTxt"
+                                android:id="@+id/paidLenderTxt"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_margin="5dp"
                                 android:fontFamily="@font/protest_strike"
                                 android:gravity="center"
-                                android:text="TOTAL INTEREST\n10"
+                                android:text="CURRENT LOANS\n10"
+                                android:textAlignment="center"
+                                android:textColor="@color/darkRegister"
+                                android:textSize="16sp" />
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            app:cardBackgroundColor="@color/lightBackground"
+                            app:cardCornerRadius="5dp"
+                            app:cardElevation="8dp">
+
+                            <TextView
+                                android:id="@+id/profitTxt"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                android:fontFamily="@font/protest_strike"
+                                android:gravity="center"
+                                android:text="PAID LOANS\n10"
                                 android:textAlignment="center"
                                 android:textColor="@color/darkRegister"
                                 android:textSize="16sp" />

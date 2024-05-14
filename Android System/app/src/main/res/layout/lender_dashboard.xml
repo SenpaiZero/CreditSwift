@@ -61,35 +61,13 @@
                             app:cardElevation="8dp">
 
                             <TextView
-                                android:id="@+id/appliedLenderTxt"
+                                android:id="@+id/finishedContractTxt"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_margin="5dp"
                                 android:fontFamily="@font/protest_strike"
                                 android:gravity="center"
-                                android:text="APPLIED BORROWER\n10"
-                                android:textAlignment="center"
-                                android:textColor="@color/darkRegister"
-                                android:textSize="16sp" />
-                        </androidx.cardview.widget.CardView>
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:layout_weight="1"
-                            app:cardBackgroundColor="@color/lightBackground"
-                            app:cardCornerRadius="5dp"
-                            app:cardElevation="8dp">
-
-                            <TextView
-                                android:id="@+id/totalBorrowedTxt"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="5dp"
-                                android:fontFamily="@font/protest_strike"
-                                android:gravity="center"
-                                android:text="CURRENT  APPLIED BORROWER\n10"
+                                android:text="FINISHED CONTRACT\n10"
                                 android:textAlignment="center"
                                 android:textColor="@color/darkRegister"
                                 android:textSize="16sp" />
@@ -105,13 +83,35 @@
                             app:cardElevation="8dp">
 
                             <TextView
-                                android:id="@+id/totalCurrentBorrowedTxt"
+                                android:id="@+id/unfinishedContractTxt"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_margin="5dp"
                                 android:fontFamily="@font/protest_strike"
                                 android:gravity="center"
-                                android:text="TOTAL SPENT\n10"
+                                android:text="UNFINISHED CONTRACT\n10"
+                                android:textAlignment="center"
+                                android:textColor="@color/darkRegister"
+                                android:textSize="16sp" />
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            app:cardBackgroundColor="@color/lightBackground"
+                            app:cardCornerRadius="5dp"
+                            app:cardElevation="8dp">
+
+                            <TextView
+                                android:id="@+id/allLenderContractTxt"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="5dp"
+                                android:fontFamily="@font/protest_strike"
+                                android:gravity="center"
+                                android:text="ALL CONTRACT\n10"
                                 android:textAlignment="center"
                                 android:textColor="@color/darkRegister"
                                 android:textSize="16sp" />
@@ -126,8 +126,8 @@
                         android:orientation="horizontal">
 
                         <androidx.cardview.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
                             android:layout_margin="5dp"
                             android:layout_weight="1"
                             app:cardBackgroundColor="@color/lightBackground"
@@ -135,9 +135,9 @@
                             app:cardElevation="8dp">
 
                             <TextView
-                                android:id="@+id/totalUnpaidTxt"
+                                android:id="@+id/unpaidLenderTxt"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_margin="5dp"
                                 android:fontFamily="@font/protest_strike"
                                 android:gravity="center"
@@ -148,7 +148,7 @@
                         </androidx.cardview.widget.CardView>
 
                         <androidx.cardview.widget.CardView
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_margin="5dp"
                             android:layout_weight="1"
@@ -157,9 +157,9 @@
                             app:cardElevation="8dp">
 
                             <TextView
-                                android:id="@+id/totalPaidTxt"
+                                android:id="@+id/paidLenderTxt"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_margin="5dp"
                                 android:fontFamily="@font/protest_strike"
                                 android:gravity="center"
@@ -170,7 +170,7 @@
                         </androidx.cardview.widget.CardView>
 
                         <androidx.cardview.widget.CardView
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_margin="5dp"
                             android:layout_weight="1"
@@ -179,13 +179,13 @@
                             app:cardElevation="8dp">
 
                             <TextView
-                                android:id="@+id/totalInterestTxt"
+                                android:id="@+id/profitTxt"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_margin="5dp"
                                 android:fontFamily="@font/protest_strike"
                                 android:gravity="center"
-                                android:text="TOTAL INTEREST\n10"
+                                android:text="PROFIT\n10"
                                 android:textAlignment="center"
                                 android:textColor="@color/darkRegister"
                                 android:textSize="16sp" />

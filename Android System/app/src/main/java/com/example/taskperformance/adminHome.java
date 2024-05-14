@@ -43,7 +43,7 @@ public class adminHome extends AppCompatActivity {
     ConstraintLayout settingCon, confirmationLayout;
     userInterfaceHelper UIHelper;
     Button settingApply, settingCancel, confirmLogout, cancelLogout;
-    boolean isNormal;
+    String isNormal;
     ProfileHelper profileHelper;
     public static adminHome admin;
     @Override
@@ -51,7 +51,9 @@ public class adminHome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_home);
 
-        isNormal = getIntent().getBooleanExtra("normal", true);
+        isNormal = getIntent().getStringExtra("normal");
+        if(isNormal == null || isNormal.isEmpty()) isNormal = "ADMIN";
+
         UIHelper = new userInterfaceHelper(this);
         UIHelper.setContext(this);
         UIHelper.removeActionbar();
@@ -62,10 +64,12 @@ public class adminHome extends AppCompatActivity {
 
         setUIVariables();
         setOnClick();
-        if(isNormal)
+        if(isNormal.equalsIgnoreCase("ADMIN"))
             changeTintTab(tabAdmin);
-        else
+        else if(isNormal.equalsIgnoreCase("LENDER"))
             changeTintTab(tabLender);
+        else if(isNormal.equalsIgnoreCase("BORROWER"))
+            changeTintTab(tabBorrower);
 
         admin = this;
     }

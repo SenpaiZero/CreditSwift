@@ -66,10 +66,12 @@ public class userListAdapter extends RecyclerView.Adapter<userListAdapter.userLi
             holder.payBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    double remaining = borrowList.get(position).getRemaining() - borrowList.get(position).getPayment();
+                    if(remaining < 0) remaining = 0;
                     UIHelper.setConfirmation("PAYMENT", "DO YOU REALLY WANT PAY?", "CANCEL", "PAY");
                     UIHelper.setNegativeConfirmation("cancel");
                     UIHelper.setPositiveConfirmation_pay(profileHelper, borrowerName, borrowList.get(position).getName(),
-                            borrowList.get(position).getRemaining() - borrowList.get(position).getPayment());
+                            remaining);
                     UIHelper.setConfirmVisibility(true);
                 }
             });

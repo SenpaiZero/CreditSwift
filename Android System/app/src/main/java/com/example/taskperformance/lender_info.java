@@ -37,6 +37,7 @@ public class lender_info extends AppCompatActivity {
     ImageView profile;
     Button cancel, save;
     Bitmap def, current;
+    String defEmail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +83,8 @@ public class lender_info extends AppCompatActivity {
         freq.setSelection(UIHelper.getSpinnerSelected(freq, Freq));
         profile.setImageBitmap(pic);
         current = ((BitmapDrawable) profile.getDrawable()).getBitmap();
+
+        defEmail = Email;
     }
     void setUIVariable()
     {
@@ -114,6 +117,9 @@ public class lender_info extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                double maxV = Double.valueOf(max.getText().toString());
+                double minV = Double.valueOf(min.getText().toString());
+
                 if(validationHelper.checkAlphaWithSpace(name.getText().toString())) {
                     UIHelper.showCustomToast("The company name you entered is not valid.");
                     return;
@@ -126,12 +132,18 @@ public class lender_info extends AppCompatActivity {
                     UIHelper.showCustomToast("Please add an image for your profile.");
                     return;
                 }
-                else if(profileHelper.checkEmailExist(email.getText().toString())) {
-                    UIHelper.showCustomToast("The email you entered already exist.");
+                else if(maxV < minV) {
+                    UIHelper.showCustomToast("The max amount should be higher than minimum");
                     return;
                 }
+
                 if(getIntent().getBooleanExtra("create", true))
                 {
+                     if(profileHelper.checkEmailExist(email.getText().toString())) {
+                        UIHelper.showCustomToast("The email you entered already exist.");
+                        return;
+                     }
+
                     createNewLender(name.getText().toString(),
                             email.getText().toString(),
                             Double.valueOf(max.getText().toString()),
@@ -142,6 +154,10 @@ public class lender_info extends AppCompatActivity {
                 }
                 else
                 {
+                    if(profileHelper.checkEmailExist_update(email.getText().toString(), defEmail)) {
+                        UIHelper.showCustomToast("The email you entered already exist.");
+                        return;
+                    }
                     if(profileHelper.updateLenderInfo(name.getText().toString(),
                             email.getText().toString(),
                             Double.valueOf(min.getText().toString()),
@@ -195,7 +211,7 @@ public class lender_info extends AppCompatActivity {
     }
     void goAdmin() {
         startActivity(new Intent(lender_info.this, adminHome.class)
-                .putExtra("normal", false)
+                .putExtra("normal", "LENDER")
                 .putExtra("username", getIntent().getStringExtra("username").toString()));
     }
     private Bitmap resizeImage(Uri imageUri) {

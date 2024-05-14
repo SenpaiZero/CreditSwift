@@ -217,7 +217,8 @@ public class ProfileHelper {
                 SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN,
                 SqliteHelper.LenderAccount.TABLE_NAME + "." + SqliteHelper.LenderAccount.NAME_COLUMN,
                 SqliteHelper.LenderAccount.NAME_COLUMN,
-                SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN
+                SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN,
+                SqliteHelper.LenderAccount.RATE_COLUMN
         };
 
         String selection = SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN +
@@ -236,6 +237,7 @@ public class ProfileHelper {
         while(cursor.moveToNext()) {
             String name_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.NAME_COLUMN));
             String val_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN));
+            double rate_ = cursor.getDouble(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.RATE_COLUMN));
 
             // Found the lender
             if(name_.equalsIgnoreCase(lenderName)) {
@@ -247,10 +249,16 @@ public class ProfileHelper {
                     data_ = data[i].split(":");
                     Log.d("Apply", data_[0] + " : " + userFullnameToUsername(borrowName));
                     if(data_[0].equals(userFullnameToUsername(borrowName))) {
-                        if(isAccept)
+                        if(isAccept) {
                             data[i] = data_[0]+":"+"TRUE"+":"+data_[2]+":"+data_[3]+":"+data_[4];
+                            double interest_= (rate_ / 100) * Double.valueOf(data_[3]);
+                            updateTotalInterestSpent(lenderName, interest_, Double.valueOf(data_[3]));
+                            updateCurrentTotalLend(data_[0], Double.valueOf(data_[3]), true);
+                        }
                         else
+                        {
                             data[i] = "";
+                        }
                         Log.e("apply", "update data");
                     }
                 }
@@ -442,15 +450,20 @@ public class ProfileHelper {
                 for(int i = 0; i < data.length; i++) {
                      data_ = data[i].split(":");
                      if(data_[0].equals(borrowerName)) {
+                         // Remaining nakukuha sa UIHelper through parameters
+                         // This means payment
                          if(year == 1122334455 || total == 1122334455) {
                              val = borrowerName + ":"+String.valueOf(!isApply).toUpperCase()+":"+remaining+":"+data_[3]+":"+data_[4]+"|";
                              Log.e("apply", "updated remaining " + remaining);
                          }
 
-
+                         // POTANGINANG METHOD TO BAKIT NAPAKA BUGGY AYOKO NA TANGINA WAHHHH AIOSDHAOISDH
                          if(remaining <= 0) {
                              donePayment(borrowerName, lenderName, Double.valueOf(data_[3]) , Double.valueOf(data_[4]));
                              addRemoveListBorrower(lenderName.replaceAll(" ", "_"), borrowerName, false);
+                             updateCurrentTotalLend(data_[0], Double.valueOf(data_[3]), false);
+                             updateTotalLend(data_[0], Double.valueOf(data_[3]));
+
                              data[i] = "";
                          } else {
                              data[i] = val;
@@ -1040,8 +1053,26 @@ public class ProfileHelper {
         while(cursor.moveToNext())
         {
             String email_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.EMAIL_COLUMN));
-            if(email_.equalsIgnoreCase(email_))
+            if(email_.equalsIgnoreCase(email))
                 return true;
+        }
+        return false;
+    }
+    public boolean checkEmailExist_update(String email, String defEmail) {
+        String[] col = {
+                SqliteHelper.AccountEntry.EMAIL_COLUMN
+        };
+
+        Cursor cursor = db.query(SqliteHelper.AccountEntry.TABLE_NAME,
+                col, null, null, null, null, null);
+
+        while(cursor.moveToNext())
+        {
+            String email_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.EMAIL_COLUMN));
+            if(!email_.equalsIgnoreCase(defEmail)) {
+                if(email_.equalsIgnoreCase(email))
+                    return true;
+            }
         }
         return false;
     }
@@ -1079,4 +1110,273 @@ public class ProfileHelper {
         return rowsUpdated > 0;
     }
 
+    public boolean updateTotalInterestSpent(String user, double interest, double spent) {
+        String[] col = {
+                SqliteHelper.LenderAccount.NAME_COLUMN,
+                SqliteHelper.LenderAccount.TOTAL_INTEREST,
+                SqliteHelper.LenderAccount.TOTAL_SPENT
+        };
+
+        Cursor cursor = db.query(SqliteHelper.LenderAccount.TABLE_NAME,
+                col, null, null, null, null, null);
+
+        while(cursor.moveToNext()) {
+            String name_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.NAME_COLUMN));
+            double interest_ = cursor.getDouble(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.TOTAL_INTEREST));
+            double spent_ = cursor.getDouble(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.TOTAL_SPENT));
+
+            if(name_.equals(user)) {
+                ContentValues values = new ContentValues();
+                double totalInterest = interest_ + interest;
+                double totalSpent = spent_ + spent;
+
+                values.put(SqliteHelper.LenderAccount.TOTAL_INTEREST, totalInterest);
+                values.put(SqliteHelper.LenderAccount.TOTAL_SPENT, totalSpent);
+
+                String selection = SqliteHelper.LenderAccount.NAME_COLUMN + " = ?";
+                String[] selectionArgs = { user };
+                int rowsUpdated = db.update(
+                        SqliteHelper.LenderAccount.TABLE_NAME,
+                        values,
+                        selection,
+                        selectionArgs);
+
+                return rowsUpdated > 0;
+            }
+        }
+        return false;
+
+    }
+    public boolean updateCurrentTotalLend(String user, double lend, boolean isAdd) {
+        String[] col = {
+                SqliteHelper.BorrowerAccount.USERNAME_COLUMN,
+                SqliteHelper.BorrowerAccount.TOTAL_CURRENT_LEND_COLUMN
+        };
+
+        Cursor cursor = db.query(SqliteHelper.BorrowerAccount.TABLE_NAME,
+                col, null, null, null, null, null);
+
+        while(cursor.moveToNext()) {
+            String name_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.BorrowerAccount.USERNAME_COLUMN));
+            double lend_ = cursor.getDouble(cursor.getColumnIndexOrThrow(SqliteHelper.BorrowerAccount.TOTAL_CURRENT_LEND_COLUMN));
+
+            String s = user;
+            if(user.contains("\\|")) s = userFullnameToUsername(user);
+
+            if(name_.equals(s)) {
+                ContentValues values = new ContentValues();
+                double totalLend;
+                if(isAdd)
+                    totalLend = lend_ + lend;
+                else
+                    totalLend = lend_ - lend;
+
+                if(totalLend <= 0) totalLend = 0;
+
+                values.put(SqliteHelper.BorrowerAccount.TOTAL_CURRENT_LEND_COLUMN, totalLend);
+
+                String selection = SqliteHelper.BorrowerAccount.USERNAME_COLUMN + " = ?";
+                String[] selectionArgs = { user };
+                int rowsUpdated = db.update(
+                        SqliteHelper.BorrowerAccount.TABLE_NAME,
+                        values,
+                        selection,
+                        selectionArgs);
+
+                return rowsUpdated > 0;
+            }
+        }
+        return false;
+    }
+    public boolean updateTotalLend(String user, double lend) {
+        String[] col = {
+                SqliteHelper.BorrowerAccount.USERNAME_COLUMN,
+                SqliteHelper.BorrowerAccount.TOTAL_LEND_COLUMN
+        };
+
+        Cursor cursor = db.query(SqliteHelper.BorrowerAccount.TABLE_NAME,
+                col, null, null, null, null, null);
+
+        while(cursor.moveToNext()) {
+            String name_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.BorrowerAccount.USERNAME_COLUMN));
+            double lend_ = cursor.getDouble(cursor.getColumnIndexOrThrow(SqliteHelper.BorrowerAccount.TOTAL_LEND_COLUMN));
+
+            String s = user;
+            if(user.contains("\\|")) s = userFullnameToUsername(user);
+
+            if(name_.equals(s)) {
+                ContentValues values = new ContentValues();
+                double totalLend = lend_ + lend;
+
+                values.put(SqliteHelper.BorrowerAccount.TOTAL_LEND_COLUMN, totalLend);
+
+                String selection = SqliteHelper.BorrowerAccount.USERNAME_COLUMN + " = ?";
+                String[] selectionArgs = { user };
+                int rowsUpdated = db.update(
+                        SqliteHelper.BorrowerAccount.TABLE_NAME,
+                        values,
+                        selection,
+                        selectionArgs);
+
+                return rowsUpdated > 0;
+            }
+        }
+        return false;
+    }
+
+    public double[] getBorrowerDashboard(String user) {
+        String[] columns = {
+                SqliteHelper.LenderAccount.NAME_COLUMN,
+                SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN,
+                SqliteHelper.LenderAccount.APPLIED_BORROWER_COLUMN
+        };
+        double totalLoans = 0, currentLoans = 0, paidLoans = 0;
+
+        Cursor cursor = db.query(
+                SqliteHelper.LenderAccount.TABLE_NAME,
+                columns,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        while(cursor.moveToNext()) {
+            String lendName_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.NAME_COLUMN));
+            String currentApplied = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN));
+            String applied = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.APPLIED_BORROWER_COLUMN));
+
+            String s = user.contains("\\|") ? userFullnameToUsername(user) : user;
+
+            // Current
+            String[] current = currentApplied.split("\\|");
+
+            for(int i = 0; i < current.length; i++) {
+                if(currentApplied.isEmpty() || currentApplied == null) {
+                    currentLoans = 0;
+                    break;
+                }
+                String[] current_ = current[i].split(":");
+                String name = current_[0];
+                String isAccept = current_[1];
+                double total = Double.valueOf(current_[3]);
+
+                if(name.equals(s)) {
+                    if(isAccept.equalsIgnoreCase("TRUE")) {
+                        currentLoans += total;
+                    }
+                }
+            }
+
+            // Done
+            String[] done = applied.split("\\|");
+            for(int i = 0; i < done.length; i++) {
+                if(applied.isEmpty() || applied == null) {
+                    paidLoans = 0;
+                    break;
+                }
+
+                String[] done_ = done[i].split(":");
+                String name = done_[0];
+                double total = Double.valueOf(done_[1]);
+
+                if(name.equals(s)) {
+                    paidLoans += total;
+                }
+            }
+        }
+
+        totalLoans = currentLoans + paidLoans;
+
+        int[] counts = getBorrowerCounts(user);
+        return new double[]{
+            counts[2], counts[1], counts[0], totalLoans, currentLoans, paidLoans
+        };
+    }
+
+    public int[] getBorrowerCounts(String user) {
+        String[] col = {
+                SqliteHelper.BorrowerAccount.USERNAME_COLUMN,
+                SqliteHelper.BorrowerAccount.LIST_DONE_COLUMN,
+                SqliteHelper.BorrowerAccount.LIST_COLUMN
+        };
+
+        Cursor cursor = db.query(SqliteHelper.BorrowerAccount.TABLE_NAME,
+                col, null, null, null, null, null);
+
+        int fullPaid = 0, unpaid = 0, allContract = 0;
+        while(cursor.moveToNext()) {
+            String name_ = cursor.getString(cursor.getColumnIndexOrThrow(col[0]));
+            String listDone = cursor.getString(cursor.getColumnIndexOrThrow(col[1]));
+            String list = cursor.getString(cursor.getColumnIndexOrThrow(col[2]));
+
+            String s = user.contains("\\|") ? userFullnameToUsername(user) : user;
+            if(name_.equals(s)) {
+                if(!list.isEmpty())
+                    unpaid = list.split("\\|").length;
+                if(!listDone.isEmpty())
+                    fullPaid = listDone.split("\\|").length;
+                allContract = unpaid + fullPaid;
+                return new int[] {
+                        unpaid, fullPaid, allContract
+                };
+            }
+        }
+        return new int[] {0, 0, 0};
+    }
+
+    public double[] getLenderDashboard(String name) {
+        String[] col = {
+                SqliteHelper.LenderAccount.NAME_COLUMN,
+                SqliteHelper.LenderAccount.APPLIED_BORROWER_COLUMN,
+                SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN,
+                SqliteHelper.LenderAccount.RATE_COLUMN
+        };
+
+        double unpaid, paid, profit;
+        Cursor cursor = db.query(SqliteHelper.LenderAccount.TABLE_NAME,
+                col, null, null, null, null, null);
+
+        while(cursor.moveToNext()) {
+            // wala pa
+        }
+
+        int[] data = getLenderCount(name);
+        return new double[] {
+                data[0], data[1], data[2]
+        };
+        //all, finish, unfinish
+    }
+
+    public int[] getLenderCount(String name) {
+        String[] col = {
+                SqliteHelper.LenderAccount.NAME_COLUMN,
+                SqliteHelper.LenderAccount.APPLIED_BORROWER_COLUMN,
+                SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN
+        };
+
+        Cursor cursor = db.query(SqliteHelper.LenderAccount.TABLE_NAME,
+                col, null, null, null, null, null);
+
+        int finish = 0, unfinish = 0, all = 0;
+        while(cursor.moveToNext()) {
+            String name_ = cursor.getString(cursor.getColumnIndexOrThrow(col[0]));
+            String applied_ = cursor.getString(cursor.getColumnIndexOrThrow(col[1]));
+            String current_ = cursor.getString(cursor.getColumnIndexOrThrow(col[2]));
+
+            if(name_.equalsIgnoreCase(name_)) {
+                if(!applied_.isEmpty())
+                    finish = applied_.split("\\|").length;
+                if(!current_.isEmpty())
+                    unfinish = current_.split("\\|").length;
+                all = finish + unfinish;
+                return new int[] {
+                        all, finish, unfinish
+                };
+            }
+        }
+        return new int[] {
+                0,0,0
+        };
+    }
 }
