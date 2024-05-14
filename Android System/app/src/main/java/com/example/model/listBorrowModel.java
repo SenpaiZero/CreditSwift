@@ -7,10 +7,10 @@ import com.example.Helper.SqliteHelper;
 
 public class listBorrowModel {
     String name, frequency, email;
-    int total, year;
-    double interest, remaining;
+    int year;
+    double interest, total, remaining;
     Bitmap pic;
-    public listBorrowModel(String name, String frequency, String email, int total, double remaining, int year, double interest, Bitmap pic) {
+    public listBorrowModel(String name, String frequency, String email, double total, double remaining, int year, double interest, Bitmap pic) {
         this.name = name;
         this.frequency = frequency;
         this.email = email;
@@ -64,7 +64,7 @@ public class listBorrowModel {
         return email;
     }
 
-    public int getTotal() {
+    public double getTotal() {
         return total;
     }
 

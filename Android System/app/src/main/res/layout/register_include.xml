@@ -128,16 +128,6 @@
                 android:background="@color/lightBackground2"
                 app:srcCompat="@null" />
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.1"
-                android:fontFamily="@font/abel"
-                android:text="OR"
-                android:textAlignment="center"
-                android:textColor="@color/lightLogin" />
-
             <ImageView
                 android:id="@+id/imageView2"
                 android:layout_width="wrap_content"
@@ -145,33 +135,6 @@
                 android:layout_weight="1"
                 android:background="@color/lightBackground2"
                 app:srcCompat="@null" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/socialMediaCon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_weight="1"
-            android:divider="@drawable/empty_tall_divider"
-            android:orientation="horizontal"
-            android:showDividers="middle">
-
-            <ImageView
-                android:id="@+id/fbLogin"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                app:srcCompat="@drawable/fb" />
-
-            <ImageView
-                android:id="@+id/googleLogin"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                app:srcCompat="@drawable/google" />
         </LinearLayout>
 
         <LinearLayout

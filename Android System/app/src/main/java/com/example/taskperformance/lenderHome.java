@@ -44,6 +44,7 @@ public class lenderHome extends AppCompatActivity {
     Button settingApply, settingCancel, confirmLogout, cancelLogout, applyApply, applyCancel;
     EditText applyAmount, applyYear;
     public static lenderHome lender_home;
+    TextView finished, unfinished, allContract, unpaid, paid, profit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +69,7 @@ public class lenderHome extends AppCompatActivity {
         changeTintTab(tabUser);
 
         lender_home = this;
+        setDashboard();
     }
     void setUIVariables()
     {
@@ -111,6 +113,24 @@ public class lenderHome extends AppCompatActivity {
         applyCancel = findViewById(R.id.cancelApplyBtn);
 
         borrowerListCer = findViewById(R.id.listCer);
+
+        unpaid = findViewById(R.id.unpaidLenderTxt);
+        paid = findViewById(R.id.paidLenderTxt);
+        profit = findViewById(R.id.profitTxt);
+        finished = findViewById(R.id.finishedContractTxt);
+        unfinished = findViewById(R.id.unfinishedContractTxt);
+        allContract = findViewById(R.id.allLenderContractTxt);
+
+    }
+    public void setDashboard() {
+        double[] data = profileHelper.getLenderDashboard(getIntent().getStringExtra("username"));
+
+        allContract.setText("ALL CONTRACTS\n"+(int)data[0]);
+        finished.setText("FINISHED CONTRACTS\n"+(int)data[1]);
+        unfinished.setText("UNFINISHED CONTRACTS\n"+(int)data[2]);
+        paid.setText("PAID\n"+ String.format("%.2f", data[3]));
+        unpaid.setText("UNPAID\n"+String.format("%.2f", data[4]));
+        profit.setText("PROFIT\n"+String.format("%.2f", data[5]));
     }
     void setOnClick() {
         // Tab onclick

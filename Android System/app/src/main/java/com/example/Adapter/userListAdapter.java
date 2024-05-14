@@ -56,7 +56,7 @@ public class userListAdapter extends RecyclerView.Adapter<userListAdapter.userLi
         if(type.equals(borrower)) {
             holder.name.setText(borrowList.get(position).getName());
             holder.email.setText(borrowList.get(position).getEmail());
-            holder.total.setText("Total: " + borrowList.get(position).getTotal()+
+            holder.total.setText("Total: " + String.format("%.2f", borrowList.get(position).getTotal())+
                     " | Year: "+borrowList.get(position).getYear());
             holder.remaining.setText(String.format("%.2f", borrowList.get(position).getRemaining())
                     + " | " + borrowList.get(position).getFrequency().toUpperCase());
@@ -82,8 +82,8 @@ public class userListAdapter extends RecyclerView.Adapter<userListAdapter.userLi
 
             holder.name.setText(borrowList.get(position).getName());
             holder.email.setText(borrowList.get(position).getEmail());
-            holder.total.setText("Total: " +borrowList.get(position).getTotal());
-            holder.remaining.setText("Remaining: "+borrowList.get(position).getRemaining()
+            holder.total.setText("Total: "+String.format("%.2f", borrowList.get(position).getTotal()));
+            holder.remaining.setText("Remaining: "+String.format("%.2f", borrowList.get(position).getRemaining())
                     + "\nYear: " + borrowList.get(position).getYear());
             holder.pic.setImageBitmap(borrowList.get(position).getPic());
         }

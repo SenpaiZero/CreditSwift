@@ -65,7 +65,7 @@
                         android:fontFamily="@font/abel"
                         android:text="Email"
                         android:textColor="@color/darkRegister"
-                        android:textSize="20sp" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/totalViewTxt"
@@ -75,7 +75,7 @@
                         android:fontFamily="@font/abel"
                         android:text="Total: "
                         android:textColor="@color/darkRegister"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/remainingFreqViewTxt"
@@ -85,7 +85,7 @@
                         android:fontFamily="@font/abel"
                         android:text=" 1422312234 | Quarterly"
                         android:textColor="@color/darkRegister"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
                     <Button
                         android:id="@+id/payNowBtn"

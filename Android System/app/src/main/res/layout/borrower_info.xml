@@ -395,6 +395,7 @@
             android:fontFamily="@font/protest_strike"
             android:text="START"
             android:textAlignment="center"
+            android:textColor="@color/white"
             android:textSize="20sp"
             app:cornerRadius="4dp" />
 

@@ -49,7 +49,7 @@ public class applyAdapter extends RecyclerView.Adapter<applyAdapter.applyAdapter
     @SuppressLint("RecyclerView")
     public void onBindViewHolder(@NonNull applyAdapterHolder holder,  int position) {
         holder.fullName.setText(applyList.get(position).getName().replaceAll("\\|", " "));
-        holder.amount.setText("Amount: " + String.valueOf(applyList.get(position).getAmount()));
+        holder.amount.setText("Amount: " + String.format("%.2f",applyList.get(position).getAmount()));
         holder.profile.setImageBitmap(applyList.get(position).getImg());
         holder.email.setText(applyList.get(position).getEmail());
 

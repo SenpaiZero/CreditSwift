@@ -104,7 +104,9 @@
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:backgroundTint="@color/lightTxt"
+                    android:fontFamily="@font/protest_strike"
                     android:text="CANCEL"
+                    android:textAlignment="center"
                     android:textColor="@color/white"
                     app:cornerRadius="5dp" />
 
@@ -116,7 +118,9 @@
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:backgroundTint="@color/lightTxt"
+                    android:fontFamily="@font/protest_strike"
                     android:text="APPLY"
+                    android:textAlignment="center"
                     android:textColor="@color/white"
                     app:cornerRadius="5dp" />
             </LinearLayout>
