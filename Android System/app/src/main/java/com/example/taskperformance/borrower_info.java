@@ -243,4 +243,8 @@ public class borrower_info extends AppCompatActivity {
             return null;
         }
     }
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
 }

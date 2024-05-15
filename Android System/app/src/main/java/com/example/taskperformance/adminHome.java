@@ -329,4 +329,8 @@ public class adminHome extends AppCompatActivity {
         userCon.setAdapter(usersLenderAdapter_);
         userCon.setLayoutManager(new LinearLayoutManager(this));
     }
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
 }

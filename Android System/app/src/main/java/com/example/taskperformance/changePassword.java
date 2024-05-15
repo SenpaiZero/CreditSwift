@@ -121,4 +121,8 @@ public class changePassword extends AppCompatActivity {
         cancelBtn = findViewById(R.id.changePassCancel);
         confirmBtn = findViewById(R.id.changePassConfirm);
     }
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
 }

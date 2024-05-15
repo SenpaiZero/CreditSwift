@@ -27,6 +27,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.taskperformance.MainActivity;
 import com.example.taskperformance.R;
 import com.example.taskperformance.adminHome;
+import com.example.taskperformance.lenderHome;
+import com.example.taskperformance.userHome;
 
 import java.util.Arrays;
 
@@ -156,6 +158,8 @@ public class userInterfaceHelper {
             @Override
             public void onClick(View v) {
                 profileHelper.addUpdateCurrentLend(borrowerName, lenderName, remaining,1122334455, 1122334455, false);
+                userHome.user_home.setDashboard();
+                userHome.user_home.setDashboardList();
                 setConfirmVisibility(false);
             }
         });

@@ -1333,7 +1333,7 @@ public class ProfileHelper {
                 SqliteHelper.LenderAccount.RATE_COLUMN
         };
 
-        int[] data1 = getLenderCount(name);
+        int finish = 0, unfinish = 0, all = 0;
         double unpaid = 0, paid = 0, profit = 0, currentTotal = 0;
         Cursor cursor = db.query(SqliteHelper.LenderAccount.TABLE_NAME,
                 col, null, null, null, null, null);
@@ -1348,82 +1348,50 @@ public class ProfileHelper {
                 double rate_ = cursor.getDouble(cursor.getColumnIndexOrThrow(col[3]));
 
 
-                if(current_.length() < 0 || current_ == null || current_.isEmpty()) {
-                    return new double[] {
-                            data1[0], data1[1], data1[2],  paid, unpaid, profit
-                    };
-                }
-                // Current
-                String[] currentData = current_.split("\\|");
-                for(int i = 0; i < currentData.length; i++) {
-                    String[] data = currentData[i].split(":");
-                    String user_ = data[0];
-                    String isApply_ = data[1];
-                    double remaining_ = Double.valueOf(data[2]);
-                    double total_ = Double.valueOf(data[3]);
-                    int year_ = Integer.valueOf(data[4]);
+                if(current_.length() > 0 || current_ != null || !current_.isEmpty()) {
+                    // Current
+                    String[] currentData = current_.split("\\|");
+                    for(int i = 0; i < currentData.length; i++) {
+                        String[] data = currentData[i].split(":");
+                        String user_ = data[0];
+                        String isApply_ = data[1];
+                        double remaining_ = Double.valueOf(data[2]);
+                        double total_ = Double.valueOf(data[3]);
+                        int year_ = Integer.valueOf(data[4]);
 
-                    unpaid += remaining_;
-                    paid += (total_ - remaining_);
-                    currentTotal += total_;
+                        if(isApply_.equalsIgnoreCase("TRUE")) {
+                            unpaid += remaining_;
+                            currentTotal += total_;
+                            unfinish += 1;
+                        }
+                    }
                 }
 
-                /*if(applied_.length() < 0 || applied_ == null || applied_.isEmpty()) {
-                    return new double[] {
-                            data1[0], data1[1], data1[2],  paid, unpaid, profit
-                    };
-                }
-                // DONE
-                String[] appliedData = applied_.split("\\|");
-                for(int i = 0; i < appliedData.length; i++) {
-                    String[] data = appliedData[i].split(":");
-                    String user_ = data[0];
-                    double total_ = Double.valueOf(data[1]);
-                    int year_ = Integer.valueOf(data[2]);
 
-                    double n = (currentTotal - unpaid);
-                    paid += n <= 0 ? 0 : n;
-                }*/
+                if(applied_.length() > 0 || applied_ != null || !applied_.isEmpty()) {
+                    // DONE
+                    String[] appliedData = applied_.split("\\|");
+                    for(int i = 0; i < appliedData.length; i++) {
+                        String[] data = appliedData[i].split(":");
+                        String user_ = data[0];
+                        double total_ = Double.valueOf(data[1]);
+                        int year_ = Integer.valueOf(String.format("%.0f", Double.valueOf(data[2])));
+
+                        double n = total_ + (currentTotal - unpaid);
+                        paid += n <= 0 ? 0 : n;
+                        finish += 1;
+                    }
+                }
+
 
                 profit = ((rate_ / 100) * paid);
+                all = finish + unfinish;
             }
         }
 
         return new double[] {
-                data1[0], data1[1], data1[2],  paid, unpaid, profit
+                all, finish, unfinish,  paid, unpaid, profit
         };
         //all, finish, unfinish, paid, unpaid, profit
-    }
-
-    public int[] getLenderCount(String name) {
-        String[] col = {
-                SqliteHelper.LenderAccount.NAME_COLUMN,
-                SqliteHelper.LenderAccount.APPLIED_BORROWER_COLUMN,
-                SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN
-        };
-
-        Cursor cursor = db.query(SqliteHelper.LenderAccount.TABLE_NAME,
-                col, null, null, null, null, null);
-
-        int finish = 0, unfinish = 0, all = 0;
-        while(cursor.moveToNext()) {
-            String name_ = cursor.getString(cursor.getColumnIndexOrThrow(col[0]));
-            String applied_ = cursor.getString(cursor.getColumnIndexOrThrow(col[1]));
-            String current_ = cursor.getString(cursor.getColumnIndexOrThrow(col[2]));
-
-            if(name_.equalsIgnoreCase(name)) {
-                if(!applied_.isEmpty())
-                    finish = applied_.split("\\|").length;
-                if(!current_.isEmpty())
-                    unfinish = current_.split("\\|").length;
-                all = finish + unfinish;
-                return new int[] {
-                        all, finish, unfinish
-                };
-            }
-        }
-        return new int[] {
-                0,0,0
-        };
     }
 }

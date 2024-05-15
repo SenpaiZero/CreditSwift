@@ -53,7 +53,7 @@ public class lender_info extends AppCompatActivity {
         setOnClick();
         checkEdit();
 
-        def = BitmapFactory.decodeResource(getResources(), R.drawable.add_picture);;
+        def = BitmapFactory.decodeResource(getResources(), R.drawable.add_picture);
     }
 
     void checkEdit() {
@@ -110,7 +110,9 @@ public class lender_info extends AppCompatActivity {
                 else if(getIntent().getBooleanExtra("admin", false))
                     goAdmin();
                 else
-                    startActivity(new Intent(lender_info.this, lenderHome.class));
+                    startActivity(new Intent(lender_info.this, lenderHome.class)
+                            .putExtra("username", getIntent().getStringExtra("username"))
+                            .putExtra("name", getIntent().getStringExtra("username")));
             }
         });
 
@@ -144,7 +146,7 @@ public class lender_info extends AppCompatActivity {
                         return;
                      }
 
-                    createNewLender(name.getText().toString(),
+                    createNewLender(name.getText().toString().replaceAll(" ", "_"),
                             email.getText().toString(),
                             Double.valueOf(max.getText().toString()),
                             Double.valueOf(min.getText().toString()),
@@ -158,7 +160,7 @@ public class lender_info extends AppCompatActivity {
                         UIHelper.showCustomToast("The email you entered already exist.");
                         return;
                     }
-                    if(profileHelper.updateLenderInfo(name.getText().toString(),
+                    if(profileHelper.updateLenderInfo(name.getText().toString().replaceAll(" ", "_"),
                             email.getText().toString(),
                             Double.valueOf(min.getText().toString()),
                             Double.valueOf(max.getText().toString()),
@@ -247,5 +249,9 @@ public class lender_info extends AppCompatActivity {
             e.printStackTrace();
             return null;
         }
+    }
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
     }
 }

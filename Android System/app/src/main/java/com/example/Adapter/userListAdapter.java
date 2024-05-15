@@ -2,6 +2,7 @@ package com.example.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.example.Helper.userInterfaceHelper;
 import com.example.model.applyModel;
 import com.example.model.listBorrowModel;
 import com.example.taskperformance.R;
+import com.example.taskperformance.lenderHome;
 
 import java.util.LinkedList;
 
@@ -53,12 +55,15 @@ public class userListAdapter extends RecyclerView.Adapter<userListAdapter.userLi
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull userListAdapterHolder holder, @SuppressLint("RecyclerView") int position) {
+        double total = borrowList.get(position).getTotal() + (borrowList.get(position).getTotal() * (borrowList.get(position).getInterest() / 100));
+        double remaining = borrowList.get(position).getRemaining() + (borrowList.get(position).getTotal() * (borrowList.get(position).getInterest() / 100));
+
         if(type.equals(borrower)) {
-            holder.name.setText(borrowList.get(position).getName());
+             holder.name.setText(borrowList.get(position).getName());
             holder.email.setText(borrowList.get(position).getEmail());
-            holder.total.setText("Total: " + String.format("%.2f", borrowList.get(position).getTotal())+
+            holder.total.setText("Total: " + String.format("%.2f", total)+
                     " | Year: "+borrowList.get(position).getYear());
-            holder.remaining.setText(String.format("%.2f", borrowList.get(position).getRemaining())
+            holder.remaining.setText(String.format("%.2f", remaining)
                     + " | " + borrowList.get(position).getFrequency().toUpperCase());
             holder.pic.setImageBitmap(borrowList.get(position).getPic());
 
@@ -73,6 +78,7 @@ public class userListAdapter extends RecyclerView.Adapter<userListAdapter.userLi
                     UIHelper.setPositiveConfirmation_pay(profileHelper, borrowerName, borrowList.get(position).getName(),
                             remaining);
                     UIHelper.setConfirmVisibility(true);
+
                 }
             });
         }
@@ -82,8 +88,8 @@ public class userListAdapter extends RecyclerView.Adapter<userListAdapter.userLi
 
             holder.name.setText(borrowList.get(position).getName());
             holder.email.setText(borrowList.get(position).getEmail());
-            holder.total.setText("Total: "+String.format("%.2f", borrowList.get(position).getTotal()));
-            holder.remaining.setText("Remaining: "+String.format("%.2f", borrowList.get(position).getRemaining())
+            holder.total.setText("Total: "+String.format("%.2f", total));
+            holder.remaining.setText("Remaining: "+String.format("%.2f", remaining)
                     + "\nYear: " + borrowList.get(position).getYear());
             holder.pic.setImageBitmap(borrowList.get(position).getPic());
         }

@@ -254,7 +254,6 @@ public class userHome extends AppCompatActivity {
     void changeContent(Button button)
     {
         userLenderAdapter usersLenderAdapter_;
-        userListAdapter userListAdapter_;
 
         dashboard.setVisibility(View.INVISIBLE);
         if(usersLenderList != null)
@@ -286,10 +285,7 @@ public class userHome extends AppCompatActivity {
 
             userCon.setVisibility(View.INVISIBLE);
             dashboard.setVisibility(View.VISIBLE);
-            listBorrowModel = profileHelper.getCurrentListBorrow(getIntent().getStringExtra("username"));
-            userListAdapter_ = new userListAdapter(listBorrowModel, profileHelper, UIHelper, this, userListAdapter.borrower, getIntent().getStringExtra("username"));
-            dashboardRec.setAdapter(userListAdapter_);
-            dashboardRec.setLayoutManager(new LinearLayoutManager(this));
+            setDashboardList();
         }
         else if(button.getId() == tabUser.getId())
         {
@@ -299,6 +295,13 @@ public class userHome extends AppCompatActivity {
 
     }
 
+    public void setDashboardList() {
+        userListAdapter userListAdapter_;
+        listBorrowModel = profileHelper.getCurrentListBorrow(getIntent().getStringExtra("username"));
+        userListAdapter_ = new userListAdapter(listBorrowModel, profileHelper, UIHelper, this, userListAdapter.borrower, getIntent().getStringExtra("username"));
+        dashboardRec.setAdapter(userListAdapter_);
+        dashboardRec.setLayoutManager(new LinearLayoutManager(this));
+    }
     void changeContainerVisibility(boolean isAdmin)
     {
         if(isAdmin)
@@ -357,5 +360,9 @@ public class userHome extends AppCompatActivity {
                 applyInfo.setVisibility(View.INVISIBLE);
             }
         });
+    }
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
     }
 }

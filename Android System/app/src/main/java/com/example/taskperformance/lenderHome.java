@@ -2,6 +2,7 @@ package com.example.taskperformance;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -70,6 +71,7 @@ public class lenderHome extends AppCompatActivity {
 
         lender_home = this;
         setDashboard();
+
     }
     void setUIVariables()
     {
@@ -121,6 +123,9 @@ public class lenderHome extends AppCompatActivity {
         unfinished = findViewById(R.id.unfinishedContractTxt);
         allContract = findViewById(R.id.allLenderContractTxt);
 
+    }
+    public void setStatic() {
+        lender_home = this;
     }
     public void setDashboard() {
         double[] data = profileHelper.getLenderDashboard(getIntent().getStringExtra("username"));
@@ -214,6 +219,7 @@ public class lenderHome extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(lenderHome.this, lender_info.class)
                         .putExtra("create", false)
+                        .putExtra("admin", false)
                         .putExtra("username", getIntent().getStringExtra("username".toString())));
             }
         });
@@ -294,5 +300,9 @@ public class lenderHome extends AppCompatActivity {
 
         userCon.setVisibility(View.VISIBLE);
         adminCon.setVisibility(View.INVISIBLE);
+    }
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
     }
 }

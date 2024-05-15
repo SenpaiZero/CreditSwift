@@ -44,7 +44,7 @@ public class listBorrowModel {
             System.out.println("Error: Interest rate is zero.");
             return 0.0; // or handle this case appropriately
         }
-        double payment = total * (percent / freq) / (1 - Math.pow(1 + (percent / freq), -freq * year));
+        double payment = ((total / freq) * (percent / 100)) + (total / freq);
         return payment;
     }
 

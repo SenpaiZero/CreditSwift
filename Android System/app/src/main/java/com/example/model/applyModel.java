@@ -5,9 +5,9 @@ import android.graphics.Bitmap;
 public class applyModel {
 
     String name, email;
-    int amount;
+    double amount;
     Bitmap img;
-    public applyModel(String name, String email, int amount, Bitmap img) {
+    public applyModel(String name, String email, double amount, Bitmap img) {
         this.name = name;
         this.email = email;
         this.amount = amount;
@@ -18,7 +18,7 @@ public class applyModel {
         return name;
     }
 
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 
