@@ -1,5 +1,6 @@
 package com.example.taskperformance;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -243,6 +244,7 @@ public class borrower_info extends AppCompatActivity {
             return null;
         }
     }
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
         //super.onBackPressed();

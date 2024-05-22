@@ -1,13 +1,8 @@
 package com.example.taskperformance;
 
-import static android.text.InputType.TYPE_CLASS_TEXT;
-import static android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -15,17 +10,12 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.text.InputType;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -46,7 +36,6 @@ import com.example.Helper.validationHelper;
 
 import java.text.DecimalFormat;
 import java.util.Random;
-import android.Manifest;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -93,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
 
         UIHelper.setSpinner(getResources().getStringArray(R.array.yesno), animSpinner);
         UIHelper.setSpinner(getResources().getStringArray(R.array.animation_speed), animSpeedSpinner);
-
         stayLoginHelper = new StayLoginHelper(this);
 
         if(stayLoginHelper.getStayLogin()) {
@@ -111,8 +99,8 @@ public class MainActivity extends AppCompatActivity {
                         .putExtra("username", stayLoginHelper.getUserPass()[0]));
             }
         }
-    }
 
+    }
     void openLoginRegister(View view, ConstraintLayout layout, ImageView bg, boolean isReverse)
     {
 

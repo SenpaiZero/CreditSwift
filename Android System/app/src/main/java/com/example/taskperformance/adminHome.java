@@ -22,6 +22,7 @@ import com.example.Adapter.userLenderAdapter;
 import com.example.Adapter.usersAdapter;
 import com.example.Helper.ProfileHelper;
 import com.example.Helper.SettingHelper;
+import com.example.Helper.SqliteHelper;
 import com.example.Helper.userInterfaceHelper;
 import com.example.model.userLenderModel;
 import com.example.model.usersModel;
@@ -329,6 +330,7 @@ public class adminHome extends AppCompatActivity {
         userCon.setAdapter(usersLenderAdapter_);
         userCon.setLayoutManager(new LinearLayoutManager(this));
     }
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
         //super.onBackPressed();

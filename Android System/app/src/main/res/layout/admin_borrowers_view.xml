@@ -96,7 +96,7 @@
                         android:fontFamily="@font/protest_strike"
                         android:text="Edit"
                         android:textColor="#FFFFFF"
-                        android:textSize="16dp"
+                        android:textSize="14dp"
                         android:textStyle="bold"
                         app:cornerRadius="10dp" />
 
@@ -110,7 +110,7 @@
                         android:fontFamily="@font/protest_strike"
                         android:text="Remove"
                         android:textColor="#FFFFFF"
-                        android:textSize="16dp"
+                        android:textSize="14dp"
                         android:textStyle="bold"
                         app:cornerRadius="10dp" />
                 </LinearLayout>

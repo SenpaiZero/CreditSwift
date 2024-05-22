@@ -412,7 +412,7 @@ public class ProfileHelper {
             }
         }
     }
-    public String addUpdateCurrentLend(String borrowerName, String lenderName, double remaining, int total, int year, boolean isApply) {
+    public String addUpdateCurrentLend(String borrowerName, String lenderName, double remaining, double total, int year, boolean isApply) {
         ContentValues lender = new ContentValues();
         String val = borrowerName + ":"+String.valueOf(!isApply).toUpperCase()+":"+remaining+":"+total+":"+year+"|";
         lender.put(SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN, val);
@@ -555,7 +555,7 @@ public class ProfileHelper {
                         }
 
                         if(data_[1].equalsIgnoreCase("FALSE"))
-                            list.add(new applyModel(fullname_, email_, Integer.valueOf(data_[3]), img));
+                            list.add(new applyModel(fullname_, email_, Double.valueOf(data_[3]), img));
                     }
                     cursor2.close();
                 }
@@ -963,7 +963,7 @@ public class ProfileHelper {
                                 String name = data_[0];
                                 String isAccept = data_[1];
                                 double remaining = Double.valueOf(data_[2]);
-                                int total = Integer.valueOf(data_[3]);
+                                double total = Double.valueOf(data_[3]);
                                 int year = Integer.valueOf(data_[4]);
                                 if(isAccept.equalsIgnoreCase("TRUE")) {
                                     list.add(new listBorrowModel(lenderName.replaceAll("_", " "), freq_, email_, total, remaining, year, rate_, img));
@@ -1030,11 +1030,11 @@ public class ProfileHelper {
                     String borrowName = data_[0];
                     String isAccept = data_[1];
                     double remaining = Double.valueOf(data_[2]);
-                    int total = Integer.valueOf(data_[3]);
+                    double total = Double.valueOf(data_[3]);
                     int year = Integer.valueOf(data_[4]);
 
                     if(isAccept.equalsIgnoreCase("TRUE"))
-                        list.add(new listBorrowModel(borrowName, freq_, email_, total, remaining, year, interest, img));
+                        list.add(new listBorrowModel(borrowName, freq_, getUserEmail(borrowName), total, remaining, year, interest, img));
                 }
                 return list;
             }
@@ -1042,6 +1042,25 @@ public class ProfileHelper {
         return list;
     }
 
+    public String getUserEmail(String user)  {
+        String[] col = {
+            SqliteHelper.AccountEntry.USERNAME_COLUMN,
+            SqliteHelper.AccountEntry.EMAIL_COLUMN
+        };
+        String name = user.contains("\\|") ? userFullnameToUsername(user) : user;
+
+
+        Cursor cursor = db.query(SqliteHelper.AccountEntry.TABLE_NAME,
+                col, null, null, null, null, null);
+
+        while(cursor.moveToNext())
+        {
+            String s = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.USERNAME_COLUMN));
+            if(s.equalsIgnoreCase(name))
+                return cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.EMAIL_COLUMN));
+        }
+        return "";
+    }
     public boolean checkEmailExist(String email) {
         String[] col = {
             SqliteHelper.AccountEntry.EMAIL_COLUMN
@@ -1241,58 +1260,56 @@ public class ProfileHelper {
                 null,
                 null
         );
-        while(cursor.moveToNext()) {
-            String lendName_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.NAME_COLUMN));
-            String currentApplied = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN));
-            String applied = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.APPLIED_BORROWER_COLUMN));
 
-            String s = user.contains("\\|") ? userFullnameToUsername(user) : user;
+        try {
+            while (cursor.moveToNext()) {
+                String lendName_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.NAME_COLUMN));
+                String currentApplied = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN));
+                String applied = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.APPLIED_BORROWER_COLUMN));
 
-            // Current
-            String[] current = currentApplied.split("\\|");
+                String s = user.contains("\\|") ? userFullnameToUsername(user) : user;
 
-            for(int i = 0; i < current.length; i++) {
-                if(currentApplied.isEmpty() || currentApplied == null) {
-                    currentLoans = 0;
-                    break;
+                if (currentApplied != null && !currentApplied.isEmpty()) {
+                    // Current
+                    String[] current = currentApplied.split("\\|");
+                    for (String value : current) {
+                        String[] current_ = value.split(":");
+                        String name = current_[0];
+                        String isAccept = current_[1];
+                        double total = Double.parseDouble(current_[3]);
+
+                        if (name.equals(s) && isAccept.equalsIgnoreCase("TRUE")) {
+                            currentLoans += total;
+                        }
+                    }
                 }
-                String[] current_ = current[i].split(":");
-                String name = current_[0];
-                String isAccept = current_[1];
-                double total = Double.valueOf(current_[3]);
 
-                if(name.equals(s)) {
-                    if(isAccept.equalsIgnoreCase("TRUE")) {
-                        currentLoans += total;
+                if (applied != null && !applied.isEmpty()) {
+                    // Done
+                    String[] done = applied.split("\\|");
+                    for (String value : done) {
+                        String[] done_ = value.split(":");
+                        String name = done_[0];
+                        double total = Double.parseDouble(done_[1]);
+
+                        if (name.equals(s)) {
+                            paidLoans += total;
+                        }
                     }
                 }
             }
-
-            // Done
-            String[] done = applied.split("\\|");
-            for(int i = 0; i < done.length; i++) {
-                if(applied.isEmpty() || applied == null) {
-                    paidLoans = 0;
-                    break;
-                }
-
-                String[] done_ = done[i].split(":");
-                String name = done_[0];
-                double total = Double.valueOf(done_[1]);
-
-                if(name.equals(s)) {
-                    paidLoans += total;
-                }
-            }
+        } finally {
+            cursor.close();
         }
 
         totalLoans = currentLoans + paidLoans;
 
         int[] counts = getBorrowerCounts(user);
         return new double[]{
-            counts[2], counts[1], counts[0], totalLoans, currentLoans, paidLoans
+                counts[2], counts[1], counts[0], totalLoans, currentLoans, paidLoans
         };
     }
+
 
     public int[] getBorrowerCounts(String user) {
         String[] col = {
@@ -1330,68 +1347,69 @@ public class ProfileHelper {
                 SqliteHelper.LenderAccount.NAME_COLUMN,
                 SqliteHelper.LenderAccount.APPLIED_BORROWER_COLUMN,
                 SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN,
-                SqliteHelper.LenderAccount.RATE_COLUMN
+                SqliteHelper.LenderAccount.RATE_COLUMN,
+                SqliteHelper.LenderAccount.TOTAL_INTEREST
         };
 
         int finish = 0, unfinish = 0, all = 0;
         double unpaid = 0, paid = 0, profit = 0, currentTotal = 0;
-        Cursor cursor = db.query(SqliteHelper.LenderAccount.TABLE_NAME,
-                col, null, null, null, null, null);
 
+        Cursor cursor = db.query(SqliteHelper.LenderAccount.TABLE_NAME, col, null, null, null, null, null);
 
-        // Done
-        while(cursor.moveToNext()) {
-            String name_ = cursor.getString(cursor.getColumnIndexOrThrow(col[0]));
-            if(name.equals(name_)) {
-                String applied_ = cursor.getString(cursor.getColumnIndexOrThrow(col[1]));
-                String current_ = cursor.getString(cursor.getColumnIndexOrThrow(col[2]));
-                double rate_ = cursor.getDouble(cursor.getColumnIndexOrThrow(col[3]));
+        try {
+            while (cursor.moveToNext()) {
+                String name_ = cursor.getString(cursor.getColumnIndexOrThrow(col[0]));
+                if (name.equals(name_)) {
+                    String applied_ = cursor.getString(cursor.getColumnIndexOrThrow(col[1]));
+                    String current_ = cursor.getString(cursor.getColumnIndexOrThrow(col[2]));
+                    double rate_ = cursor.getDouble(cursor.getColumnIndexOrThrow(col[3]));
+                    double inte = cursor.getDouble(cursor.getColumnIndexOrThrow(col[4]));
 
+                    if (current_ != null && !current_.isEmpty()) {
+                        // Current
+                        String[] currentData = current_.split("\\|");
+                        for (String s : currentData) {
+                            String[] data = s.split(":");
+                            String user_ = data[0];
+                            String isApply_ = data[1];
+                            double remaining_ = Double.parseDouble(data[2]);
+                            double total_ = Double.parseDouble(data[3]);
+                            int year_ = Integer.parseInt(data[4]);
 
-                if(current_.length() > 0 || current_ != null || !current_.isEmpty()) {
-                    // Current
-                    String[] currentData = current_.split("\\|");
-                    for(int i = 0; i < currentData.length; i++) {
-                        String[] data = currentData[i].split(":");
-                        String user_ = data[0];
-                        String isApply_ = data[1];
-                        double remaining_ = Double.valueOf(data[2]);
-                        double total_ = Double.valueOf(data[3]);
-                        int year_ = Integer.valueOf(data[4]);
-
-                        if(isApply_.equalsIgnoreCase("TRUE")) {
-                            unpaid += remaining_;
-                            currentTotal += total_;
-                            unfinish += 1;
+                            if (isApply_.equalsIgnoreCase("TRUE")) {
+                                unpaid += remaining_;
+                                currentTotal += total_;
+                                unfinish += 1;
+                            }
                         }
                     }
-                }
 
+                    if (applied_ != null && !applied_.isEmpty()) {
+                        // DONE
+                        String[] appliedData = applied_.split("\\|");
+                        for (String s : appliedData) {
+                            String[] data = s.split(":");
+                            String user_ = data[0];
+                            double total_ = Double.parseDouble(data[1]);
+                            int year_ = Integer.parseInt(String.format("%.0f", Double.parseDouble(data[2])));
 
-                if(applied_.length() > 0 || applied_ != null || !applied_.isEmpty()) {
-                    // DONE
-                    String[] appliedData = applied_.split("\\|");
-                    for(int i = 0; i < appliedData.length; i++) {
-                        String[] data = appliedData[i].split(":");
-                        String user_ = data[0];
-                        double total_ = Double.valueOf(data[1]);
-                        int year_ = Integer.valueOf(String.format("%.0f", Double.valueOf(data[2])));
-
-                        double n = total_ + (currentTotal - unpaid);
-                        paid += n <= 0 ? 0 : n;
-                        finish += 1;
+                            double n = total_ + (currentTotal - unpaid);
+                            paid += Math.max(n, 0);
+                            finish += 1;
+                        }
                     }
+
+                    profit = rate_ > 0 ? ((rate_ / 100) * paid) : paid;
+                    all = finish + unfinish;
                 }
-
-
-                profit = ((rate_ / 100) * paid);
-                all = finish + unfinish;
             }
+        } finally {
+            cursor.close();
         }
 
         return new double[] {
-                all, finish, unfinish,  paid, unpaid, profit
+                all, finish, unfinish, paid, unpaid, profit
         };
-        //all, finish, unfinish, paid, unpaid, profit
     }
+
 }

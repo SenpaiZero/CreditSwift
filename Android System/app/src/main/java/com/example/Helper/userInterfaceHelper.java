@@ -63,6 +63,9 @@ public class userInterfaceHelper {
         toastText.setText(message);
 
         customCardView.setVisibility(View.VISIBLE);
+        customCardView.setZ(999);
+        customCardView.bringToFront();
+
 
         ObjectAnimator fadeOut = ObjectAnimator.ofFloat(customCardView, "alpha", 1f, 0f);
         if(duration == 0)

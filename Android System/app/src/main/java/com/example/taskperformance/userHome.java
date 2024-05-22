@@ -302,6 +302,7 @@ public class userHome extends AppCompatActivity {
         dashboardRec.setAdapter(userListAdapter_);
         dashboardRec.setLayoutManager(new LinearLayoutManager(this));
     }
+
     void changeContainerVisibility(boolean isAdmin)
     {
         if(isAdmin)
@@ -328,7 +329,7 @@ public class userHome extends AppCompatActivity {
         applyApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int amount = Integer.valueOf(applyAmount.getText().toString());
+                double amount = Double.valueOf(applyAmount.getText().toString());
                 int year = Integer.valueOf(applyYear.getText().toString());
 
                 if(amount < min || amount > max) {

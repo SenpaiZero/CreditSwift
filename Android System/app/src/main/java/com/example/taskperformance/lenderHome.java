@@ -1,5 +1,6 @@
 package com.example.taskperformance;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -127,6 +128,7 @@ public class lenderHome extends AppCompatActivity {
     public void setStatic() {
         lender_home = this;
     }
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
     public void setDashboard() {
         double[] data = profileHelper.getLenderDashboard(getIntent().getStringExtra("username"));
 
@@ -268,6 +270,7 @@ public class lenderHome extends AppCompatActivity {
             userListAdapter_ = new userListAdapter(borrowerList, profileHelper, UIHelper, this, userListAdapter.lender, "");
             borrowerListCer.setAdapter(userListAdapter_);
             borrowerListCer.setLayoutManager(new LinearLayoutManager(this));
+            setDashboard();
         }
         else if(button.getId() == tabUser.getId())
         {
