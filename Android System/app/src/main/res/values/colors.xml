@@ -3,12 +3,18 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="lightLogin">#FF52A2</color>
+    <color name="lightLogin">#008DDA</color>
+    <color name="lightRegister">#41C9E2</color>
+    <color name="lightBackground">#ACE2E1</color>
+    <color name="lightBackground2">#ACE2E1</color>
+    <color name="lightTxt">#004E78</color>
+<!--
+<color name="lightLogin">#FF52A2</color>
     <color name="lightRegister">#FFB07F</color>
     <color name="lightBackground">#FFECAF</color>
     <color name="lightBackground2">#FD8DC0</color>
     <color name="lightTxt">#F31559</color>
-
+    -->
     <color name="darkLogin">#005C5C</color>
     <color name="darkRegister">#032649</color>
     <color name="darkBackground">#80882A</color>

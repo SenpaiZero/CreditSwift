@@ -79,7 +79,7 @@ public class ProfileHelper {
             String name_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.USERNAME_COLUMN));
             String data = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.DATA_COLUMN));
 
-            if(name_.equals(name)) {
+            if(name_.equalsIgnoreCase(name)) {
                 if(data.equalsIgnoreCase("NO"))
                     return true;
             }
@@ -157,7 +157,7 @@ public class ProfileHelper {
 
     public boolean updateBorrowerInfo(String username, String fullname, String email, String birth, Bitmap pic) {
         ContentValues content = new ContentValues();
-        content.put(SqliteHelper.BorrowerAccount.NAME_COLUMN, fullname);
+        content.put(SqliteHelper.BorrowerAccount.NAME_COLUMN, fullname.toUpperCase());
         content.put(SqliteHelper.BorrowerAccount.BIRTH_COLUMN, birth);
         byte[] imageBytes = null;
         if (pic != null) {
@@ -173,11 +173,11 @@ public class ProfileHelper {
         int rowsAffected = db.update(SqliteHelper.BorrowerAccount.TABLE_NAME,
                 content,
                 SqliteHelper.BorrowerAccount.USERNAME_COLUMN + " = ?",
-                new String[]{username});
+                new String[]{username.toUpperCase()});
         int rowsAffected2 = db.update(SqliteHelper.AccountEntry.TABLE_NAME,
                 contentVal,
                 SqliteHelper.AccountEntry.USERNAME_COLUMN + " = ?",
-                new String[]{username});
+                new String[]{username.toUpperCase()});
 
         return rowsAffected > 0 && rowsAffected2 > 0;
     }
@@ -206,7 +206,7 @@ public class ProfileHelper {
             String name_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.BorrowerAccount.NAME_COLUMN));
 
             if(name_.equalsIgnoreCase(fullname)) {
-                return cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.USERNAME_COLUMN));
+                return cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.USERNAME_COLUMN)).toUpperCase();
             }
         }
         return null;
@@ -248,7 +248,7 @@ public class ProfileHelper {
                 for(int i = 0; i < data.length; i++) {
                     data_ = data[i].split(":");
                     Log.d("Apply", data_[0] + " : " + userFullnameToUsername(borrowName));
-                    if(data_[0].equals(userFullnameToUsername(borrowName))) {
+                    if(data_[0].equalsIgnoreCase(userFullnameToUsername(borrowName))) {
                         if(isAccept) {
                             data[i] = data_[0]+":"+"TRUE"+":"+data_[2]+":"+data_[3]+":"+data_[4];
                             double interest_= (rate_ / 100) * Double.valueOf(data_[3]);
@@ -314,7 +314,7 @@ public class ProfileHelper {
                     System.out.println("REMOVING!!");
                     String data[] = val_.split("\\|");
                     for(int i = 0; i < data.length; i++) {
-                        if(data[i].equals(lenderName)) {
+                        if(data[i].equalsIgnoreCase(lenderName)) {
                             data[i] = "";
                         }
                     }
@@ -436,7 +436,7 @@ public class ProfileHelper {
             String val_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN));
 
             if(val_ == null || val_.isEmpty()) val_ = "";
-            if(name_.equals(lenderName.replaceAll(" ", "_"))) {
+            if(name_.equalsIgnoreCase(lenderName.replaceAll(" ", "_"))) {
                 if(isApply) {
                     if(val_.contains(borrowerName)) return "EXIST";
                 }
@@ -449,7 +449,7 @@ public class ProfileHelper {
 
                 for(int i = 0; i < data.length; i++) {
                      data_ = data[i].split(":");
-                     if(data_[0].equals(borrowerName)) {
+                     if(data_[0].equalsIgnoreCase(borrowerName)) {
                          // Remaining nakukuha sa UIHelper through parameters
                          // This means payment
                          if(year == 1122334455 || total == 1122334455) {
@@ -515,7 +515,7 @@ public class ProfileHelper {
             String val_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN));
 
             Log.d("apply", "COMPANY: " + companyName + " COMPARE: " + name_ + " VALUE: " + val_);
-            if(name_.equals(companyName)) {
+            if(name_.equalsIgnoreCase(companyName)) {
                 if(val_==null || val_.isEmpty()) return list;
 
                 String[] data = val_.split("\\|"); // Escape | character
@@ -590,12 +590,11 @@ public class ProfileHelper {
         actValues.put(SqliteHelper.AccountEntry.USERNAME_COLUMN, name_.toUpperCase());
         actValues.put(SqliteHelper.AccountEntry.PASSWORD_COLUMN, name_.toUpperCase());
         actValues.put(SqliteHelper.AccountEntry.EMAIL_COLUMN, email);
-        actValues.put(SqliteHelper.AccountEntry.PASSWORD_COLUMN, name_);
         actValues.put(SqliteHelper.AccountEntry.TYPE_COLUMN, "LENDER");
         actValues.put(SqliteHelper.AccountEntry.ARCHIVE_COLUMN, "NO");
         actValues.put(SqliteHelper.AccountEntry.DATA_COLUMN, "YES");
 
-        values.put(SqliteHelper.LenderAccount.NAME_COLUMN, name_);
+        values.put(SqliteHelper.LenderAccount.NAME_COLUMN, name_.toUpperCase());
         values.put(SqliteHelper.LenderAccount.MIN_COLUMN, minimum);
         values.put(SqliteHelper.LenderAccount.MAX_COLUMN, maximum);
         values.put(SqliteHelper.LenderAccount.RATE_COLUMN, rate);
@@ -676,7 +675,7 @@ public class ProfileHelper {
                 img = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
             }
 
-            if (type.equals(type_)) {
+            if (type.equalsIgnoreCase(type_)) {
                 if (archive_.equalsIgnoreCase("YES"))
                     archlist.add(new usersModel(name_, type_, email_, img, fullname_));
                 else
@@ -736,7 +735,7 @@ public class ProfileHelper {
                 img = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
             }
 
-            if (type.equals(type_)) {
+            if (type.equalsIgnoreCase(type_)) {
                 if (archive_.equalsIgnoreCase("YES"))
                     archlist.add(new userLenderModel(name_, min_, max_, rate_, freq_, email_, img));
                 else
@@ -937,7 +936,7 @@ public class ProfileHelper {
 
                     Log.d("apply", "List is running");
                     while (cursor2.moveToNext()) {
-                        String companyName_ = cursor2.getString(cursor2.getColumnIndexOrThrow(SqliteHelper.AccountEntry.USERNAME_COLUMN));
+                        String companyName_ = cursor2.getString(cursor2.getColumnIndexOrThrow(SqliteHelper.AccountEntry.USERNAME_COLUMN)).toUpperCase();
 
                         Log.e("APPLY", "comapny: " + companyName_ + " :: compare: " + lenders[i]);
                         if(companyName_.equalsIgnoreCase(lenders[i])) {
@@ -1048,8 +1047,6 @@ public class ProfileHelper {
             SqliteHelper.AccountEntry.EMAIL_COLUMN
         };
         String name = user.contains("\\|") ? userFullnameToUsername(user) : user;
-
-
         Cursor cursor = db.query(SqliteHelper.AccountEntry.TABLE_NAME,
                 col, null, null, null, null, null);
 
@@ -1144,7 +1141,7 @@ public class ProfileHelper {
             double interest_ = cursor.getDouble(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.TOTAL_INTEREST));
             double spent_ = cursor.getDouble(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.TOTAL_SPENT));
 
-            if(name_.equals(user)) {
+            if(name_.equalsIgnoreCase(user)) {
                 ContentValues values = new ContentValues();
                 double totalInterest = interest_ + interest;
                 double totalSpent = spent_ + spent;
@@ -1182,7 +1179,7 @@ public class ProfileHelper {
             String s = user;
             if(user.contains("\\|")) s = userFullnameToUsername(user);
 
-            if(name_.equals(s)) {
+            if(name_.equalsIgnoreCase(s)) {
                 ContentValues values = new ContentValues();
                 double totalLend;
                 if(isAdd)
@@ -1223,7 +1220,7 @@ public class ProfileHelper {
             String s = user;
             if(user.contains("\\|")) s = userFullnameToUsername(user);
 
-            if(name_.equals(s)) {
+            if(name_.equalsIgnoreCase(s)) {
                 ContentValues values = new ContentValues();
                 double totalLend = lend_ + lend;
 
@@ -1278,7 +1275,7 @@ public class ProfileHelper {
                         String isAccept = current_[1];
                         double total = Double.parseDouble(current_[3]);
 
-                        if (name.equals(s) && isAccept.equalsIgnoreCase("TRUE")) {
+                        if (name.equalsIgnoreCase(s) && isAccept.equalsIgnoreCase("TRUE")) {
                             currentLoans += total;
                         }
                     }
@@ -1292,7 +1289,7 @@ public class ProfileHelper {
                         String name = done_[0];
                         double total = Double.parseDouble(done_[1]);
 
-                        if (name.equals(s)) {
+                        if (name.equalsIgnoreCase(s)) {
                             paidLoans += total;
                         }
                     }
@@ -1328,7 +1325,7 @@ public class ProfileHelper {
             String list = cursor.getString(cursor.getColumnIndexOrThrow(col[2]));
 
             String s = user.contains("\\|") ? userFullnameToUsername(user) : user;
-            if(name_.equals(s)) {
+            if(name_.equalsIgnoreCase(s)) {
                 if(!list.isEmpty())
                     unpaid = list.split("\\|").length;
                 if(!listDone.isEmpty())
@@ -1359,7 +1356,7 @@ public class ProfileHelper {
         try {
             while (cursor.moveToNext()) {
                 String name_ = cursor.getString(cursor.getColumnIndexOrThrow(col[0]));
-                if (name.equals(name_)) {
+                if (name.equalsIgnoreCase(name_)) {
                     String applied_ = cursor.getString(cursor.getColumnIndexOrThrow(col[1]));
                     String current_ = cursor.getString(cursor.getColumnIndexOrThrow(col[2]));
                     double rate_ = cursor.getDouble(cursor.getColumnIndexOrThrow(col[3]));
@@ -1370,7 +1367,7 @@ public class ProfileHelper {
                         String[] currentData = current_.split("\\|");
                         for (String s : currentData) {
                             String[] data = s.split(":");
-                            String user_ = data[0];
+                            String user_ = data[0].toUpperCase();
                             String isApply_ = data[1];
                             double remaining_ = Double.parseDouble(data[2]);
                             double total_ = Double.parseDouble(data[3]);
@@ -1389,7 +1386,7 @@ public class ProfileHelper {
                         String[] appliedData = applied_.split("\\|");
                         for (String s : appliedData) {
                             String[] data = s.split(":");
-                            String user_ = data[0];
+                            String user_ = data[0].toUpperCase();
                             double total_ = Double.parseDouble(data[1]);
                             int year_ = Integer.parseInt(String.format("%.0f", Double.parseDouble(data[2])));
 

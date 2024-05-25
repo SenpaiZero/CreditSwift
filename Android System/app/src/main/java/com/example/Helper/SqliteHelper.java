@@ -44,7 +44,9 @@ public class SqliteHelper extends SQLiteOpenHelper {
             "username TEXT NOT NULL);";
 
     public SqliteHelper(Context context) {
-        super(context, context.getDatabasePath(DATABASE_NAME).getPath(), null, DATABASE_VERSION);
+        super(context, context.getDatabasePath(DATABASE_NAME).getAbsolutePath(), null, DATABASE_VERSION);
+        String databasePath = context.getDatabasePath(DATABASE_NAME).getAbsolutePath();
+        Log.d("SqliteHelper", "Database path: " + databasePath);
     }
 
     @Override

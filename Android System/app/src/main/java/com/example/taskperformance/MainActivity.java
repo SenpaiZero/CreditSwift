@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -99,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
                         .putExtra("username", stayLoginHelper.getUserPass()[0]));
             }
         }
-
     }
     void openLoginRegister(View view, ConstraintLayout layout, ImageView bg, boolean isReverse)
     {

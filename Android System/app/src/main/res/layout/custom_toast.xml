@@ -13,7 +13,7 @@
         android:elevation="7dp"
         android:radius="8dp"
         android:visibility="visible"
-        app:cardBackgroundColor="#CB853737"
+        app:cardBackgroundColor="#9008547E"
         app:cardCornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

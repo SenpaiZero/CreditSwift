@@ -63,9 +63,13 @@ public class userInterfaceHelper {
         toastText.setText(message);
 
         customCardView.setVisibility(View.VISIBLE);
-        customCardView.setZ(999);
         customCardView.bringToFront();
+        customCardView.setZ(999);
+        customCardView.setElevation(999);
 
+        // Not sure pa if this will work (don't have testing device)
+        customCardView.requestLayout();
+        customCardView.invalidate();
 
         ObjectAnimator fadeOut = ObjectAnimator.ofFloat(customCardView, "alpha", 1f, 0f);
         if(duration == 0)
@@ -125,6 +129,7 @@ public class userInterfaceHelper {
                         StayLoginHelper stayLoginHelper = new StayLoginHelper(activity);
                         stayLoginHelper.setStayLogin(false);
 
+                        activity.finish();
                         Log.d("Logout", stayLoginHelper.getStayLogin() + "");
                         context.startActivity(new Intent(context, MainActivity.class));
                     }
