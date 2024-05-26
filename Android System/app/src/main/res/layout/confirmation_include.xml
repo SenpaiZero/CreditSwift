@@ -79,9 +79,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/protest_strike"
+                    android:shadowColor="#000000"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="1"
                     android:text="MESSAGE MESSAGE MESSAGE MESSAGEMESSAGE MESSAGE MESSAGE MESSAGEMESSAGE MESSAGE MESSAGE MESSAGEMESSAGE MESSAGE MESSAGE MESSAGEMESSAGE MESSAGE MESSAGE MESSAGE"
                     android:textAlignment="center"
-                    android:textColor="@color/darkRegister" />
+                    android:textColor="@color/lightTxt2" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -95,7 +99,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:layout_weight="1"
-                        android:backgroundTint="#CA0E00"
+                        android:backgroundTint="@color/negativeButton"
                         android:fontFamily="@font/bebas"
                         android:text="NEGATIVE"
                         android:textColor="#FFFFFF"
@@ -107,7 +111,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_weight="1"
-                        android:backgroundTint="#5B9F0C"
+                        android:backgroundTint="@color/positiveButton"
                         android:fontFamily="@font/bebas"
                         android:text="POSITIVE"
                         android:textColor="#FFFFFF"

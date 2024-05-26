@@ -5,9 +5,10 @@
 
     <color name="lightLogin">#008DDA</color>
     <color name="lightRegister">#41C9E2</color>
-    <color name="lightBackground">#ACE2E1</color>
-    <color name="lightBackground2">#77CDCC</color>
+    <color name="lightBackground">#8FDCDA</color>
+    <color name="lightBackground2">#19BFBD</color>
     <color name="lightTxt">#004E78</color>
+    <color name="lightTxt2">#BFE7FB</color>
 <!--
 <color name="lightLogin">#FF52A2</color>
     <color name="lightRegister">#FFB07F</color>
@@ -19,6 +20,6 @@
     <color name="darkRegister">#032649</color>
     <color name="darkBackground">#80882A</color>
 
-    <color name="negativeButton">#CA0E00</color>
-    <color name="positiveButton">#5B9F0C</color>
+    <color name="negativeButton">#CD5C52</color>
+    <color name="positiveButton">#83B34A</color>
 </resources>

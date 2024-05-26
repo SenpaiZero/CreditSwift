@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.Helper.DateHelper;
 import com.example.Helper.ProfileHelper;
 import com.example.Helper.userInterfaceHelper;
 import com.example.Helper.validationHelper;
@@ -144,6 +145,12 @@ public class borrower_info extends AppCompatActivity {
                 }
                 else if(validationHelper.checkImageChange(def, current)) {
                     UIHelper.showCustomToast("Please add an image for your profile");
+                    return;
+                }
+                else if(DateHelper.isDue(yearSpinner.getSelectedItem().toString()+"-"+
+                        (monthSpinner.getSelectedItemPosition()+1)+"-"+
+                        daySpinner.getSelectedItem().toString())) {
+                    UIHelper.showCustomToast("Please make sure the date is correct.");
                     return;
                 }
                 String name_ = lastName.getText().toString().toUpperCase() + "|" +

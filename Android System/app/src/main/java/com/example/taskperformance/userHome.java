@@ -337,6 +337,14 @@ public class userHome extends AppCompatActivity {
                     return;
                 }
 
+                if(year > 25) {
+                    UIHelper.showCustomToast("Please make sure that the year is lower than 25.");
+                    return;
+                }
+                if(year <= 0) {
+                    UIHelper.showCustomToast("Please make sure that the year is bigger than 0.");
+                    return;
+                }
                 String a = profileHelper.addUpdateCurrentLend(getIntent().getStringExtra("username"),
                         companyName, amount, amount, year, true);
                 Log.d("apply", "username: " + getIntent().getStringExtra("username"));

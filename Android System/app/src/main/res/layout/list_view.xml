@@ -17,7 +17,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            app:cardBackgroundColor="#9F98E4"
+            app:cardBackgroundColor="@color/lightBackground2"
             app:cardCornerRadius="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -60,7 +60,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/abel"
                             android:text="Company Name"
-                            android:textColor="@color/darkRegister"
+                            android:textColor="@color/lightTxt"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
@@ -71,7 +71,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/abel"
                             android:text="Email"
-                            android:textColor="@color/darkRegister"
+                            android:textColor="@color/lightTxt"
                             android:textSize="16sp" />
 
                         <TextView
@@ -81,7 +81,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/abel"
                             android:text="Total: "
-                            android:textColor="@color/darkRegister"
+                            android:textColor="@color/lightTxt"
                             android:textSize="16sp" />
 
                         <TextView
@@ -91,7 +91,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/abel"
                             android:text=" 1422312234 | Quarterly"
-                            android:textColor="@color/darkRegister"
+                            android:textColor="@color/lightTxt"
                             android:textSize="16sp" />
 
                         <Button

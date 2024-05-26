@@ -135,7 +135,7 @@ public class lender_info extends AppCompatActivity {
                     return;
                 }
                 else if(maxV < minV) {
-                    UIHelper.showCustomToast("The max amount should be higher than minimum");
+                    UIHelper.showCustomToast("The maximum amount should be higher than minimum");
                     return;
                 }
 

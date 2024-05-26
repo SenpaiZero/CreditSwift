@@ -27,7 +27,7 @@
             android:padding="26dp"
             android:text="Your Custom CardView Toast Message"
             android:textAlignment="center"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/lightTxt2"
             android:textStyle="bold" />
     </androidx.cardview.widget.CardView>
 

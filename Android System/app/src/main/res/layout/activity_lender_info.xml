@@ -301,20 +301,22 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/darkRegister"
+                    android:backgroundTint="@color/lightTxt2"
                     android:dropDownWidth="match_parent"
                     android:entries="@array/interestPercent"
-                    android:foregroundTint="@color/darkRegister" />
+                    android:popupBackground="@color/lightLogin"
+                    android:spinnerMode="dropdown" />
 
                 <Spinner
                     android:id="@+id/freqSpinner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/darkRegister"
+                    android:backgroundTint="@color/lightTxt2"
                     android:dropDownWidth="match_parent"
                     android:entries="@array/frequency"
-                    android:foregroundTint="@color/darkRegister" />
+                    android:popupBackground="@color/lightLogin"
+                    android:spinnerMode="dropdown" />
 
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

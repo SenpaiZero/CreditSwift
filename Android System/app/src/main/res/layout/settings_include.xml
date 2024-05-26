@@ -91,10 +91,10 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/lightRegister"
+                    android:backgroundTint="@color/lightTxt2"
                     android:dropDownWidth="match_parent"
                     android:entries="@array/yesno"
-                    android:popupBackground="@color/lightBackground"
+                    android:popupBackground="@color/lightLogin"
                     android:spinnerMode="dropdown" />
 
             </LinearLayout>
@@ -121,10 +121,10 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/lightRegister"
+                    android:backgroundTint="@color/lightTxt2"
                     android:dropDownWidth="match_parent"
                     android:entries="@array/animation_speed"
-                    android:popupBackground="@color/lightBackground"
+                    android:popupBackground="@color/lightLogin"
                     android:spinnerMode="dropdown" />
             </LinearLayout>
 

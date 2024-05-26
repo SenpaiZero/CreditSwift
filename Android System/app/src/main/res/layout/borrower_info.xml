@@ -243,27 +243,30 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/darkRegister"
+                    android:backgroundTint="@color/lightTxt2"
                     android:dropDownWidth="match_parent"
-                    android:foregroundTint="@color/darkRegister" />
+                    android:popupBackground="@color/lightLogin"
+                    android:spinnerMode="dropdown" />
 
                 <Spinner
                     android:id="@+id/daySpinner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/darkRegister"
+                    android:backgroundTint="@color/lightTxt2"
                     android:dropDownWidth="match_parent"
-                    android:foregroundTint="@color/darkRegister" />
+                    android:popupBackground="@color/lightLogin"
+                    android:spinnerMode="dropdown" />
 
                 <Spinner
                     android:id="@+id/yearSpinner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/darkRegister"
+                    android:backgroundTint="@color/lightTxt2"
                     android:dropDownWidth="match_parent"
-                    android:foregroundTint="@color/darkRegister" />
+                    android:popupBackground="@color/lightLogin"
+                    android:spinnerMode="dropdown" />
             </LinearLayout>
 
             <TextView
@@ -375,10 +378,11 @@
             android:layout_marginLeft="15dp"
             android:layout_marginBottom="15dp"
             android:layout_weight="1"
-            android:backgroundTint="@color/lightTxt"
+            android:backgroundTint="@color/negativeButton"
             android:fontFamily="@font/protest_strike"
             android:text="CANCEL"
             android:textAlignment="center"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:visibility="gone"
             app:cornerRadius="4dp" />

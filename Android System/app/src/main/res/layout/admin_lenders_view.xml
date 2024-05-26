@@ -17,7 +17,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            app:cardBackgroundColor="#9F98E4"
+            app:cardBackgroundColor="@color/lightBackground2"
             app:cardCornerRadius="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +51,7 @@
                         android:layout_weight="0.5"
                         android:fontFamily="@font/abel"
                         android:text="Company Name"
-                        android:textColor="@color/darkRegister"
+                        android:textColor="@color/lightTxt"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -62,7 +62,7 @@
                         android:layout_weight="0.5"
                         android:fontFamily="@font/abel"
                         android:text="Email"
-                        android:textColor="@color/darkRegister"
+                        android:textColor="@color/lightTxt"
                         android:textSize="20sp" />
 
                     <TextView
@@ -73,7 +73,7 @@
                         android:drawablePadding="5dp"
                         android:fontFamily="@font/abel"
                         android:text="1,000 - 100,000"
-                        android:textColor="@color/darkRegister"
+                        android:textColor="@color/lightTxt"
                         android:textSize="20sp" />
 
                     <TextView
@@ -83,7 +83,7 @@
                         android:layout_weight="0.5"
                         android:fontFamily="@font/abel"
                         android:text="5% | Monthly"
-                        android:textColor="@color/darkRegister"
+                        android:textColor="@color/lightTxt"
                         android:textSize="20sp" />
 
                     <LinearLayout
