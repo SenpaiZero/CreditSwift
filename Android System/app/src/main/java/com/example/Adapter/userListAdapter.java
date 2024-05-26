@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.Helper.DateHelper;
 import com.example.Helper.ProfileHelper;
 import com.example.Helper.userInterfaceHelper;
 import com.example.model.applyModel;
@@ -58,6 +59,14 @@ public class userListAdapter extends RecyclerView.Adapter<userListAdapter.userLi
         double total = borrowList.get(position).getTotal() + (borrowList.get(position).getTotal() * (borrowList.get(position).getInterest() / 100));
         double remaining = borrowList.get(position).getRemaining() + (borrowList.get(position).getTotal() * (borrowList.get(position).getInterest() / 100));
 
+        holder.dueDate.setText("DUE DATE: " + borrowList.get(position).getDate());
+
+        if(DateHelper.isDue(borrowList.get(position).getDate())) {
+            holder.status.setText("WAITING FOR PAYMENT");
+        } else {
+            holder.status.setText("PAST DUE");
+        }
+
         if(type.equals(borrower)) {
              holder.name.setText(borrowList.get(position).getName());
             holder.email.setText(borrowList.get(position).getEmail());
@@ -93,6 +102,7 @@ public class userListAdapter extends RecyclerView.Adapter<userListAdapter.userLi
                     + "\nYear: " + borrowList.get(position).getYear());
             holder.pic.setImageBitmap(borrowList.get(position).getPic());
         }
+
     }
 
     @Override
@@ -102,7 +112,7 @@ public class userListAdapter extends RecyclerView.Adapter<userListAdapter.userLi
 
     public static class userListAdapterHolder extends RecyclerView.ViewHolder {
 
-        TextView name, email, total, remaining;
+        TextView name, email, total, remaining, dueDate, status;
         ImageView pic;
         Button payBtn;
         public userListAdapterHolder(@NonNull View itemView) {
@@ -115,6 +125,9 @@ public class userListAdapter extends RecyclerView.Adapter<userListAdapter.userLi
 
             pic = itemView.findViewById(R.id.profileView);
             payBtn = itemView.findViewById(R.id.payNowBtn);
+
+            dueDate = itemView.findViewById(R.id.lastDueTxt);
+            status = itemView.findViewById(R.id.statusTxt);
         }
     }
 }

@@ -6,11 +6,11 @@ import com.example.Helper.SettingHelper;
 import com.example.Helper.SqliteHelper;
 
 public class listBorrowModel {
-    String name, frequency, email;
+    String name, frequency, email, date;
     int year;
     double interest, total, remaining;
     Bitmap pic;
-    public listBorrowModel(String name, String frequency, String email, double total, double remaining, int year, double interest, Bitmap pic) {
+    public listBorrowModel(String name, String frequency, String email, double total, double remaining, int year, double interest, Bitmap pic, String date) {
         this.name = name;
         this.frequency = frequency;
         this.email = email;
@@ -19,6 +19,7 @@ public class listBorrowModel {
         this.year = year;
         this.pic = pic;
         this.interest = interest;
+        this.date = date;
     }
     public double getPayment() {
         double percent = getInterest();
@@ -49,6 +50,9 @@ public class listBorrowModel {
     }
 
 
+    public String getDate() {
+        return date;
+    }
     public double getInterest() {
         return interest;
     }

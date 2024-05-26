@@ -169,7 +169,7 @@ public class borrower_info extends AppCompatActivity {
                         UIHelper.showCustomToast("The email you entered already exist.");
                         return;
                     }
-                    profileHelper.updateBorrowerInfo(getIntent().getStringExtra("username").toString(),
+                    profileHelper.updateBorrowerInfo(getIntent().getStringExtra("username"),
                             name_,
                             email.getText().toString().toUpperCase(),
                             birth_, ((BitmapDrawable) profile.getDrawable()).getBitmap()

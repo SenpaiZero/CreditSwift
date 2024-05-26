@@ -117,7 +117,7 @@ public class ProfileHelper {
                     SqliteHelper.AccountEntry.TABLE_NAME,
                     val,
                     SqliteHelper.AccountEntry.USERNAME_COLUMN + " = ?",
-                    new String[]{username}
+                    new String[]{username.toUpperCase().toUpperCase()}
             );
             return newRowId != -1;
         } catch (Exception ex) {
@@ -146,11 +146,11 @@ public class ProfileHelper {
         int rowsAffected = db.update(SqliteHelper.LenderAccount.TABLE_NAME,
                 content,
                 SqliteHelper.LenderAccount.NAME_COLUMN + " = ?",
-                new String[]{name});
+                new String[]{name.toUpperCase()});
         int rowsAffected2 = db.update(SqliteHelper.AccountEntry.TABLE_NAME,
                 contentVal,
                 SqliteHelper.AccountEntry.USERNAME_COLUMN + " = ?",
-                new String[]{name});
+                new String[]{name.toUpperCase()});
 
         return rowsAffected > 0 && rowsAffected2 > 0;
     }
@@ -168,7 +168,7 @@ public class ProfileHelper {
         content.put(SqliteHelper.BorrowerAccount.PIC_COLUMN, imageBytes);
 
         ContentValues contentVal = new ContentValues();
-        contentVal.put(SqliteHelper.AccountEntry.EMAIL_COLUMN, email);
+        contentVal.put(SqliteHelper.AccountEntry.EMAIL_COLUMN, email.toUpperCase());
 
         int rowsAffected = db.update(SqliteHelper.BorrowerAccount.TABLE_NAME,
                 content,
@@ -218,7 +218,8 @@ public class ProfileHelper {
                 SqliteHelper.LenderAccount.TABLE_NAME + "." + SqliteHelper.LenderAccount.NAME_COLUMN,
                 SqliteHelper.LenderAccount.NAME_COLUMN,
                 SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN,
-                SqliteHelper.LenderAccount.RATE_COLUMN
+                SqliteHelper.LenderAccount.RATE_COLUMN,
+                SqliteHelper.LenderAccount.FREQ_COLUMN
         };
 
         String selection = SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN +
@@ -238,6 +239,7 @@ public class ProfileHelper {
             String name_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.NAME_COLUMN));
             String val_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN));
             double rate_ = cursor.getDouble(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.RATE_COLUMN));
+            String freq = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.FREQ_COLUMN));
 
             // Found the lender
             if(name_.equalsIgnoreCase(lenderName)) {
@@ -250,7 +252,7 @@ public class ProfileHelper {
                     Log.d("Apply", data_[0] + " : " + userFullnameToUsername(borrowName));
                     if(data_[0].equalsIgnoreCase(userFullnameToUsername(borrowName))) {
                         if(isAccept) {
-                            data[i] = data_[0]+":"+"TRUE"+":"+data_[2]+":"+data_[3]+":"+data_[4];
+                            data[i] = data_[0]+":"+"TRUE"+":"+data_[2]+":"+data_[3]+":"+data_[4]+":"+DateHelper.addMonth(data_[5], freq);
                             double interest_= (rate_ / 100) * Double.valueOf(data_[3]);
                             updateTotalInterestSpent(lenderName, interest_, Double.valueOf(data_[3]));
                             updateCurrentTotalLend(data_[0], Double.valueOf(data_[3]), true);
@@ -272,7 +274,7 @@ public class ProfileHelper {
                 values.put(SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN, newVal);
                 db.update(SqliteHelper.LenderAccount.TABLE_NAME,  values,
                         SqliteHelper.LenderAccount.NAME_COLUMN+ " = ?",
-                        new String[]{lenderName});
+                        new String[]{lenderName.toUpperCase()});
 
                 if(isAccept) {
                     addRemoveListBorrower(lenderName, borrowName, true);
@@ -329,12 +331,12 @@ public class ProfileHelper {
                 if(isAdd) {
                     db.update(SqliteHelper.BorrowerAccount.TABLE_NAME,  values,
                             SqliteHelper.BorrowerAccount.NAME_COLUMN+ " = ?",
-                            new String[]{borrowName});
+                            new String[]{borrowName.toUpperCase()});
                 }
                 else {
                     db.update(SqliteHelper.BorrowerAccount.TABLE_NAME,  values,
                             SqliteHelper.BorrowerAccount.USERNAME_COLUMN+ " = ?",
-                            new String[]{borrowName});
+                            new String[]{borrowName.toUpperCase()});
                 }
             }
         }
@@ -372,7 +374,7 @@ public class ProfileHelper {
 
                 db.update(SqliteHelper.LenderAccount.TABLE_NAME,  values,
                         SqliteHelper.LenderAccount.NAME_COLUMN+ " = ?",
-                        new String[]{lenderName.replaceAll(" ", "_")});
+                        new String[]{lenderName.replaceAll(" ", "_").toUpperCase()});
                 break;
             }
         }
@@ -407,19 +409,20 @@ public class ProfileHelper {
 
                 db.update(SqliteHelper.BorrowerAccount.TABLE_NAME,  values2,
                         SqliteHelper.BorrowerAccount.USERNAME_COLUMN+ " = ?",
-                        new String[]{borrowerName.replaceAll(" ", "_")});
+                        new String[]{borrowerName.replaceAll(" ", "_").toUpperCase()});
                 break;
             }
         }
     }
     public String addUpdateCurrentLend(String borrowerName, String lenderName, double remaining, double total, int year, boolean isApply) {
         ContentValues lender = new ContentValues();
-        String val = borrowerName + ":"+String.valueOf(!isApply).toUpperCase()+":"+remaining+":"+total+":"+year+"|";
+        String val = borrowerName + ":"+String.valueOf(!isApply).toUpperCase()+":"+remaining+":"+total+":"+year+":"+DateHelper.getCurrentDate()+"|";
         lender.put(SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN, val);
         Log.d("APPLY", "VALUE: " + val + " LENDER NAME: " + lenderName);
         String[] col = {
                 SqliteHelper.LenderAccount.NAME_COLUMN,
-                SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN
+                SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN,
+                SqliteHelper.LenderAccount.FREQ_COLUMN
         };
         Cursor cursor = db.query(
                 SqliteHelper.LenderAccount.TABLE_NAME,
@@ -434,6 +437,7 @@ public class ProfileHelper {
         while(cursor.moveToNext()) {
             String name_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.NAME_COLUMN));
             String val_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN));
+            String freq = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.FREQ_COLUMN));
 
             if(val_ == null || val_.isEmpty()) val_ = "";
             if(name_.equalsIgnoreCase(lenderName.replaceAll(" ", "_"))) {
@@ -453,11 +457,10 @@ public class ProfileHelper {
                          // Remaining nakukuha sa UIHelper through parameters
                          // This means payment
                          if(year == 1122334455 || total == 1122334455) {
-                             val = borrowerName + ":"+String.valueOf(!isApply).toUpperCase()+":"+remaining+":"+data_[3]+":"+data_[4]+"|";
+                             val = borrowerName + ":"+String.valueOf(!isApply).toUpperCase()+":"+remaining+":"+data_[3]+":"+data_[4]+":"+DateHelper.addMonth(data_[5], freq)+"|";
                              Log.e("apply", "updated remaining " + remaining);
                          }
 
-                         // POTANGINANG METHOD TO BAKIT NAPAKA BUGGY AYOKO NA TANGINA WAHHHH AIOSDHAOISDH
                          if(remaining <= 0) {
                              donePayment(borrowerName, lenderName, Double.valueOf(data_[3]) , Double.valueOf(data_[4]));
                              addRemoveListBorrower(lenderName.replaceAll(" ", "_"), borrowerName, false);
@@ -486,7 +489,7 @@ public class ProfileHelper {
                 lender.put(SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN, newVal);
                 db.update(SqliteHelper.LenderAccount.TABLE_NAME,  lender,
                         SqliteHelper.LenderAccount.NAME_COLUMN+ " = ?",
-                        new String[]{lenderName.replaceAll(" ", "_")});
+                        new String[]{lenderName.replaceAll(" ", "_").toUpperCase()});
                 return returnType;
             }
         }
@@ -536,7 +539,7 @@ public class ProfileHelper {
                                     " = " + SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN,
                             columns,
                             SqliteHelper.BorrowerAccount.TABLE_NAME + "." + SqliteHelper.BorrowerAccount.USERNAME_COLUMN + "=?",
-                            new String[]{data_[0]}, // Pass username as selection argument
+                            new String[]{data_[0].toUpperCase()}, // Pass username as selection argument
                             null,
                             null,
                             null,
@@ -575,7 +578,7 @@ public class ProfileHelper {
                 SqliteHelper.AccountEntry.TABLE_NAME,
                 val,
                 SqliteHelper.AccountEntry.USERNAME_COLUMN + " = ?",
-                new String[]{username.replaceAll(" ", "_")}
+                new String[]{username.replaceAll(" ", "_").toUpperCase()}
         );
         return false;
     }
@@ -964,8 +967,10 @@ public class ProfileHelper {
                                 double remaining = Double.valueOf(data_[2]);
                                 double total = Double.valueOf(data_[3]);
                                 int year = Integer.valueOf(data_[4]);
+                                String due = data_[5];
                                 if(isAccept.equalsIgnoreCase("TRUE")) {
-                                    list.add(new listBorrowModel(lenderName.replaceAll("_", " "), freq_, email_, total, remaining, year, rate_, img));
+                                    list.add(new listBorrowModel(lenderName.replaceAll("_", " "),
+                                            freq_, email_, total, remaining, year, rate_, img, due));
                                     Log.e("APPLY", "ADDED TO THE LIST");
                                 }
                             }
@@ -1031,9 +1036,11 @@ public class ProfileHelper {
                     double remaining = Double.valueOf(data_[2]);
                     double total = Double.valueOf(data_[3]);
                     int year = Integer.valueOf(data_[4]);
+                    String due = data_[5];
 
                     if(isAccept.equalsIgnoreCase("TRUE"))
-                        list.add(new listBorrowModel(borrowName, freq_, getUserEmail(borrowName), total, remaining, year, interest, img));
+                        list.add(new listBorrowModel(borrowName, freq_, getUserEmail(borrowName),
+                                total, remaining, year, interest, img, due));
                 }
                 return list;
             }

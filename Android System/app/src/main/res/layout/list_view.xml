@@ -26,83 +26,126 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#009F6060"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
-                <ImageView
-                    android:id="@+id/profileView"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/user" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:paddingLeft="5dp">
+                    android:background="#009F6060"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="10dp">
 
-                    <TextView
-                        android:id="@+id/companyTxt"
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:id="@+id/profileView"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/user" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:fontFamily="@font/abel"
-                        android:text="Company Name"
-                        android:textColor="@color/darkRegister"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:orientation="vertical"
+                        android:paddingLeft="5dp">
 
-                    <TextView
-                        android:id="@+id/emailViewTxt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/abel"
-                        android:text="Email"
-                        android:textColor="@color/darkRegister"
-                        android:textSize="16sp" />
+                        <TextView
+                            android:id="@+id/companyTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/abel"
+                            android:text="Company Name"
+                            android:textColor="@color/darkRegister"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/totalViewTxt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/abel"
-                        android:text="Total: "
-                        android:textColor="@color/darkRegister"
-                        android:textSize="16sp" />
+                        <TextView
+                            android:id="@+id/emailViewTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/abel"
+                            android:text="Email"
+                            android:textColor="@color/darkRegister"
+                            android:textSize="16sp" />
 
-                    <TextView
-                        android:id="@+id/remainingFreqViewTxt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/abel"
-                        android:text=" 1422312234 | Quarterly"
-                        android:textColor="@color/darkRegister"
-                        android:textSize="16sp" />
+                        <TextView
+                            android:id="@+id/totalViewTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/abel"
+                            android:text="Total: "
+                            android:textColor="@color/darkRegister"
+                            android:textSize="16sp" />
 
-                    <Button
-                        android:id="@+id/payNowBtn"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="2dp"
-                        android:backgroundTint="@color/lightTxt"
-                        android:includeFontPadding="false"
-                        android:text="PAY NOW: 1231.1231221321312"
-                        android:textColor="#FFFFFF"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:cornerRadius="5dp" />
+                        <TextView
+                            android:id="@+id/remainingFreqViewTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/abel"
+                            android:text=" 1422312234 | Quarterly"
+                            android:textColor="@color/darkRegister"
+                            android:textSize="16sp" />
+
+                        <Button
+                            android:id="@+id/payNowBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="2dp"
+                            android:backgroundTint="@color/lightTxt"
+                            android:includeFontPadding="false"
+                            android:text="PAY NOW: 1231.1231221321312"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="5dp" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        android:id="@+id/lastDueTxt"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/protest_strike"
+                        android:text="Due: 5 - 25 - 2024"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="@color/lightTxt"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/statusTxt"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/protest_strike"
+                        android:text="past due"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="@color/lightTxt"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
             </LinearLayout>
+
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
