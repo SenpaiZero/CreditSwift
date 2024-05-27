@@ -3,6 +3,7 @@ package com.example.Adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ public class userListAdapter extends RecyclerView.Adapter<userListAdapter.userLi
     Context context;
     String type;
     String borrowerName;
+    double payment;
 
     public static final String borrower = "borrow",
             lender = "lender";
@@ -60,13 +62,13 @@ public class userListAdapter extends RecyclerView.Adapter<userListAdapter.userLi
         double remaining = borrowList.get(position).getRemaining() + (borrowList.get(position).getTotal() * (borrowList.get(position).getInterest() / 100));
 
         holder.dueDate.setText("DUE DATE: " + borrowList.get(position).getDate());
+        payment = borrowList.get(position).getPayment();
 
         if(DateHelper.isDue(borrowList.get(position).getDate())) {
             holder.status.setText("WAITING FOR PAYMENT");
         } else {
             holder.status.setText("PAST DUE");
         }
-
         if(type.equals(borrower)) {
              holder.name.setText(borrowList.get(position).getName());
             holder.email.setText(borrowList.get(position).getEmail());
@@ -76,11 +78,20 @@ public class userListAdapter extends RecyclerView.Adapter<userListAdapter.userLi
                     + " | " + borrowList.get(position).getFrequency().toUpperCase());
             holder.pic.setImageBitmap(borrowList.get(position).getPic());
 
-            holder.payBtn.setText("PAY NOW: " + String.format("%.2f", borrowList.get(position).getPayment()));
+            if(!DateHelper.isDue(borrowList.get(position).getDate()))
+            {
+                payment = payment + (payment * (Math.abs((2.0 * DateHelper.calculateMonthsBetween(borrowList.get(position).getDate()))/100)));
+                Log.d("pay", payment + "");
+                holder.payBtn.setText("PAY NOW: " + String.format("%.2f", payment) + "\n(+"+
+                        Math.abs(2 * DateHelper.calculateMonthsBetween(borrowList.get(position).getDate())) + "%)");
+            }
+            else {
+                holder.payBtn.setText("PAY NOW: " + String.format("%.2f", payment));
+            }
             holder.payBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    double remaining = borrowList.get(position).getRemaining() - borrowList.get(position).getPayment();
+                    double remaining = borrowList.get(position).getRemaining() - payment;
                     if(remaining < 0) remaining = 0;
                     UIHelper.setConfirmation("PAYMENT", "DO YOU REALLY WANT PAY?", "CANCEL", "PAY");
                     UIHelper.setNegativeConfirmation("cancel");

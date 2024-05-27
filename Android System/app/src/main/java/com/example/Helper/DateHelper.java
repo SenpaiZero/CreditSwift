@@ -65,4 +65,25 @@ public class DateHelper {
         }
     }
 
+    public static int calculateMonthsBetween(String endDate) {
+        try {
+            Date start = new Date(); // current date
+            Date end = DATE_FORMAT.parse(endDate);
+            Calendar startCal = Calendar.getInstance();
+            startCal.setTime(start);
+            Calendar endCal = Calendar.getInstance();
+            endCal.setTime(end);
+
+            int startYear = startCal.get(Calendar.YEAR);
+            int startMonth = startCal.get(Calendar.MONTH);
+            int endYear = endCal.get(Calendar.YEAR);
+            int endMonth = endCal.get(Calendar.MONTH);
+
+            return Math.abs((endYear - startYear) * 12 + (endMonth - startMonth));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
 }
