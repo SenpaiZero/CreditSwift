@@ -18,10 +18,12 @@ import com.example.model.userLenderModel;
 import com.example.model.usersModel;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ProfileHelper {
@@ -703,7 +705,85 @@ public class ProfileHelper {
 
         return isArchive ? archlist : list;
     }
+    public LinkedList<userLenderModel> getUsersLenderList(String type, boolean isArchive, String rate, String frequency) {
+        LinkedList<userLenderModel> list = new LinkedList<>();
+        LinkedList<userLenderModel> archlist = new LinkedList<>();
+        boolean isRate = !rate.equalsIgnoreCase("ALL RATES");
+        boolean isFreq = !frequency.equalsIgnoreCase("ALL FREQ");
 
+        String[] columns = {
+                SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN,
+                SqliteHelper.AccountEntry.ARCHIVE_COLUMN,
+                SqliteHelper.AccountEntry.EMAIL_COLUMN,
+                SqliteHelper.AccountEntry.TYPE_COLUMN,
+                SqliteHelper.LenderAccount.TABLE_NAME + "." + SqliteHelper.LenderAccount.NAME_COLUMN,
+                SqliteHelper.LenderAccount.NAME_COLUMN,
+                SqliteHelper.LenderAccount.PIC_COLUMN,
+                SqliteHelper.LenderAccount.MIN_COLUMN,
+                SqliteHelper.LenderAccount.MAX_COLUMN,
+                SqliteHelper.LenderAccount.FREQ_COLUMN,
+                SqliteHelper.LenderAccount.RATE_COLUMN,
+        };
+
+        String selection = SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN +
+                " = " + SqliteHelper.LenderAccount.TABLE_NAME + "." + SqliteHelper.LenderAccount.NAME_COLUMN;
+
+        StringBuilder where = new StringBuilder();
+        List<String> selectionArgsList = new ArrayList<>();
+
+        if (isRate) {
+            where.append(SqliteHelper.LenderAccount.RATE_COLUMN).append(" < ?");
+            selectionArgsList.add(rate);
+        }
+        if (isFreq) {
+            if (where.length() > 0) {
+                where.append(" AND ");
+            }
+            where.append(SqliteHelper.LenderAccount.FREQ_COLUMN).append(" = ? COLLATE NOCASE");
+            selectionArgsList.add(frequency);
+        }
+
+        String[] selectionArgs = selectionArgsList.toArray(new String[0]);
+
+        Cursor cursor = db.query(
+                SqliteHelper.AccountEntry.TABLE_NAME + " INNER JOIN " + SqliteHelper.LenderAccount.TABLE_NAME +
+                        " ON " + selection,
+                columns,
+                where.length() > 0 ? where.toString() : null,
+                selectionArgs.length > 0 ? selectionArgs : null,
+                null,
+                null,
+                null
+        );
+
+        while (cursor.moveToNext())
+        {
+            String name_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.NAME_COLUMN));
+            double max_ = cursor.getDouble(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.MAX_COLUMN));
+            double min_ = cursor.getDouble(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.MIN_COLUMN));
+            String freq_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.FREQ_COLUMN));
+            double rate_ = cursor.getDouble(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.RATE_COLUMN));
+            String email_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.EMAIL_COLUMN));
+            String archive_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.ARCHIVE_COLUMN));
+            String type_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.TYPE_COLUMN));
+            byte[] imageBytes = cursor.getBlob(cursor.getColumnIndexOrThrow(SqliteHelper.BorrowerAccount.PIC_COLUMN));
+
+            Bitmap img = null; // Default value for the image
+
+            if (imageBytes != null && imageBytes.length > 0) {
+                img = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+            }
+
+            if (type.equalsIgnoreCase(type_)) {
+                if (archive_.equalsIgnoreCase("YES"))
+                    archlist.add(new userLenderModel(name_, min_, max_, rate_, freq_, email_, img));
+                else
+                    list.add(new userLenderModel(name_, min_, max_, rate_, freq_, email_, img));
+            }
+        }
+
+        return isArchive ? archlist : list;
+    }
     public LinkedList<userLenderModel> getUsersLenderList(String type, boolean isArchive, String search) {
         LinkedList<userLenderModel> list = new LinkedList<>();
         LinkedList<userLenderModel> archlist = new LinkedList<>();

@@ -61,11 +61,12 @@
         android:id="@+id/recyclerCon"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="4dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/tabCon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userTitleTxt" />
+        app:layout_constraintTop_toBottomOf="@+id/filterCon" />
 
     <LinearLayout
         android:id="@+id/userCon"
@@ -282,6 +283,48 @@
 
         </androidx.cardview.widget.CardView>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/filterCon"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="10dp"
+        android:orientation="horizontal"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userTitleTxt">
+
+        <Button
+            android:id="@+id/ratesBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/lightTxt"
+            android:fontFamily="@font/protest_strike"
+            android:text="ALL RATES"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:cornerRadius="4dp" />
+
+        <Button
+            android:id="@+id/freqBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/lightTxt"
+            android:fontFamily="@font/protest_strike"
+            android:text="ALL FREQ"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:cornerRadius="4dp" />
     </LinearLayout>
 
     <include

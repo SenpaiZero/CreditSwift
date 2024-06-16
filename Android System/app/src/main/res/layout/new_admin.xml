@@ -91,6 +91,34 @@
                 android:textColor="@color/darkRegister"
                 android:textColorHint="@color/darkRegister" />
 
+            <TextView
+                android:id="@+id/textView123as4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/abel"
+                android:text="EMAIL"
+                android:textColor="@color/darkRegister"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:id="@+id/newAdminEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/darkRegister"
+                android:drawableLeft="@drawable/email_img"
+                android:drawablePadding="2dp"
+                android:drawableTint="@color/darkRegister"
+                android:elegantTextHeight="false"
+                android:ems="12"
+                android:fontFamily="@font/abel"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:password="false"
+                android:textColor="@color/darkRegister"
+                android:textColorHint="@color/darkRegister" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

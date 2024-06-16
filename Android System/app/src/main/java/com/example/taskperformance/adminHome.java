@@ -45,7 +45,7 @@ public class adminHome extends AppCompatActivity {
     ConstraintLayout settingCon, confirmationLayout, newAdminCon;
     userInterfaceHelper UIHelper;
     Button settingApply, settingCancel, confirmLogout, cancelLogout, newAdminApply, newAdminCancel;
-    EditText newAdminUser, newAdminPass, searchTxt;
+    EditText newAdminUser, newAdminPass, searchTxt, newAdminEmail;
     String isNormal;
     ProfileHelper profileHelper;
     public static adminHome admin;
@@ -147,6 +147,7 @@ public class adminHome extends AppCompatActivity {
         newAdminUser = findViewById(R.id.newAdminUserTB);
         newAdminPass = findViewById(R.id.newAdminPassTB);
         newAdmin = findViewById(R.id.adminNewAdmin);
+        newAdminEmail = findViewById(R.id.newAdminEmail);
 
         searchCon = findViewById(R.id.searchCon);
         searchTxt = findViewById(R.id.searchTB);
@@ -268,6 +269,7 @@ public class adminHome extends AppCompatActivity {
             public void onClick(View v) {
                 newAdminUser.setText("");
                 newAdminPass.setText("");
+                newAdminEmail.setText("");
                 newAdminCon.setVisibility(View.INVISIBLE);
             }
         });
@@ -277,25 +279,42 @@ public class adminHome extends AppCompatActivity {
             public void onClick(View v) {
                 String user = newAdminUser.getText().toString();
                 String pass = newAdminPass.getText().toString();
+                String email = newAdminEmail.getText().toString();
+
+                if(user.isEmpty() || pass.isEmpty() || email.isEmpty()) {
+                    UIHelper.showCustomToast("All fields should be filled up to continue,");
+                    return;
+                }
+
                 if(validationHelper.checkAlphaNumeric(user)) {
                     UIHelper.showCustomToast("Only letters and numbers are allowed in username.");
+                    return;
                 }
 
                 if(validationHelper.checkAlphaNumeric(pass)) {
                     UIHelper.showCustomToast("Only letters and numbers are allowed in password");
+                    return;
                 }
 
-                String va = profileHelper.newAccount(user, pass, "NONE", "ADMIN");
+                if(validationHelper.checkEmail(email)) {
+                    UIHelper.showCustomToast("The email you entered is invalid");
+                    return;
+                }
+
+                String va = profileHelper.newAccount(user, pass, email, "ADMIN");
                 if(va.equalsIgnoreCase("true"))
                 {
                     UIHelper.showCustomToast("You have successfully registered.");
+                    newAdminUser.setText("");
+                    newAdminPass.setText("");
+                    newAdminEmail.setText("");
+                    newAdminCon.setVisibility(View.INVISIBLE);
                 }
                 else if(va.equalsIgnoreCase("duplicate")) {
                     UIHelper.showCustomToast("The username already exist.");
                 }
                 else
                 {
-                    // something went wrong
                     UIHelper.showCustomToast("Something went wrong. Please try again later.");
                 }
             }
@@ -406,6 +425,7 @@ public class adminHome extends AppCompatActivity {
         userCon.setLayoutManager(new LinearLayoutManager(this));
 
         countText.setText((isArchive ? "ARCHIVED BORROWER COUNT: " : "BORROWER COUNT: ") + usersList.size());
+
     }
 
     public void setLenderList(boolean isArchive) {

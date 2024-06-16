@@ -30,13 +30,13 @@ import java.util.LinkedList;
 public class userHome extends AppCompatActivity {
 
     Spinner animSpeedSpinner, animSpinner;
-    Button tabLender, tabDashboard, tabUser;
+    Button tabLender, tabDashboard, tabUser, rate, freq;
     TextView title, titleConfirm, msgConfirm;;
     LinkedList<userLenderModel> usersLenderList;
     LinkedList<listBorrowModel> listBorrowModel;
     SettingHelper settingHelper;
     RecyclerView userCon, dashboardRec;
-    LinearLayout adminCon;
+    LinearLayout adminCon, filterCon;
     CardView logoutBtn, lenderArchiveBtn, dashboardBtn, changePasswordBtn, settingsBtn, profileBtn;
     ConstraintLayout settingCon, confirmationLayout, dashboard, applyInfo;
     userInterfaceHelper UIHelper;
@@ -127,6 +127,10 @@ public class userHome extends AppCompatActivity {
         totalLoans = findViewById(R.id.totalLoansTxt);
         currentLoans = findViewById(R.id.paidLenderTxt);
         paidLoans = findViewById(R.id.profitTxt);
+
+        rate = findViewById(R.id.ratesBtn);
+        freq = findViewById(R.id.freqBtn);
+        filterCon = findViewById(R.id.filterCon);
     }
 
     public void setDashboard() {
@@ -229,6 +233,69 @@ public class userHome extends AppCompatActivity {
                         .putExtra("borrower", true));
             }
         });
+
+        rate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String s = rate.getText().toString().toUpperCase();
+                String val = "";
+                if(s.equals("ALL RATES")) {
+                    rate.setText("BELOW 10%");
+                    val = "10.0";
+                }
+                else if(s.equals("BELOW 10%")){
+                    rate.setText("BELOW 8%");
+                    val = "8.0";
+                }
+                else if(s.equals("BELOW 8%")){
+                    rate.setText("BELOW 6%");
+                    val = "6.0";
+                }
+                else if(s.equals("BELOW 6%")){
+                    rate.setText("BELOW 4%");
+                    val = "4.0";
+                }
+                else if(s.equals("BELOW 4%")){
+                    rate.setText("BELOW 2%");
+                    val = "2.0";
+                }
+                else
+                    rate.setText("ALL RATES");
+
+                setLenderList(val, freq.getText().toString());
+            }
+        });
+
+        freq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String s = freq.getText().toString().toUpperCase();
+                if(s.equals("ALL FREQ")) {
+                    freq.setText("ANNUAL");
+                }
+                else if(s.equals("ANNUAL")) {
+                    freq.setText("SEMI-ANNUAL");
+                }
+                else if(s.equals("SEMI-ANNUAL")) {
+                    freq.setText("QUARTERLY");
+                } else if(s.equals("QUARTERLY")) {
+                    freq.setText("MONTHLY");
+                }
+                else if(s.equals("MONTHLY")) {
+                    freq.setText("WEEKLY");
+                }
+                else if(s.equals("WEEKLY")) {
+                    freq.setText("ALL FREQ");
+                }
+
+
+                String x = rate.getText().toString().toUpperCase();
+                String val = x.contains("10") ? "10.0" : x.contains("8") ? "8.0" : x.contains("6") ? "6.0" :
+                        x.contains("4") ? "4.0" : x.contains("2") ? "2.0" : "ALL FREQ";
+
+                setLenderList(val, freq.getText().toString());
+            }
+        });
     }
 
     @SuppressLint("UseCompatTextViewDrawableApis")
@@ -251,10 +318,19 @@ public class userHome extends AppCompatActivity {
         changeContent(button);
     }
 
+    void setLenderList(String rate, String freq) {
+        userLenderAdapter usersLenderAdapter_;
+        title.setText("LENDER");
+        changeContainerVisibility(false);
+        usersLenderList = profileHelper.getUsersLenderList("LENDER", false, rate, freq);
+        usersLenderAdapter_ = new userLenderAdapter(usersLenderList, this, userLenderAdapter.user, profileHelper);
+
+        userCon.setAdapter(usersLenderAdapter_);
+        userCon.setLayoutManager(new LinearLayoutManager(this));
+    }
     void changeContent(Button button)
     {
-        userLenderAdapter usersLenderAdapter_;
-
+        filterCon.setVisibility(View.INVISIBLE);
         dashboard.setVisibility(View.INVISIBLE);
         if(usersLenderList != null)
             if(usersLenderList.size() > 0)
@@ -266,13 +342,8 @@ public class userHome extends AppCompatActivity {
             if(listBorrowModel != null)
                 if(listBorrowModel.size() > 0)
                     listBorrowModel.clear();
-            title.setText("LENDER");
-            changeContainerVisibility(false);
-            usersLenderList = profileHelper.getUsersLenderList("LENDER", false, "");
-            usersLenderAdapter_ = new userLenderAdapter(usersLenderList, this, userLenderAdapter.user, profileHelper);
-
-            userCon.setAdapter(usersLenderAdapter_);
-            userCon.setLayoutManager(new LinearLayoutManager(this));
+            filterCon.setVisibility(View.VISIBLE);
+            setLenderList(rate.getText().toString(), freq.getText().toString());
         }
         else if(button.getId() == tabDashboard.getId())
         {
