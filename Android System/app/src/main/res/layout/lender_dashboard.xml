@@ -215,16 +215,50 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/protest_strike"
-                        android:text="LSIT OF CURRENT APPLIED BORROWER"
+                        android:text="LIST OF BORROWER"
                         android:textAlignment="center"
                         android:textColor="@color/darkRegister"
                         android:textSize="24sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/archiveBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/lightLogin"
+                            android:fontFamily="@font/protest_strike"
+                            android:text="Archive"
+                            android:textAlignment="center"
+                            android:textColor="@color/lightTxt2"
+                            android:visibility="gone"
+                            app:cornerRadius="6dp" />
+
+                        <Button
+                            android:id="@+id/filterBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/lightLogin"
+                            android:fontFamily="@font/protest_strike"
+                            android:text="All"
+                            android:textAlignment="center"
+                            android:textColor="@color/lightTxt2"
+                            app:cornerRadius="6dp" />
+                    </LinearLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/listCer"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_margin="10dp" />
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp" />
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>

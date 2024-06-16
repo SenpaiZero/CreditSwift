@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -26,7 +25,6 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.Helper.AdminAccountHelper;
 import com.example.Helper.JavaMailAPI;
 import com.example.Helper.PasswordHelper;
 import com.example.Helper.ProfileHelper;
@@ -85,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         UIHelper.setSpinner(getResources().getStringArray(R.array.animation_speed), animSpeedSpinner);
         stayLoginHelper = new StayLoginHelper(this);
 
+        profileHelper.newAccount("ADMIN", "admin", "NONE", "ADMIN");
         if(stayLoginHelper.getStayLogin()) {
            String va = profileHelper.checkLogin(stayLoginHelper.getUserPass()[0], stayLoginHelper.getUserPass()[1]);
             if(va.equalsIgnoreCase("LENDER"))
@@ -96,6 +95,11 @@ public class MainActivity extends AppCompatActivity {
             else if(va.equalsIgnoreCase("BORROWER"))
             {
                 startActivity(new Intent(MainActivity.this, userHome.class)
+                        .putExtra("name", stayLoginHelper.getUserPass()[0])
+                        .putExtra("username", stayLoginHelper.getUserPass()[0]));
+            }
+            else if(va.equalsIgnoreCase("ADMIN")) {
+                startActivity(new Intent(MainActivity.this, adminHome.class)
                         .putExtra("name", stayLoginHelper.getUserPass()[0])
                         .putExtra("username", stayLoginHelper.getUserPass()[0]));
             }
@@ -217,13 +221,6 @@ public class MainActivity extends AppCompatActivity {
                 String user = loginUserTB.getText().toString();
                 String pass = loginPassTB.getText().toString();
 
-                AdminAccountHelper adminAccountHelper = new AdminAccountHelper(MainActivity.this);
-                if(user.equalsIgnoreCase("admin") && adminAccountHelper.getPassword().equals(pass))
-                {
-                    startActivity(new Intent(MainActivity.this, adminHome.class)
-                            .putExtra("username", "ADMIN"));
-                    return;
-                }
                 if(user.isEmpty())
                 {
                     UIHelper.showCustomToast("Username input is invalid");
@@ -243,8 +240,19 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
+                if(va.equalsIgnoreCase("archived")) {
+                    UIHelper.showCustomToast("Your account is archived.");
+                    return;
+                }
+
                 stayLoginHelper.setStayLogin(stayLogin.isChecked());
                 stayLoginHelper.setUserPass(user, pass);
+
+                if(va.equalsIgnoreCase("ADMIN")) {
+                    startActivity(new Intent(MainActivity.this, adminHome.class)
+                            .putExtra("username", user));
+                }
+
                 if(va.equalsIgnoreCase("LENDER"))
                 {
                     startActivity(new Intent(MainActivity.this, lenderHome.class)

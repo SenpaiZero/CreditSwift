@@ -268,7 +268,7 @@ public class userHome extends AppCompatActivity {
                     listBorrowModel.clear();
             title.setText("LENDER");
             changeContainerVisibility(false);
-            usersLenderList = profileHelper.getUsersLenderList("LENDER", false);
+            usersLenderList = profileHelper.getUsersLenderList("LENDER", false, "");
             usersLenderAdapter_ = new userLenderAdapter(usersLenderList, this, userLenderAdapter.user, profileHelper);
 
             userCon.setAdapter(usersLenderAdapter_);

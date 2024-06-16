@@ -146,21 +146,15 @@ public class userInterfaceHelper {
             profileHelper.changePassword(username, newPass);
             return "Password has been updated";
         }
+        else if(va.equalsIgnoreCase("ADMIN")) {
+            profileHelper.changePassword(username, newPass);
+            return "Password has been updated";
+        }
         else {
             return "Incorrect current password.";
         }
     }
 
-    public String setPositiveConfirmation_changePasswordAdmin(AdminAccountHelper adminAccountHelper, String currentPass, String newPass) {
-            if(!adminAccountHelper.getPassword().equals(currentPass))
-                return "Incorrect current password.";
-            else
-            {
-                adminAccountHelper.setPassword(newPass);
-                return "Password has been updated";
-            }
-
-    }
     public void setPositiveConfirmation_pay(ProfileHelper profileHelper, String borrowerName, String lenderName, double remaining) {
         positiveBtn.setOnClickListener(new View.OnClickListener() {
             @Override

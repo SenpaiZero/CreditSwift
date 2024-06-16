@@ -1,5 +1,6 @@
 package com.example.Helper;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -265,9 +266,12 @@ public class ProfileHelper {
                     }
                 }
 
-                String newVal = Arrays.stream(data)
-                        .filter(s -> !s.isEmpty())
-                        .collect(Collectors.joining("|"));
+                String newVal = "";
+
+                for (String datum : data) {
+                    if(!datum.isEmpty())
+                        newVal += datum + "|";
+                }
 
                 Log.d("Apply", newVal);
                 ContentValues values = new ContentValues();
@@ -321,9 +325,12 @@ public class ProfileHelper {
                         }
                     }
 
-                    newVal = Arrays.stream(data)
-                            .filter(s -> !s.isEmpty())
-                            .collect(Collectors.joining("|"));
+                    newVal = "";
+
+                    for (String datum : data) {
+                        if(!datum.isEmpty())
+                            newVal += datum + "|";
+                    }
                 }
 
                 System.out.println("Removing list: " + newVal);
@@ -478,9 +485,12 @@ public class ProfileHelper {
                 }
 
 
-                String newVal = Arrays.stream(data)
-                        .filter(s -> !s.isEmpty())
-                        .collect(Collectors.joining("|"));
+                String newVal = "";
+
+                for (String datum : data) {
+                    if(!datum.isEmpty())
+                        newVal += datum + "|";
+                }
                 if(!isUpdated) newVal = val_ + val;
 
                 Log.e("apply", "aft: " + Arrays.toString(data));
@@ -569,7 +579,6 @@ public class ProfileHelper {
         cursor.close();
         return null;
     }
-
     public boolean changeArchive(String username, boolean isArchive) {
         ContentValues val = new ContentValues();
         val.put(SqliteHelper.AccountEntry.ARCHIVE_COLUMN, isArchive ? "YES" : "NO");
@@ -636,10 +645,10 @@ public class ProfileHelper {
         }
     }
 
-    public LinkedList<usersModel> getUsersList(String type, boolean isArchive) {
+    public LinkedList<usersModel> getUsersList(String type, boolean isArchive, String search) {
         LinkedList<usersModel> list = new LinkedList<>();
         LinkedList<usersModel> archlist = new LinkedList<>();
-
+        boolean isSearch = search != null || !search.isEmpty();
         String[] columns = {
                 SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN,
                 SqliteHelper.AccountEntry.TYPE_COLUMN,
@@ -653,12 +662,18 @@ public class ProfileHelper {
         String selection = SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN +
                 " = " + SqliteHelper.BorrowerAccount.TABLE_NAME + "." + SqliteHelper.BorrowerAccount.USERNAME_COLUMN;
 
+        String where = SqliteHelper.BorrowerAccount.NAME_COLUMN + " LIKE ?";
+
+
+        String searchPattern = "%" + search.replaceAll(" ", "_") + "%";
+        String[] selectionArgs = new String[]{searchPattern};
+
         Cursor cursor = db.query(
                 SqliteHelper.AccountEntry.TABLE_NAME + " INNER JOIN " + SqliteHelper.BorrowerAccount.TABLE_NAME +
                         " ON " + selection,
                 columns,
-                null,
-                null,
+                isSearch ? where : null,
+                isSearch ? selectionArgs : null,
                 null,
                 null,
                 null
@@ -689,9 +704,11 @@ public class ProfileHelper {
         return isArchive ? archlist : list;
     }
 
-    public LinkedList<userLenderModel> getUsersLenderList(String type, boolean isArchive) {
+    public LinkedList<userLenderModel> getUsersLenderList(String type, boolean isArchive, String search) {
         LinkedList<userLenderModel> list = new LinkedList<>();
         LinkedList<userLenderModel> archlist = new LinkedList<>();
+        boolean isSearch = search != null || !search.isEmpty();
+
         String[] columns = {
                 SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN,
                 SqliteHelper.AccountEntry.ARCHIVE_COLUMN,
@@ -709,12 +726,18 @@ public class ProfileHelper {
         String selection = SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN +
                 " = " + SqliteHelper.LenderAccount.TABLE_NAME + "." + SqliteHelper.LenderAccount.NAME_COLUMN;
 
+        String where = SqliteHelper.LenderAccount.NAME_COLUMN + " LIKE ?";
+
+
+        String searchPattern = "%" + search.replaceAll(" ", "_") + "%";
+        String[] selectionArgs = new String[]{searchPattern};
+
         Cursor cursor = db.query(
                 SqliteHelper.AccountEntry.TABLE_NAME + " INNER JOIN " + SqliteHelper.LenderAccount.TABLE_NAME +
                         " ON " + selection,
                 columns,
-                null,
-                null,
+                isSearch ? where : null,
+                isSearch ? selectionArgs : null,
                 null,
                 null,
                 null
@@ -749,12 +772,22 @@ public class ProfileHelper {
         return isArchive ? archlist : list;
     }
     public String checkLogin(String username, String password) {
-        String[] columns = {SqliteHelper.AccountEntry.USERNAME_COLUMN,
-                SqliteHelper.AccountEntry.EMAIL_COLUMN,
+        String[] columns = {
+                SqliteHelper.AccountEntry.USERNAME_COLUMN,
                 SqliteHelper.AccountEntry.PASSWORD_COLUMN,
                 SqliteHelper.AccountEntry.ARCHIVE_COLUMN,
-                SqliteHelper.AccountEntry.TYPE_COLUMN};
-        Cursor cursor = db.query(SqliteHelper.AccountEntry.TABLE_NAME, columns, null, null, null, null, null);
+                SqliteHelper.AccountEntry.TYPE_COLUMN
+        };
+
+        String selection = SqliteHelper.AccountEntry.USERNAME_COLUMN + " = ?";
+        String[] selectionArgs = { username.toUpperCase() };
+
+        @SuppressLint("Recycle") Cursor cursor =
+                db.query(SqliteHelper.AccountEntry.TABLE_NAME,
+                        columns, selection, selectionArgs,
+                        null,
+                        null,
+                        null);
 
         while(cursor.moveToNext())
         {
@@ -763,7 +796,7 @@ public class ProfileHelper {
             String archive_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.ARCHIVE_COLUMN));
             String type_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.TYPE_COLUMN));
 
-            if(archive_.equalsIgnoreCase("YES")) return "false";
+            if(archive_.equalsIgnoreCase("YES")) return "archived";
             if(username_.trim().equalsIgnoreCase(username) && password_.trim().equals(password))
             {
                 return type_;
@@ -961,6 +994,7 @@ public class ProfileHelper {
 
                             for(int j = 0; j < data.length; j++) {
                                 data_ = data[j].split(":");
+                                if(data_.length <= 1) continue;
 
                                 String name = data_[0];
                                 String isAccept = data_[1];
@@ -968,7 +1002,7 @@ public class ProfileHelper {
                                 double total = Double.valueOf(data_[3]);
                                 int year = Integer.valueOf(data_[4]);
                                 String due = data_[5];
-                                if(isAccept.equalsIgnoreCase("TRUE")) {
+                                if(isAccept.equalsIgnoreCase("TRUE") && name.equalsIgnoreCase(borrowName)) {
                                     list.add(new listBorrowModel(lenderName.replaceAll("_", " "),
                                             freq_, email_, total, remaining, year, rate_, img, due));
                                     Log.e("APPLY", "ADDED TO THE LIST");
@@ -983,7 +1017,7 @@ public class ProfileHelper {
         return list;
     }
 
-    public LinkedList<listBorrowModel> getBorrowList_Lender(String lenderName) {
+    public LinkedList<listBorrowModel> getBorrowList_Lender(String lenderName, String filterType) {
         LinkedList<listBorrowModel> list = new LinkedList<>();
 
         String[] columns = {
@@ -992,8 +1026,7 @@ public class ProfileHelper {
                 SqliteHelper.LenderAccount.TABLE_NAME + "." + SqliteHelper.LenderAccount.NAME_COLUMN,
                 SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN,
                 SqliteHelper.LenderAccount.FREQ_COLUMN,
-                SqliteHelper.LenderAccount.RATE_COLUMN,
-                SqliteHelper.LenderAccount.PIC_COLUMN
+                SqliteHelper.LenderAccount.RATE_COLUMN
         };
 
         String selection = SqliteHelper.AccountEntry.TABLE_NAME + "." + SqliteHelper.AccountEntry.USERNAME_COLUMN +
@@ -1017,12 +1050,6 @@ public class ProfileHelper {
                 String email_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.AccountEntry.EMAIL_COLUMN));
                 String freq_ = cursor.getString(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.FREQ_COLUMN));
                 double interest = cursor.getDouble(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.FREQ_COLUMN));
-                byte[] imageBytes = cursor.getBlob(cursor.getColumnIndexOrThrow(SqliteHelper.BorrowerAccount.PIC_COLUMN));
-                Bitmap img = null;
-
-                if (imageBytes != null && imageBytes.length > 0) {
-                    img = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-                }
 
                 if(val_ == null) val_ = "";
                 if(val_ == null | val_.isEmpty()) return list;
@@ -1031,6 +1058,26 @@ public class ProfileHelper {
 
                 for(int i = 0; i < data.length; i++) {
                     data_ = data[i].split(":");
+                    if(data_.length <= 1) continue;
+
+                    Cursor cursor2 = db.query(
+                            SqliteHelper.BorrowerAccount.TABLE_NAME,
+                            new String[] {SqliteHelper.BorrowerAccount.USERNAME_COLUMN,
+                                    SqliteHelper.BorrowerAccount.PIC_COLUMN},
+                            SqliteHelper.BorrowerAccount.USERNAME_COLUMN + "=?",
+                            new String[]{data_[0].toUpperCase()},
+                            null,
+                            null,
+                            null
+                    );
+                    Bitmap img = null;
+                    if(cursor2.moveToNext()) {
+                        byte[] imageBytes = cursor2.getBlob(cursor2.getColumnIndexOrThrow(SqliteHelper.BorrowerAccount.PIC_COLUMN));
+
+                        if (imageBytes != null && imageBytes.length > 0) {
+                            img = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                        }
+                    }
                     String borrowName = data_[0];
                     String isAccept = data_[1];
                     double remaining = Double.valueOf(data_[2]);
@@ -1038,9 +1085,25 @@ public class ProfileHelper {
                     int year = Integer.valueOf(data_[4]);
                     String due = data_[5];
 
-                    if(isAccept.equalsIgnoreCase("TRUE"))
-                        list.add(new listBorrowModel(borrowName, freq_, getUserEmail(borrowName),
-                                total, remaining, year, interest, img, due));
+
+                    if(isAccept.equalsIgnoreCase("TRUE")){
+                        if(filterType.equalsIgnoreCase("PAST DUE")) {
+                            if(!DateHelper.isDue(due)) {
+                                list.add(new listBorrowModel(borrowName, freq_, getUserEmail(borrowName),
+                                        total, remaining, year, interest, img, due));
+                            }
+                        }
+                        else if(filterType.equalsIgnoreCase("TO PAY")) {
+                            if(DateHelper.isDue(due)) {
+                                list.add(new listBorrowModel(borrowName, freq_, getUserEmail(borrowName),
+                                        total, remaining, year, interest, img, due));
+                            }
+                        }
+                        else {
+                            list.add(new listBorrowModel(borrowName, freq_, getUserEmail(borrowName),
+                                    total, remaining, year, interest, img, due));
+                        }
+                    }
                 }
                 return list;
             }
@@ -1278,6 +1341,8 @@ public class ProfileHelper {
                     String[] current = currentApplied.split("\\|");
                     for (String value : current) {
                         String[] current_ = value.split(":");
+                        if(current_.length <= 1) continue;
+
                         String name = current_[0];
                         String isAccept = current_[1];
                         double total = Double.parseDouble(current_[3]);
@@ -1363,6 +1428,7 @@ public class ProfileHelper {
         try {
             while (cursor.moveToNext()) {
                 String name_ = cursor.getString(cursor.getColumnIndexOrThrow(col[0]));
+
                 if (name.equalsIgnoreCase(name_)) {
                     String applied_ = cursor.getString(cursor.getColumnIndexOrThrow(col[1]));
                     String current_ = cursor.getString(cursor.getColumnIndexOrThrow(col[2]));
@@ -1372,8 +1438,10 @@ public class ProfileHelper {
                     if (current_ != null && !current_.isEmpty()) {
                         // Current
                         String[] currentData = current_.split("\\|");
+
                         for (String s : currentData) {
                             String[] data = s.split(":");
+                            if(data.length <= 1) continue;
                             String user_ = data[0].toUpperCase();
                             String isApply_ = data[1];
                             double remaining_ = Double.parseDouble(data[2]);

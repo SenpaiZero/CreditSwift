@@ -138,6 +138,14 @@ public class lender_info extends AppCompatActivity {
                     UIHelper.showCustomToast("The maximum amount should be higher than minimum");
                     return;
                 }
+                else if(minV <= 0) {
+                    UIHelper.showCustomToast("Please make sure that the amount is more than 0.");
+                    return;
+                }
+                else if(min.getText().toString().isEmpty() || max.getText().toString().isEmpty()) {
+                    UIHelper.showCustomToast("Please make sure that the amount is not empty.");
+                    return;
+                }
 
                 if(getIntent().getBooleanExtra("create", true))
                 {

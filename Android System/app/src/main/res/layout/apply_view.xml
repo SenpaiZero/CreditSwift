@@ -17,100 +17,108 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            app:cardBackgroundColor="@color/lightBackground2"
+            app:cardBackgroundColor="@color/darkLogin"
             app:cardCornerRadius="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#009F6060"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
-                <ImageView
-                    android:id="@+id/profileView"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/user" />
+                android:layout_margin="5dp"
+                app:cardBackgroundColor="@color/lightBackground2">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:orientation="vertical"
-                    android:paddingLeft="5dp">
+                    android:background="#009F6060"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
 
-                    <TextView
-                        android:id="@+id/nameTxt"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="0.5"
-                        android:fontFamily="@font/abel"
-                        android:text="Full Name"
-                        android:textColor="@color/lightTxt"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/emailViewTxt"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="0.5"
-                        android:fontFamily="@font/abel"
-                        android:text="Email"
-                        android:textColor="@color/lightTxt"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:id="@+id/amountViewTxt"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="0.5"
-                        android:fontFamily="@font/abel"
-                        android:text="Amount"
-                        android:textColor="@color/lightTxt"
-                        android:textSize="20sp" />
+                    <ImageView
+                        android:id="@+id/profileView"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/user" />
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:orientation="horizontal"
-                        android:showDividers="middle">
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:orientation="vertical"
+                        android:paddingLeft="5dp">
 
-                        <Button
-                            android:id="@+id/applyDeclineBtn"
+                        <TextView
+                            android:id="@+id/nameTxt"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="2dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/lightTxt"
-                            android:text="Decline"
-                            android:textColor="#FFFFFF"
-                            android:textSize="16dp"
-                            android:textStyle="bold"
-                            app:cornerRadius="10dp" />
+                            android:layout_height="0dp"
+                            android:layout_weight="0.5"
+                            android:fontFamily="@font/abel"
+                            android:text="Full Name"
+                            android:textColor="@color/lightTxt"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
-                        <Button
-                            android:id="@+id/applyAcceptBtn"
+                        <TextView
+                            android:id="@+id/emailViewTxt"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="2dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.5"
+                            android:fontFamily="@font/abel"
+                            android:text="Email"
+                            android:textColor="@color/lightTxt"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:id="@+id/amountViewTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.5"
+                            android:fontFamily="@font/abel"
+                            android:text="Amount"
+                            android:textColor="@color/lightTxt"
+                            android:textSize="20sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
                             android:layout_weight="1"
-                            android:backgroundTint="@color/lightTxt"
-                            android:text="Accept"
-                            android:textColor="#FFFFFF"
-                            android:textSize="16dp"
-                            android:textStyle="bold"
-                            app:cornerRadius="10dp" />
+                            android:orientation="horizontal"
+                            android:showDividers="middle">
+
+                            <Button
+                                android:id="@+id/applyDeclineBtn"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginRight="2dp"
+                                android:layout_weight="1"
+                                android:backgroundTint="@color/lightTxt"
+                                android:text="Decline"
+                                android:textColor="#FFFFFF"
+                                android:textSize="16dp"
+                                android:textStyle="bold"
+                                app:cornerRadius="10dp" />
+
+                            <Button
+                                android:id="@+id/applyAcceptBtn"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="2dp"
+                                android:layout_weight="1"
+                                android:backgroundTint="@color/lightTxt"
+                                android:text="Accept"
+                                android:textColor="#FFFFFF"
+                                android:textSize="16dp"
+                                android:textStyle="bold"
+                                app:cornerRadius="10dp" />
+                        </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
 
-            </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

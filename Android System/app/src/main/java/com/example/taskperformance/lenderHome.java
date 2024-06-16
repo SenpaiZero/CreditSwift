@@ -32,7 +32,7 @@ import java.util.LinkedList;
 public class lenderHome extends AppCompatActivity {
 
     Spinner animSpeedSpinner, animSpinner;
-    Button tabLender, tabDashboard, tabUser;
+    Button tabLender, tabDashboard, tabUser, category, filter;
     TextView title, titleConfirm, msgConfirm;;
     LinkedList<applyModel> applyList;
     LinkedList<listBorrowModel> borrowerList;
@@ -123,6 +123,9 @@ public class lenderHome extends AppCompatActivity {
         finished = findViewById(R.id.finishedContractTxt);
         unfinished = findViewById(R.id.unfinishedContractTxt);
         allContract = findViewById(R.id.allLenderContractTxt);
+
+        category = findViewById(R.id.archiveBtn);
+        filter = findViewById(R.id.filterBtn);
 
     }
     public void setStatic() {
@@ -225,6 +228,25 @@ public class lenderHome extends AppCompatActivity {
                         .putExtra("username", getIntent().getStringExtra("username".toString())));
             }
         });
+
+        filter.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onClick(View v) {
+                if(filter.getText().toString().equalsIgnoreCase("ALL")) {
+                    filter.setText("TO PAY");
+                    updateDashboardList("TO PAY");
+                }
+                else if(filter.getText().toString().equalsIgnoreCase("TO PAY")) {
+                    filter.setText("PAST DUE");
+                    updateDashboardList("PAST DUE");
+                }
+                else if(filter.getText().toString().equalsIgnoreCase("PAST DUE")) {
+                    filter.setText("ALL");
+                    updateDashboardList("ALL");
+                }
+            }
+        });
     }
     void changeTintTab(Button button){
         // Setting the text color to default
@@ -246,7 +268,6 @@ public class lenderHome extends AppCompatActivity {
 
     void changeContent(Button button)
     {
-        userListAdapter userListAdapter_;
 
         dashboard.setVisibility(View.INVISIBLE);
         if(applyList != null)
@@ -266,10 +287,7 @@ public class lenderHome extends AppCompatActivity {
 
             dashboard.setVisibility(View.VISIBLE);
 
-            borrowerList = profileHelper.getBorrowList_Lender(getIntent().getStringExtra("name"));
-            userListAdapter_ = new userListAdapter(borrowerList, profileHelper, UIHelper, this, userListAdapter.lender, "");
-            borrowerListCer.setAdapter(userListAdapter_);
-            borrowerListCer.setLayoutManager(new LinearLayoutManager(this));
+            updateDashboardList("ALL");
             setDashboard();
         }
         else if(button.getId() == tabUser.getId())
@@ -280,6 +298,13 @@ public class lenderHome extends AppCompatActivity {
 
     }
 
+    public void updateDashboardList(String type) {
+        userListAdapter userListAdapter_;
+        borrowerList = profileHelper.getBorrowList_Lender(getIntent().getStringExtra("name"), type);
+        userListAdapter_ = new userListAdapter(borrowerList, profileHelper, UIHelper, this, userListAdapter.lender, "");
+        borrowerListCer.setAdapter(userListAdapter_);
+        borrowerListCer.setLayoutManager(new LinearLayoutManager(this));
+    }
     public void updateBorrowerList() {
 
         applyAdapter applyAdapter_;
@@ -291,6 +316,7 @@ public class lenderHome extends AppCompatActivity {
 
         userCon.setAdapter(applyAdapter_);
         userCon.setLayoutManager(new LinearLayoutManager(this));
+
     }
     void changeContainerVisibility(boolean isAdmin)
     {
@@ -304,6 +330,7 @@ public class lenderHome extends AppCompatActivity {
         userCon.setVisibility(View.VISIBLE);
         adminCon.setVisibility(View.INVISIBLE);
     }
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
         //super.onBackPressed();

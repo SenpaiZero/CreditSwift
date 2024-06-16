@@ -8,11 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.service.controls.Control;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -22,8 +23,8 @@ import com.example.Adapter.userLenderAdapter;
 import com.example.Adapter.usersAdapter;
 import com.example.Helper.ProfileHelper;
 import com.example.Helper.SettingHelper;
-import com.example.Helper.SqliteHelper;
 import com.example.Helper.userInterfaceHelper;
+import com.example.Helper.validationHelper;
 import com.example.model.userLenderModel;
 import com.example.model.usersModel;
 
@@ -34,16 +35,17 @@ public class adminHome extends AppCompatActivity {
     Spinner animSpeedSpinner, animSpinner;
     ImageButton createLender;
     Button tabLender, tabBorrower, tabAdmin;
-    TextView title, titleConfirm, msgConfirm;;
+    TextView title, titleConfirm, msgConfirm, countText;
     LinkedList<usersModel> usersList;
     LinkedList<userLenderModel> usersLenderList;
     SettingHelper settingHelper;
     RecyclerView userCon;
     LinearLayout adminCon;
-    CardView logoutBtn, lenderArchiveBtn, borrowerArchiveBtn, changePasswordBtn, settingsBtn;
-    ConstraintLayout settingCon, confirmationLayout;
+    CardView logoutBtn, lenderArchiveBtn, borrowerArchiveBtn, changePasswordBtn, settingsBtn, dashboardCon, newAdmin, searchCon;
+    ConstraintLayout settingCon, confirmationLayout, newAdminCon;
     userInterfaceHelper UIHelper;
-    Button settingApply, settingCancel, confirmLogout, cancelLogout;
+    Button settingApply, settingCancel, confirmLogout, cancelLogout, newAdminApply, newAdminCancel;
+    EditText newAdminUser, newAdminPass, searchTxt;
     String isNormal;
     ProfileHelper profileHelper;
     public static adminHome admin;
@@ -73,6 +75,26 @@ public class adminHome extends AppCompatActivity {
             changeTintTab(tabBorrower);
 
         admin = this;
+    }
+
+    void search(String type, Boolean isArchive) {
+        searchTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(type.equalsIgnoreCase("LENDER")) {
+                    setLenderList(isArchive);
+                }
+                else {
+                    setBorrowerList(isArchive);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
     }
 
     void setLogoutPopup() {
@@ -115,6 +137,19 @@ public class adminHome extends AppCompatActivity {
         confirmLogout = findViewById(R.id.positiveBtnConfirmation);
         titleConfirm = findViewById(R.id.titleTxt);
         msgConfirm = findViewById(R.id.messageTxt);
+
+        countText = findViewById(R.id.countTxt);
+        dashboardCon = findViewById(R.id.countCon);
+
+        newAdminCon = findViewById(R.id.adminNewAccount);
+        newAdminApply = findViewById(R.id.newAdminApply);
+        newAdminCancel = findViewById(R.id.newAdminCanel);
+        newAdminUser = findViewById(R.id.newAdminUserTB);
+        newAdminPass = findViewById(R.id.newAdminPassTB);
+        newAdmin = findViewById(R.id.adminNewAdmin);
+
+        searchCon = findViewById(R.id.searchCon);
+        searchTxt = findViewById(R.id.searchTB);
     }
 
     void setOnClick()
@@ -216,8 +251,53 @@ public class adminHome extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(adminHome.this, changePassword.class)
-                        .putExtra("username", "ADMIN")
+                        .putExtra("username", getIntent().getStringExtra("username"))
                         .putExtra("type", "ADMIN"));
+            }
+        });
+
+        newAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newAdminCon.setVisibility(View.VISIBLE);
+            }
+        });
+
+        newAdminCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newAdminUser.setText("");
+                newAdminPass.setText("");
+                newAdminCon.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        newAdminApply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String user = newAdminUser.getText().toString();
+                String pass = newAdminPass.getText().toString();
+                if(validationHelper.checkAlphaNumeric(user)) {
+                    UIHelper.showCustomToast("Only letters and numbers are allowed in username.");
+                }
+
+                if(validationHelper.checkAlphaNumeric(pass)) {
+                    UIHelper.showCustomToast("Only letters and numbers are allowed in password");
+                }
+
+                String va = profileHelper.newAccount(user, pass, "NONE", "ADMIN");
+                if(va.equalsIgnoreCase("true"))
+                {
+                    UIHelper.showCustomToast("You have successfully registered.");
+                }
+                else if(va.equalsIgnoreCase("duplicate")) {
+                    UIHelper.showCustomToast("The username already exist.");
+                }
+                else
+                {
+                    // something went wrong
+                    UIHelper.showCustomToast("Something went wrong. Please try again later.");
+                }
             }
         });
     }
@@ -244,6 +324,7 @@ public class adminHome extends AppCompatActivity {
 
     void changeContent(View button)
     {
+        searchTxt.setText("");
         if(usersList != null)
             if(usersList.size() > 0)
                 usersList.clear();
@@ -255,11 +336,13 @@ public class adminHome extends AppCompatActivity {
         {
             title.setText("LENDER");
             setLenderList(false);
+            search("LENDER", false);
         }
         else if(button.getId() == tabBorrower.getId())
         {
             title.setText("BORROWER");
             setBorrowerList(false);
+            search("BORROWER", false);
         }
         else if(button.getId() == tabAdmin.getId())
         {
@@ -271,11 +354,13 @@ public class adminHome extends AppCompatActivity {
         {
             title.setText("BORROWER ARCHIVES");
             setBorrowerList(true);
+            search("BORROWER", true);
         }
         else if(button.getId() == lenderArchiveBtn.getId())
         {
             title.setText("LENDER ARCHIVES");
             setLenderList(true);
+            search("LENDER", true);
         }
 
     }
@@ -286,11 +371,15 @@ public class adminHome extends AppCompatActivity {
         {
             userCon.setVisibility(View.INVISIBLE);
             adminCon.setVisibility(View.VISIBLE);
+            dashboardCon.setVisibility(View.INVISIBLE);
+            searchCon.setVisibility(View.INVISIBLE);
             return;
         }
 
         userCon.setVisibility(View.VISIBLE);
+        dashboardCon.setVisibility(View.VISIBLE);
         adminCon.setVisibility(View.INVISIBLE);
+        searchCon.setVisibility(View.VISIBLE);
     }
 
     public void editLender(String username) {
@@ -309,12 +398,14 @@ public class adminHome extends AppCompatActivity {
         usersAdapter usersAdapter_;
         createLender.setVisibility(View.INVISIBLE);
         changeContainerVisibility(false);
-        usersList = profileHelper.getUsersList("BORROWER", isArchive);
+        usersList = profileHelper.getUsersList("BORROWER", isArchive, searchTxt.getText().toString());
         usersAdapter_ = new usersAdapter(usersList, this,
                 isArchive ? usersAdapter.archive : usersAdapter.admin,
                 profileHelper, UIHelper);
         userCon.setAdapter(usersAdapter_);
         userCon.setLayoutManager(new LinearLayoutManager(this));
+
+        countText.setText((isArchive ? "ARCHIVED BORROWER COUNT: " : "BORROWER COUNT: ") + usersList.size());
     }
 
     public void setLenderList(boolean isArchive) {
@@ -323,12 +414,14 @@ public class adminHome extends AppCompatActivity {
         if(!isArchive)
             createLender.setVisibility(View.VISIBLE);
 
-        usersLenderList = profileHelper.getUsersLenderList("LENDER", isArchive);
+        usersLenderList = profileHelper.getUsersLenderList("LENDER", isArchive, searchTxt.getText().toString());
         usersLenderAdapter_ = new userLenderAdapter(usersLenderList, this,
                 isArchive ? userLenderAdapter.archive : userLenderAdapter.admin,
                 profileHelper, UIHelper);
         userCon.setAdapter(usersLenderAdapter_);
         userCon.setLayoutManager(new LinearLayoutManager(this));
+
+        countText.setText((isArchive ? "ARCHIVED LENDER COUNT: " : "LENDER COUNT: ") + usersLenderList.size());
     }
     @SuppressLint("MissingSuperCall")
     @Override

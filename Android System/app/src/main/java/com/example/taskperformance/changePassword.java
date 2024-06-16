@@ -6,13 +6,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.example.Helper.AdminAccountHelper;
 import com.example.Helper.PasswordHelper;
 import com.example.Helper.ProfileHelper;
 import com.example.Helper.userInterfaceHelper;
@@ -62,7 +57,7 @@ public class changePassword extends AppCompatActivity {
                 }
                 else if(getIntent().getStringExtra("type").equalsIgnoreCase("ADMIN")) {
                     startActivity(new Intent(changePassword.this, adminHome.class)
-                            .putExtra("username", getIntent().getStringExtra("username")));
+                            .putExtra("username", "ADMIN_" + getIntent().getStringExtra("username")));
                 }
             }
         });
@@ -85,17 +80,8 @@ public class changePassword extends AppCompatActivity {
             UIHelper.showCustomToast("Confirm Password is empty.");
             return;
         }
-        else if(newP.equals(reP)) {
-            if(getIntent().getStringExtra("type").equalsIgnoreCase("ADMIN")) {
-                AdminAccountHelper adminAccountHelper = new AdminAccountHelper(this);
-                UIHelper.setConfirmation("CHANGE PASSWORD", "DO YOU REALLY WANT TO CHANGE YOUR PASSWORD?", "NO", "YES");
-                UIHelper.setNegativeConfirmation("close");
-                UIHelper.showCustomToast(UIHelper.setPositiveConfirmation_changePasswordAdmin(adminAccountHelper,
-                        current, newP).toString());
-                startActivity(new Intent(changePassword.this, adminHome.class)
-                        .putExtra("username", "ADMIN"));
-            }
-            else {
+
+        if(newP.equals(reP)) {
                 // Confirmation
                 UIHelper.setConfirmation("CHANGE PASSWORD", "DO YOU REALLY WANT TO CHANGE YOUR PASSWORD?", "NO", "YES");
                 UIHelper.setNegativeConfirmation("close");
@@ -110,7 +96,14 @@ public class changePassword extends AppCompatActivity {
                     startActivity(new Intent(changePassword.this, userHome.class)
                             .putExtra("username", getIntent().getStringExtra("username")));
                 }
-            }
+                else if(getIntent().getStringExtra("type").equalsIgnoreCase("ADMIN")) {
+                    startActivity(new Intent(changePassword.this, adminHome.class)
+                            .putExtra("username", getIntent().getStringExtra("username")));
+
+                }
+        }
+        else {
+            UIHelper.showCustomToast("Both passwords must be the same.");
         }
     }
     void setUIVariables() {
