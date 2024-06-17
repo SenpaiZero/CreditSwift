@@ -97,7 +97,7 @@
                                 android:backgroundTint="@color/lightTxt"
                                 android:text="Decline"
                                 android:textColor="#FFFFFF"
-                                android:textSize="16dp"
+                                android:textSize="14dp"
                                 android:textStyle="bold"
                                 app:cornerRadius="10dp" />
 
@@ -110,7 +110,7 @@
                                 android:backgroundTint="@color/lightTxt"
                                 android:text="Accept"
                                 android:textColor="#FFFFFF"
-                                android:textSize="16dp"
+                                android:textSize="14dp"
                                 android:textStyle="bold"
                                 app:cornerRadius="10dp" />
                         </LinearLayout>

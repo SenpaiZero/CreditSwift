@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     EditText forgotEmail, forgotCode, forgotPassword;
     Button forgotCancel, forgotUpdate, forgotSend;
     ConstraintLayout forgotLayout;
-    String code;
+    String code, emailUsed;
     ImageView bg, top, bottom, setting, exit;
     ConstraintLayout layout;
     userInterfaceHelper UIHelper;
@@ -363,6 +364,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 forgotLayout.setVisibility(View.INVISIBLE);
+                code = "hehe bawal na to";
+                emailUsed = "hehe bawal na to";
+                forgotEmail.setText("");
+                forgotPassword.setText("");
+                forgotCode.setText("");
             }
         });
 
@@ -394,6 +400,7 @@ public class MainActivity extends AppCompatActivity {
                 int max = 99999;
                 int random = rand.nextInt((max - min) + 1) + min;
                 code = String.valueOf(random);
+                emailUsed = forgotEmail.getText().toString();
 
                 JavaMailAPI javaMailAPI = new JavaMailAPI(MainActivity.this,
                         forgotEmail.getText().toString(),
@@ -403,12 +410,21 @@ public class MainActivity extends AppCompatActivity {
                                 +"\n\nMake sure that you do not share this code to anyone!");
 
                 javaMailAPI.execute();
+
+                // Start the cooldown timer
+                startCooldownTimer();
             }
         });
 
         forgotUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(!emailUsed.equalsIgnoreCase(forgotEmail.getText().toString())) {
+                    UIHelper.showCustomToast("The email should be the same as the one you entered.");
+                    return;
+                }
+
                 if(!code.equals(forgotCode.getText().toString())) {
                     UIHelper.showCustomToast("Incorrect Code.");
                     return;
@@ -429,7 +445,21 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void startCooldownTimer() {
+        forgotSend.setEnabled(false);
+        new CountDownTimer(60000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                forgotSend.setText("Wait " + millisUntilFinished / 1000 + "s");
+            }
 
+            @Override
+            public void onFinish() {
+                forgotSend.setText("Send Code");
+                forgotSend.setEnabled(true);
+            }
+        }.start();
+    }
     @SuppressLint("ClickableViewAccessibility")
     void setOnTouchListener()
     {

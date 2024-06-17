@@ -1497,12 +1497,13 @@ public class ProfileHelper {
                 SqliteHelper.LenderAccount.APPLIED_BORROWER_COLUMN,
                 SqliteHelper.LenderAccount.CURRENT_APPLIED_BORROWER_COLUMN,
                 SqliteHelper.LenderAccount.RATE_COLUMN,
-                SqliteHelper.LenderAccount.TOTAL_INTEREST
+                SqliteHelper.LenderAccount.TOTAL_INTEREST,
+                SqliteHelper.LenderAccount.TOTAL_SPENT
         };
 
         int finish = 0, unfinish = 0, all = 0;
         double unpaid = 0, paid = 0, profit = 0, currentTotal = 0;
-
+        double inte = 0, spent = 0;
         Cursor cursor = db.query(SqliteHelper.LenderAccount.TABLE_NAME, col, null, null, null, null, null);
 
         try {
@@ -1513,7 +1514,8 @@ public class ProfileHelper {
                     String applied_ = cursor.getString(cursor.getColumnIndexOrThrow(col[1]));
                     String current_ = cursor.getString(cursor.getColumnIndexOrThrow(col[2]));
                     double rate_ = cursor.getDouble(cursor.getColumnIndexOrThrow(col[3]));
-                    double inte = cursor.getDouble(cursor.getColumnIndexOrThrow(col[4]));
+                    inte = cursor.getDouble(cursor.getColumnIndexOrThrow(col[4]));
+                    spent = cursor.getDouble(cursor.getColumnIndexOrThrow(col[5]));
 
                     if (current_ != null && !current_.isEmpty()) {
                         // Current
@@ -1550,9 +1552,6 @@ public class ProfileHelper {
                             finish += 1;
                         }
                     }
-
-                    profit = rate_ > 0 ? ((rate_ / 100) * paid) : paid;
-                    all = finish + unfinish;
                 }
             }
         } finally {
@@ -1560,7 +1559,7 @@ public class ProfileHelper {
         }
 
         return new double[] {
-                all, finish, unfinish, paid, unpaid, profit
+                (finish+unfinish), finish, unfinish, paid, unpaid, inte
         };
     }
 

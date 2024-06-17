@@ -159,6 +159,8 @@ public class adminHome extends AppCompatActivity {
         tabLender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(newAdminCon.getVisibility() == View.VISIBLE) return;
+
                 changeTintTab(tabLender);
             }
         });
@@ -166,6 +168,8 @@ public class adminHome extends AppCompatActivity {
         tabBorrower.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(newAdminCon.getVisibility() == View.VISIBLE) return;
+
                 changeTintTab(tabBorrower);
             }
         });
@@ -173,6 +177,8 @@ public class adminHome extends AppCompatActivity {
         tabAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(newAdminCon.getVisibility() == View.VISIBLE) return;
+
                 changeTintTab(tabAdmin);
             }
         });
@@ -180,6 +186,8 @@ public class adminHome extends AppCompatActivity {
         borrowerArchiveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(newAdminCon.getVisibility() == View.VISIBLE) return;
+
                 changeContent(borrowerArchiveBtn);
                 createLender.setVisibility(View.INVISIBLE);
             }
@@ -188,6 +196,8 @@ public class adminHome extends AppCompatActivity {
         lenderArchiveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(newAdminCon.getVisibility() == View.VISIBLE) return;
+
                 changeContent(lenderArchiveBtn);
                 createLender.setVisibility(View.INVISIBLE);
             }
@@ -196,6 +206,8 @@ public class adminHome extends AppCompatActivity {
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(newAdminCon.getVisibility() == View.VISIBLE) return;
+
                 setLogoutPopup();
                 UIHelper.setConfirmVisibility(true);
             }
@@ -204,6 +216,8 @@ public class adminHome extends AppCompatActivity {
         settingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(newAdminCon.getVisibility() == View.VISIBLE) return;
+
                 settingCon.setVisibility(View.VISIBLE);
             }
         });
@@ -251,6 +265,8 @@ public class adminHome extends AppCompatActivity {
         changePasswordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(newAdminCon.getVisibility() == View.VISIBLE) return;
+
                 startActivity(new Intent(adminHome.this, changePassword.class)
                         .putExtra("username", getIntent().getStringExtra("username"))
                         .putExtra("type", "ADMIN"));
@@ -260,6 +276,8 @@ public class adminHome extends AppCompatActivity {
         newAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(newAdminCon.getVisibility() == View.VISIBLE) return;
+
                 newAdminCon.setVisibility(View.VISIBLE);
             }
         });
