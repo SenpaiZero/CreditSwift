@@ -13,6 +13,7 @@ import android.media.Image;
 import android.util.Log;
 
 import com.example.model.applyModel;
+import com.example.model.historyModel;
 import com.example.model.listBorrowModel;
 import com.example.model.userLenderModel;
 import com.example.model.usersModel;
@@ -705,6 +706,110 @@ public class ProfileHelper {
 
         return isArchive ? archlist : list;
     }
+
+    public LinkedList<historyModel> getHistoryList_borrower(String user) {
+        LinkedList<historyModel> list = new LinkedList<>();
+
+        String[] col = new String[] {
+                SqliteHelper.BorrowerAccount.LIST_DONE_COLUMN
+        };
+
+        String selection = SqliteHelper.BorrowerAccount.USERNAME_COLUMN + "= ?";
+        String[] selectionArgs = new String[] {user.replaceAll(" ", "_").toUpperCase()};
+
+        Cursor cursor = db.query(
+                SqliteHelper.BorrowerAccount.TABLE_NAME,
+                col,
+                selection,
+                selectionArgs,
+                null, null, null);
+
+        if(cursor.moveToFirst()) {
+            String val = cursor.getString(cursor.getColumnIndexOrThrow(col[0]));
+            String[] data = val.split("\\|");
+
+            for(int i = 0; i < data.length; i++) {
+                if(data[i].isEmpty() || data[i].length() <= 0) continue;
+                String[] data_ = data[i].split(":");
+                list.add(new historyModel(data_[0], Double.valueOf(data_[1]), Double.valueOf(data_[2]),
+                        getLenderPic(data_[0])));
+            }
+        }
+        return list;
+    }
+
+    public LinkedList<historyModel> getHistoryList_Lender(String user) {
+        LinkedList<historyModel> list = new LinkedList<>();
+
+        String[] col = new String[] {
+                SqliteHelper.LenderAccount.APPLIED_BORROWER_COLUMN
+        };
+
+        String selection = SqliteHelper.LenderAccount.NAME_COLUMN + "= ?";
+        String[] selectionArgs = new String[] {user.replaceAll(" ", "_").toUpperCase()};
+
+        Cursor cursor = db.query(
+                SqliteHelper.LenderAccount.TABLE_NAME,
+                col,
+                selection,
+                selectionArgs,
+                null, null, null);
+
+        if(cursor.moveToFirst()) {
+            String val = cursor.getString(cursor.getColumnIndexOrThrow(col[0]));
+            String[] data = val.split("\\|");
+
+            for(int i = 0; i < data.length; i++) {
+                if(data[i].isEmpty() || data[i].length() <= 0) continue;
+                String[] data_ = data[i].split(":");
+                list.add(new historyModel(data_[0], Double.valueOf(data_[1]), Double.valueOf(data_[2]),
+                        getBorrowPicPic(data_[0])));
+            }
+        }
+        return list;
+    }
+    private Bitmap getLenderPic(String name) {
+        Cursor cursor = db.query(
+                SqliteHelper.LenderAccount.TABLE_NAME,
+                new String[] {SqliteHelper.LenderAccount.PIC_COLUMN},
+                SqliteHelper.LenderAccount.NAME_COLUMN + "= ?",
+                new String[] {name.toUpperCase().replaceAll(" ", "_")},
+                null, null, null
+        );
+
+        if(cursor.moveToFirst()) {
+            byte[] imageBytes = cursor.getBlob(cursor.getColumnIndexOrThrow(SqliteHelper.LenderAccount.PIC_COLUMN));
+
+            Bitmap img = null; // Default value for the image
+
+            if (imageBytes != null && imageBytes.length > 0) {
+                img = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+            }
+            return img;
+        }
+        return null;
+    }
+    private Bitmap getBorrowPicPic(String name) {
+        Cursor cursor = db.query(
+                SqliteHelper.BorrowerAccount.TABLE_NAME,
+                new String[] {SqliteHelper.BorrowerAccount.PIC_COLUMN},
+                SqliteHelper.BorrowerAccount.USERNAME_COLUMN + "= ?",
+                new String[] {name.toUpperCase().replaceAll(" ", "_")},
+                null, null, null
+        );
+
+        if(cursor.moveToFirst()) {
+            byte[] imageBytes = cursor.getBlob(cursor.getColumnIndexOrThrow(SqliteHelper.BorrowerAccount.PIC_COLUMN));
+
+            Bitmap img = null; // Default value for the image
+
+            if (imageBytes != null && imageBytes.length > 0) {
+                img = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+            }
+            return img;
+        }
+        return null;
+    }
     public LinkedList<userLenderModel> getUsersLenderList(String type, boolean isArchive, String rate, String frequency) {
         LinkedList<userLenderModel> list = new LinkedList<>();
         LinkedList<userLenderModel> archlist = new LinkedList<>();
@@ -1262,7 +1367,7 @@ public class ProfileHelper {
     }
     public boolean changePassword(String username, String password) {
         String selection = SqliteHelper.AccountEntry.USERNAME_COLUMN + " = ?";
-        String[] selectionArgs = { username };
+        String[] selectionArgs = { username.toUpperCase().replaceAll(" ", "_") };
 
         ContentValues values = new ContentValues();
         values.put(SqliteHelper.AccountEntry.PASSWORD_COLUMN, password);
@@ -1534,6 +1639,7 @@ public class ProfileHelper {
                                 unpaid += remaining_;
                                 currentTotal += total_;
                                 unfinish += 1;
+                                paid += total_;
                             }
                         }
                     }
@@ -1548,8 +1654,8 @@ public class ProfileHelper {
                             int year_ = Integer.parseInt(String.format("%.0f", Double.parseDouble(data[2])));
 
                             double n = total_ + (currentTotal - unpaid);
-                            paid += Math.max(n, 0);
                             finish += 1;
+                            paid += total_;
                         }
                     }
                 }
@@ -1559,7 +1665,7 @@ public class ProfileHelper {
         }
 
         return new double[] {
-                (finish+unfinish), finish, unfinish, paid, unpaid, inte
+                (finish+unfinish), finish, unfinish, (paid-unpaid), unpaid, inte
         };
     }
 

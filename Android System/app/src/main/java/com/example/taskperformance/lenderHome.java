@@ -18,12 +18,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.Adapter.applyAdapter;
+import com.example.Adapter.historyAdapter;
 import com.example.Adapter.userLenderAdapter;
 import com.example.Adapter.userListAdapter;
 import com.example.Helper.ProfileHelper;
 import com.example.Helper.SettingHelper;
 import com.example.Helper.userInterfaceHelper;
 import com.example.model.applyModel;
+import com.example.model.historyModel;
 import com.example.model.listBorrowModel;
 import com.example.model.userLenderModel;
 
@@ -35,11 +37,12 @@ public class lenderHome extends AppCompatActivity {
     Button tabLender, tabDashboard, tabUser, category, filter;
     TextView title, titleConfirm, msgConfirm;;
     LinkedList<applyModel> applyList;
+    LinkedList<historyModel> listHistory;
     LinkedList<listBorrowModel> borrowerList;
     SettingHelper settingHelper;
     RecyclerView userCon, borrowerListCer;
     LinearLayout adminCon;
-    CardView logoutBtn, lenderArchiveBtn, dashboardBtn, changePasswordBtn, settingsBtn, profileBtn;
+    CardView logoutBtn, lenderArchiveBtn, dashboardBtn, changePasswordBtn, settingsBtn, profileBtn, historyBtn;
     ConstraintLayout settingCon, confirmationLayout, dashboard, applyInfo;
     userInterfaceHelper UIHelper;
     ProfileHelper profileHelper;
@@ -91,6 +94,7 @@ public class lenderHome extends AppCompatActivity {
         lenderArchiveBtn = findViewById(R.id.viewLenderArchive);
         changePasswordBtn = findViewById(R.id.userChangePassword);
         profileBtn = findViewById(R.id.profileBtn);
+        historyBtn = findViewById(R.id.userHistory);
 
         // Settings
         settingCon = findViewById(R.id.userSettingCon);
@@ -164,7 +168,27 @@ public class lenderHome extends AppCompatActivity {
                 changeTintTab(tabUser);
             }
         });
+        historyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                title.setText("HISTORY");
+                userCon.setVisibility(View.VISIBLE);
+                adminCon.setVisibility(View.INVISIBLE);
 
+                if(listHistory != null)
+                    if(listHistory.size() > 0)
+                        listHistory.clear();
+                if(applyList != null)
+                    if(applyList.size() > 0)
+                        applyList.clear();
+
+                listHistory = profileHelper.getHistoryList_Lender(getIntent().getStringExtra("username"));
+                historyAdapter historyAdapter_ = new historyAdapter(lenderHome.this,listHistory);
+
+                userCon.setAdapter(historyAdapter_);
+                userCon.setLayoutManager(new LinearLayoutManager(lenderHome.this));
+            }
+        });
         // Admin Buttons
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -281,9 +305,9 @@ public class lenderHome extends AppCompatActivity {
         }
         else if(button.getId() == tabDashboard.getId())
         {
-            userCon.setVisibility(View.INVISIBLE);
             title.setText("DASHBOARD");
             changeContainerVisibility(false);
+            userCon.setVisibility(View.INVISIBLE);
 
             dashboard.setVisibility(View.VISIBLE);
 

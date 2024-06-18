@@ -322,7 +322,7 @@ public class adminHome extends AppCompatActivity {
                 String va = profileHelper.newAccount(user, pass, email, "ADMIN");
                 if(va.equalsIgnoreCase("true"))
                 {
-                    UIHelper.showCustomToast("You have successfully registered.");
+                    UIHelper.showCustomToast("You have successfully added a new admin.");
                     newAdminUser.setText("");
                     newAdminPass.setText("");
                     newAdminEmail.setText("");

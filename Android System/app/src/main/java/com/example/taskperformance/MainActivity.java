@@ -14,6 +14,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -84,7 +85,11 @@ public class MainActivity extends AppCompatActivity {
         UIHelper.setSpinner(getResources().getStringArray(R.array.animation_speed), animSpeedSpinner);
         stayLoginHelper = new StayLoginHelper(this);
 
-        profileHelper.newAccount("ADMIN", "admin", "NONE", "ADMIN");
+        try {
+            profileHelper.newAccount("ADMIN", "admin", "NONE", "ADMIN");
+        } catch (Exception ex) {
+            Log.d("FIRST ADMIN","ADMIN ALREADY EXIST");
+        }
         if(stayLoginHelper.getStayLogin()) {
            String va = profileHelper.checkLogin(stayLoginHelper.getUserPass()[0], stayLoginHelper.getUserPass()[1]);
             if(va.equalsIgnoreCase("LENDER"))
@@ -251,20 +256,20 @@ public class MainActivity extends AppCompatActivity {
 
                 if(va.equalsIgnoreCase("ADMIN")) {
                     startActivity(new Intent(MainActivity.this, adminHome.class)
-                            .putExtra("username", user));
+                            .putExtra("username", user.toUpperCase()));
                 }
 
                 if(va.equalsIgnoreCase("LENDER"))
                 {
                     startActivity(new Intent(MainActivity.this, lenderHome.class)
-                            .putExtra("name", user)
-                            .putExtra("username", user));
+                            .putExtra("name", user.toUpperCase())
+                            .putExtra("username", user.toUpperCase()));
                 }
                 else if(va.equalsIgnoreCase("BORROWER"))
                 {
                     startActivity(new Intent(MainActivity.this, userHome.class)
-                            .putExtra("name", user)
-                            .putExtra("username", user));
+                            .putExtra("name", user.toUpperCase())
+                            .putExtra("username", user.toUpperCase()));
                 }
             }
         });

@@ -85,9 +85,12 @@ public class changePassword extends AppCompatActivity {
                 // Confirmation
                 UIHelper.setConfirmation("CHANGE PASSWORD", "DO YOU REALLY WANT TO CHANGE YOUR PASSWORD?", "NO", "YES");
                 UIHelper.setNegativeConfirmation("close");
-                UIHelper.showCustomToast(UIHelper.setPositiveConfirmation_changePassword(profileHelper, getIntent().getStringExtra("username"),
-                        current, newP).toString());
+                String out = UIHelper.setPositiveConfirmation_changePassword(profileHelper, getIntent().getStringExtra("username"),
+                        current, newP).toString();
+                UIHelper.showCustomToast(out);
 
+                if(!out.equalsIgnoreCase("Password has been updated")) return;
+                
                 if(getIntent().getStringExtra("type").equalsIgnoreCase("LENDER")) {
                     startActivity(new Intent(changePassword.this, lenderHome.class)
                             .putExtra("username", getIntent().getStringExtra("username")));

@@ -13,15 +13,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.Adapter.historyAdapter;
 import com.example.Adapter.userLenderAdapter;
 import com.example.Adapter.userListAdapter;
 import com.example.Helper.ProfileHelper;
 import com.example.Helper.SettingHelper;
 import com.example.Helper.userInterfaceHelper;
+import com.example.model.historyModel;
 import com.example.model.listBorrowModel;
 import com.example.model.userLenderModel;
 
@@ -34,10 +37,11 @@ public class userHome extends AppCompatActivity {
     TextView title, titleConfirm, msgConfirm;;
     LinkedList<userLenderModel> usersLenderList;
     LinkedList<listBorrowModel> listBorrowModel;
+    LinkedList<historyModel> listHistory;
     SettingHelper settingHelper;
     RecyclerView userCon, dashboardRec;
     LinearLayout adminCon, filterCon;
-    CardView logoutBtn, lenderArchiveBtn, dashboardBtn, changePasswordBtn, settingsBtn, profileBtn;
+    CardView logoutBtn, lenderArchiveBtn, dashboardBtn, changePasswordBtn, settingsBtn, profileBtn, historyBtn;
     ConstraintLayout settingCon, confirmationLayout, dashboard, applyInfo;
     userInterfaceHelper UIHelper;
     ProfileHelper profileHelper;
@@ -131,6 +135,8 @@ public class userHome extends AppCompatActivity {
         rate = findViewById(R.id.ratesBtn);
         freq = findViewById(R.id.freqBtn);
         filterCon = findViewById(R.id.filterCon);
+
+        historyBtn = findViewById(R.id.userHistory);
     }
 
     public void setDashboard() {
@@ -185,6 +191,31 @@ public class userHome extends AppCompatActivity {
             }
         });
 
+        historyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                title.setText("HISTORY");
+                userCon.setVisibility(View.VISIBLE);
+                adminCon.setVisibility(View.INVISIBLE);
+                filterCon.setVisibility(View.INVISIBLE);
+
+                if(listBorrowModel != null)
+                    if(listBorrowModel.size() > 0)
+                        listBorrowModel.clear();
+                if(usersLenderList != null)
+                    if(usersLenderList.size() > 0)
+                        usersLenderList.clear();
+                if(listHistory != null)
+                    if(listHistory.size() > 0)
+                        listHistory.clear();
+
+                listHistory = profileHelper.getHistoryList_borrower(getIntent().getStringExtra("username"));
+                historyAdapter historyAdapter_ = new historyAdapter(userHome.this,listHistory);
+
+                userCon.setAdapter(historyAdapter_);
+                userCon.setLayoutManager(new LinearLayoutManager(userHome.this));
+            }
+        });
         settingApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -328,7 +359,7 @@ public class userHome extends AppCompatActivity {
         userCon.setAdapter(usersLenderAdapter_);
         userCon.setLayoutManager(new LinearLayoutManager(this));
     }
-    void changeContent(Button button)
+    void changeContent(View button)
     {
         filterCon.setVisibility(View.INVISIBLE);
         dashboard.setVisibility(View.INVISIBLE);
@@ -363,7 +394,6 @@ public class userHome extends AppCompatActivity {
             title.setText("USER");
             changeContainerVisibility(true);
         }
-
     }
 
     public void setDashboardList() {
@@ -441,6 +471,7 @@ public class userHome extends AppCompatActivity {
             }
         });
     }
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
         //super.onBackPressed();

@@ -138,16 +138,20 @@ public class userInterfaceHelper {
     }
     public String setPositiveConfirmation_changePassword(ProfileHelper profileHelper, String username, String currentPass, String newPass) {
         String va = profileHelper.checkLogin(username, currentPass);
+
         if(va.equalsIgnoreCase("LENDER")) {
             profileHelper.changePassword(username, newPass);
+            Log.d("Change Password", "LENDER");
             return "Password has been updated";
         }
         else if(va.equalsIgnoreCase("BORROWER")) {
             profileHelper.changePassword(username, newPass);
+            Log.d("Change Password", "BORROWER");
             return "Password has been updated";
         }
         else if(va.equalsIgnoreCase("ADMIN")) {
             profileHelper.changePassword(username, newPass);
+            Log.d("Change Password", "ADMIN");
             return "Password has been updated";
         }
         else {
